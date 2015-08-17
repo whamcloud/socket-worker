@@ -1,0 +1,4 @@
+./**/node_modules/**/*
+./**/coverage/**/*
+./bundle.js
+./bundle.map.json

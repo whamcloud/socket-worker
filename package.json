@@ -1,0 +1,39 @@
+{
+  "name": "@intel-js/socket-worker",
+  "version": "1.0.0",
+  "description": "Socket.io client that runs in a WebWorker. Handles data parsing / munging.",
+  "main": "index.js",
+  "scripts": {
+    "test": "JASMINE_CONFIG_PATH=jasmine.json NODE_ENV=test jasmine",
+    "build": "browserify index.js -d -p [minifyify --map bundle.map.json --output bundle.map.json] > bundle.js",
+    "jshint": "jshint --c ./.jshintrc --exclude-path ./.jshintignore .",
+    "jscs": "jscs ."
+  },
+  "author": "IML Team",
+  "license": "MIT",
+  "dependencies": {
+    "socket.io-client": "1.3.6",
+    "@intel-js/router": "3.0.1"
+  },
+  "pre-commit": [
+    "jscs",
+    "jshint",
+    "test"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/intel-js/socket-worker.git"
+  },
+  "devDependencies": {
+    "@intel-js/fp": "1.0.4",
+    "browserify": "9.0.8",
+    "jasmine": "2.3.2",
+    "jasmine-n-matchers": "2.0.2",
+    "jscs": "2.1.0",
+    "jshint": "2.8.0",
+    "krusty-jasmine-reporter": "1.0.0",
+    "minifyify": "7.0.5",
+    "pre-commit": "1.1.1",
+    "proxyquire": "1.6.0"
+  }
+}
