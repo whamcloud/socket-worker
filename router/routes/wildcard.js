@@ -27,7 +27,7 @@ module.exports = function wildcardRoute () {
   router.all('/(.*)', function genericHandler (req, resp, next) {
     var ack;
 
-    if (req.data.ack)
+    if (req.isAck)
       ack = resp.write;
     else
       resp.socket.onMessage(resp.write);

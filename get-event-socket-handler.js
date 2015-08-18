@@ -58,7 +58,7 @@ module.exports = function getEventSocketHandler (socket, workerContext) {
       return;
 
     router.go(payload.path,
-      { verb: method, data: payload },
+      { verb: method, data: payload, isAck: data.ack },
       { socket: eventSockets[data.id], write: fn }
     );
 
