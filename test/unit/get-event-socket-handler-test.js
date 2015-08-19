@@ -108,7 +108,7 @@ describe('get event socket handler test', function () {
 
       it('should route the data', function () {
         expect(router.go).toHaveBeenCalledOnceWith('/foo/bar',
-          { verb: 'get', data: args.data.payload },
+          { verb: 'get', data: args.data.payload, isAck: undefined },
           { socket: eventSocket, write: jasmine.any(Function) }
         );
       });

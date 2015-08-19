@@ -26,8 +26,8 @@ describe('routes wildcard', function () {
 
     beforeEach(function () {
       req = {
+        isAck: true,
         data: {
-          ack: 'ack',
           payload: 'payload'
         }
       };
@@ -63,7 +63,7 @@ describe('routes wildcard', function () {
 
     describe('with no ack', function () {
       beforeEach(function () {
-        delete req.data.ack;
+        req.isAck = false;
         router.all.calls.mostRecent().args[1](req, resp, next);
       });
 
