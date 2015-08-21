@@ -1,6 +1,6 @@
 {
   "name": "@intel-js/socket-worker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Socket.io client that runs in a WebWorker. Handles data parsing / munging.",
   "main": "index.js",
   "scripts": {
@@ -35,5 +35,7 @@
     "minifyify": "7.0.5",
     "pre-commit": "1.1.1",
     "proxyquire": "1.6.0"
-  }
+  },
+  "whitelist": ["@intel-js/fp", "browserify", "jasmine", "jasmine-n-matchers", "krusty-jasmine-reporters",
+    "minifyify", "proxyquire"]
 }
