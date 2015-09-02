@@ -36,6 +36,6 @@
     "pre-commit": "1.1.1",
     "proxyquire": "1.6.0"
   },
-  "whitelist": ["@intel-js/fp", "jasmine", "jasmine-n-matchers", "krusty-jasmine-reporters",
+  "whitelist": ["@intel-js/fp", "jasmine", "jasmine-n-matchers", "krusty-jasmine-reporter",
     "proxyquire"]
 }
