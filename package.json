@@ -1,11 +1,10 @@
 {
   "name": "@intel-js/socket-worker",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Socket.io client that runs in a WebWorker. Handles data parsing / munging.",
   "main": "index.js",
   "scripts": {
     "test": "JASMINE_CONFIG_PATH=jasmine.json NODE_ENV=test jasmine",
-    "build": "./node_modules/browserify/bin/cmd.js index.js -d -p [minifyify --map bundle.map.json --output bundle.map.json] > bundle.js",
     "jshint": "jshint --c ./.jshintrc --exclude-path ./.jshintignore .",
     "jscs": "jscs ."
   },
