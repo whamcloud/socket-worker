@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@intel-js/fp": "1.0.4",
+    "highland": "2.5.1",
     "jasmine": "2.3.2",
     "jasmine-n-matchers": "2.0.2",
     "jscs": "2.1.0",
@@ -36,5 +37,5 @@
     "proxyquire": "1.6.0"
   },
   "whitelist": ["@intel-js/fp", "jasmine", "jasmine-n-matchers", "krusty-jasmine-reporter",
-    "proxyquire"]
+    "proxyquire", "highland"]
 }
