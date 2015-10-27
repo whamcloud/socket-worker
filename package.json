@@ -1,6 +1,6 @@
 {
   "name": "@intel-js/socket-worker",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Socket.io client that runs in a WebWorker. Handles data parsing / munging.",
   "main": "index.js",
   "scripts": {
