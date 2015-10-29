@@ -14,7 +14,7 @@ describe('router', function () {
       .and.returnValue(router);
 
     r = proxyquire('../../../router/index', {
-      '@intel-js/router': getRouter
+      'intel-router': getRouter
     });
   });
 

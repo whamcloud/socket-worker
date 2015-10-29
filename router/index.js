@@ -21,6 +21,6 @@
 
 'use strict';
 
-var getRouter = require('@intel-js/router');
+var getRouter = require('intel-router');
 
 module.exports = getRouter();
