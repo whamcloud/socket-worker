@@ -25,6 +25,9 @@
     "type": "git",
     "url": "https://github.intel.com/IML/socket-worker.git"
   },
+  "publishConfig": {
+    "registry": "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-local"
+  },
   "devDependencies": {
     "intel-fp": "1.0.13",
     "highland": "2.5.1",
