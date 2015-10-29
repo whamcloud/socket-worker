@@ -8,7 +8,7 @@ if (process.env.RUNNER === 'CI') {
   var junitReporter = new krustyJasmineReporter.KrustyJasmineJUnitReporter({
     specTimer: new jasmine.Timer(),
     JUnitReportSavePath: process.env.SAVE_PATH || './',
-    JUnitReportFilePrefix: process.env.FILE_PREFIX || 'socket-worker-results',
+    JUnitReportFilePrefix: process.env.FILE_PREFIX || 'socket-worker-results-' +  process.version,
     JUnitReportSuiteName: 'Socket Worker Reports',
     JUnitReportPackageName: 'Socket Worker Reports'
   });

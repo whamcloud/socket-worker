@@ -1,7 +1,7 @@
 'use strict';
 
 var proxyquire = require('proxyquire').noPreserveCache();
-var fp = require('@intel-js/fp');
+var fp = require('intel-fp');
 
 var getEventHandler = fp.curry(3, function getEventHandler (methodName, socket, event) {
   var args = socket[methodName].calls.allArgs();
