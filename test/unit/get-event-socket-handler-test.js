@@ -1,12 +1,10 @@
-'use strict';
+import proxyquire from 'proxyquire';
 
-var proxyquire = require('proxyquire').noPreserveCache();
-
-describe('get event socket handler test', function () {
+describe('get event socket handler test', () => {
   var getEventSocketHandler, getEventSocket,
     eventSocket, socket, workerContext, handler, router;
 
-  beforeEach(function () {
+  beforeEach(() => {
     eventSocket = {
       onMessage: jasmine.createSpy('onMessage'),
       sendMessage: jasmine.createSpy('sendMessage'),
@@ -23,10 +21,10 @@ describe('get event socket handler test', function () {
     getEventSocket = jasmine.createSpy('getEventSocket')
       .and.returnValue(eventSocket);
 
-    getEventSocketHandler = proxyquire('../../get-event-socket-handler', {
-      './get-event-socket': getEventSocket,
-      './router': router
-    });
+    getEventSocketHandler = proxyquire.noPreserveCache()('../../get-event-socket-handler', {
+      './get-event-socket': {default: getEventSocket},
+      './router': {default: router}
+    }).default;
 
     socket = {};
 
@@ -40,19 +38,19 @@ describe('get event socket handler test', function () {
     handler = workerContext.addEventListener.calls.allArgs()[0][1];
   });
 
-  it('should be a factory function', function () {
+  it('should be a factory function', () => {
     expect(getEventSocketHandler).toEqual(jasmine.any(Function));
   });
 
-  it('should add a message listener', function () {
+  it('should add a message listener', () => {
     expect(workerContext.addEventListener)
       .toHaveBeenCalledOnceWith('message', jasmine.any(Function), false);
   });
 
-  describe('connect', function () {
+  describe('connect', () => {
     var args;
 
-    beforeEach(function () {
+    beforeEach(() => {
       args = {
         data: {
           id: '1',
@@ -63,21 +61,22 @@ describe('get event socket handler test', function () {
       handler(args);
     });
 
-    it('should get an event socket', function () {
-      expect(getEventSocket).toHaveBeenCalledOnceWith(socket, '1', undefined);
+    it('should get an event socket', () => {
+      expect(getEventSocket)
+        .toHaveBeenCalledOnceWith(socket, '1');
     });
 
-    it('should not recreate an existing socket', function () {
+    it('should not recreate an existing socket', () => {
       handler(args);
 
       expect(getEventSocket).toHaveBeenCalledOnce();
     });
   });
 
-  describe('send', function () {
+  describe('send', () => {
     var args;
 
-    beforeEach(function () {
+    beforeEach(() => {
       args = {
         data: {
           path: '/foo/bar',
@@ -88,14 +87,14 @@ describe('get event socket handler test', function () {
       };
     });
 
-    it('should not route a message if we haven\'t connected yet', function () {
+    it('should not route a message if we haven\'t connected yet', () => {
       handler(args);
 
       expect(router.go).not.toHaveBeenCalled();
     });
 
-    describe('with a connected socket', function () {
-      beforeEach(function () {
+    describe('with a connected socket', () => {
+      beforeEach(() => {
         handler({
           data: {
             id: '1',
@@ -106,14 +105,14 @@ describe('get event socket handler test', function () {
         handler(args);
       });
 
-      it('should route the data', function () {
+      it('should route the data', () => {
         expect(router.go).toHaveBeenCalledOnceWith('/foo/bar',
-          { verb: 'get', data: args.data.payload, isAck: undefined },
+          { verb: 'get', payload: args.data.payload, isAck: undefined },
           { socket: eventSocket, write: jasmine.any(Function) }
         );
       });
 
-      it('should send a postMessage when writing', function () {
+      it('should send a postMessage when writing', () => {
         var write = router.go.calls.mostRecent().args[2].write;
 
         write('foo');
@@ -127,10 +126,10 @@ describe('get event socket handler test', function () {
     });
   });
 
-  describe('end', function () {
+  describe('end', () => {
     var args;
 
-    beforeEach(function () {
+    beforeEach(() => {
       args = {
         data: {
           id: '1',
@@ -139,14 +138,14 @@ describe('get event socket handler test', function () {
       };
     });
 
-    it('should not end a non-existent socket', function () {
+    it('should not end a non-existent socket', () => {
       handler(args);
 
       expect(eventSocket.end).not.toHaveBeenCalled();
     });
 
-    describe('with a connected socket', function () {
-      beforeEach(function () {
+    describe('with a connected socket', () => {
+      beforeEach(() => {
         handler({
           data: {
             id: '1',
@@ -157,11 +156,11 @@ describe('get event socket handler test', function () {
         handler(args);
       });
 
-      it('should end a connected socket', function () {
+      it('should end a connected socket', () => {
         expect(eventSocket.end).toHaveBeenCalledOnce();
       });
 
-      it('should not end a socket twice', function () {
+      it('should not end a socket twice', () => {
         handler(args);
 
         expect(eventSocket.end).toHaveBeenCalledOnce();

@@ -1,7 +1,9 @@
+// @flow
+
 //
 // INTEL CONFIDENTIAL
 //
-// Copyright 2013-2014 Intel Corporation All Rights Reserved.
+// Copyright 2013-2015 Intel Corporation All Rights Reserved.
 //
 // The source code contained or described herein and all documents related
 // to the source code ("Material") are owned by Intel Corporation or its
@@ -21,13 +23,11 @@
 
 /* global self */
 
-'use strict';
+import createSocket from './create-socket';
+import getEventSocketHandler from './get-event-socket-handler';
+import routes from './router/routes';
 
-var createSocket = require('./create-socket');
-var eventSocketHandler = require('./get-event-socket-handler');
-
-var routes = require('./router/routes');
 routes.wildcard();
 
-var socket = createSocket(self.location.origin, self);
-eventSocketHandler(socket, self);
+const socket = createSocket(self.location.origin, self);
+getEventSocketHandler(socket, self);

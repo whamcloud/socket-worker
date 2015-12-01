@@ -1,7 +1,9 @@
+// @flow
+
 //
 // INTEL CONFIDENTIAL
 //
-// Copyright 2013-2014 Intel Corporation All Rights Reserved.
+// Copyright 2013-2015 Intel Corporation All Rights Reserved.
 //
 // The source code contained or described herein and all documents related
 // to the source code ("Material") are owned by Intel Corporation or its
@@ -19,12 +21,10 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-'use strict';
+import router from '../';
 
-var router = require('../index');
-
-module.exports = function wildcardRoute () {
-  router.all('/(.*)', function genericHandler (req, resp, next) {
+export default function wildcardRoute (): void {
+  router.all('/(.*)', (req, resp, next) => {
     var ack;
 
     if (req.isAck)
@@ -32,8 +32,8 @@ module.exports = function wildcardRoute () {
     else
       resp.socket.onMessage(resp.write);
 
-    resp.socket.sendMessage(req.data, ack);
+    resp.socket.sendMessage(req.payload, ack);
 
     next(req, resp);
   });
-};
+}

@@ -1,7 +1,9 @@
+// @flow
+
 //
 // INTEL CONFIDENTIAL
 //
-// Copyright 2013-2014 Intel Corporation All Rights Reserved.
+// Copyright 2013-2015 Intel Corporation All Rights Reserved.
 //
 // The source code contained or described herein and all documents related
 // to the source code ("Material") are owned by Intel Corporation or its
@@ -19,30 +21,39 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-'use strict';
+import io from 'socket.io-client';
 
-var io = require('socket.io-client');
-
-module.exports = function createSocket (url, workerContext) {
+export default function createSocket (url:string, workerContext: typeof self) {
   var socket = io(url);
 
-  socket.on('reconnecting', function onReconnecting (attempt) {
-    workerContext.postMessage({ type: 'reconnecting', data: attempt });
+  socket.on('reconnecting', (attempt) => {
+    workerContext.postMessage({
+      type: 'reconnecting',
+      data: attempt
+    });
   });
 
-  socket.on('reconnect', function onReconnected (attempt) {
-    workerContext.postMessage({ type: 'reconnect', data: attempt });
+  socket.on('reconnect', (attempt) => {
+    workerContext.postMessage({
+      type: 'reconnect',
+      data: attempt
+    });
   });
 
-  socket.once('error', function onError (err) {
-    workerContext.postMessage({ type: 'error', data: err });
+  socket.once('error', (err) => {
+    workerContext.postMessage({
+      type: 'error',
+      data: err
+    });
 
     socket.disconnect();
   });
 
-  socket.once('disconnect', function onDisconnect () {
-    workerContext.postMessage({ type: 'disconnect' });
+  socket.once('disconnect', () => {
+    workerContext.postMessage({
+      type: 'disconnect'
+    });
   });
 
   return socket;
-};
+}

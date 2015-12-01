@@ -1,6 +1,4 @@
-'use strict';
-
-var getEventSocket = require('../../get-event-socket');
+import getEventSocket from '../../get-event-socket';
 
 describe('event connection', function () {
   var eventSocket, socket, id;

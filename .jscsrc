@@ -1,4 +1,5 @@
 {
+  "esnext": true,
   "requireCurlyBraces": [
     "for",
     "while",
@@ -92,7 +93,6 @@
   },
   "excludeFiles": [
     "node_modules/**",
-    "bundle.js",
-    "bundle.map.json"
+    "dist/**"
   ]
 }

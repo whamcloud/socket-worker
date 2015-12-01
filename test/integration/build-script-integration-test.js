@@ -1,54 +1,39 @@
-'use strict';
+import {unlinkSync, readFileSync, statSync} from 'fs';
+import {dirname, join} from 'path';
+import {tail} from 'intel-fp';
+import {exec} from 'child_process';
 
-var build = require('../../build');
-var λ = require('highland');
-var fs = require('fs');
-var path = require('path');
-var join = path.join;
+describe('build script', () => {
+  var distDir;
 
-describe('build script', function () {
-  var stream, joinDirname;
+  beforeAll((done) => {
+    const moduleDir = dirname(dirname(__dirname));
+    distDir = join.bind(join, moduleDir, 'dist');
 
-  it('should return a function when required programmatically', function () {
-    expect(build).toEqual(jasmine.any(Function));
+    exec(join(moduleDir, 'bin/build'), (error, stdout, stderr) => {
+      if (stderr.length)
+        console.error(stderr);
+
+      if (error)
+        done.fail(error);
+
+      done();
+    });
+  }, 60000);
+
+  afterAll(function deleteSourceMap () {
+    unlinkSync(distDir('bundle.map.json'));
+    unlinkSync(distDir('bundle.js'));
   });
 
-  describe('when invoked', function () {
-    beforeAll(function browserify () {
-      joinDirname = join.bind(path, __dirname);
-
-      stream = build(__dirname);
-    });
-
-    afterAll(function deleteSourceMap (done) {
-      var unlink = λ.wrapCallback(fs.unlink);
-
-      λ(unlink(joinDirname('bundle.map.json')))
-        .stopOnError(done.fail)
-        .each(done);
-    });
-
-    it('should result in a readable stream that points to a source map file', function (done) {
-      λ(stream)
-        .split()
-        .last()
-        .stopOnError(done.fail)
-        .map(function assert (x) {
-          expect(x.toString()).toEqual('//# sourceMappingURL=bundle.map.json');
-        })
-        .each(done);
-    });
-
-    it('should store a sourcemap on the fs', function (done) {
-      var stat = λ.wrapCallback(fs.stat);
-
-      stat(joinDirname('bundle.map.json'))
-        .map(function assert (stats) {
-          expect(stats.isFile()).toBe(true);
-        })
-        .stopOnError(done.fail)
-        .each(done);
-    });
+  it('should result in a readable stream that points to a source map file', () => {
+    const bundle = readFileSync(distDir('bundle.js'), 'utf8');
+    expect(tail(bundle.split('\n')))
+      .toBe('//# sourceMappingURL=bundle.map.json');
   });
 
+  it('should store a sourcemap on the fs', () => {
+    const stats = statSync(distDir('bundle.map.json'));
+    expect(stats.isFile()).toBe(true);
+  });
 });

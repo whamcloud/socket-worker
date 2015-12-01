@@ -1,34 +1,33 @@
-'use strict';
+const proxyquire = require('proxyquire').noPreserveCache();
 
-var proxyquire = require('proxyquire').noPreserveCache();
-
-describe('routes wildcard', function () {
+describe('routes wildcard', () => {
   var router, wildcard;
 
-  beforeEach(function () {
+  beforeEach(() => {
     router = {
       all: jasmine.createSpy('all')
     };
 
     wildcard = proxyquire('../../../../router/routes/wildcard', {
-      '../index': router
-    });
+      '../': {default: router}
+    }).default;
 
     wildcard();
   });
 
-  it('should call router.all', function () {
-    expect(router.all).toHaveBeenCalledOnceWith('/(.*)', jasmine.any(Function));
+  it('should call router.all', () => {
+    expect(router.all)
+      .toHaveBeenCalledOnceWith('/(.*)', jasmine.any(Function));
   });
 
-  describe('generic handler', function () {
+  describe('generic handler', () => {
     var req, resp, next;
 
-    beforeEach(function () {
+    beforeEach(() => {
       req = {
         isAck: true,
-        data: {
-          payload: 'payload'
+        payload: {
+          foo: 'bar'
         }
       };
 
@@ -43,39 +42,39 @@ describe('routes wildcard', function () {
       next = jasmine.createSpy('next');
     });
 
-    describe('with ack', function () {
-      beforeEach(function () {
+    describe('with ack', () => {
+      beforeEach(() => {
         router.all.calls.mostRecent().args[1](req, resp, next);
       });
 
-      it('should send a message when the data contains an ack', function () {
-        expect(resp.socket.sendMessage).toHaveBeenCalledOnceWith(req.data, resp.write);
+      it('should send a message when the data contains an ack', () => {
+        expect(resp.socket.sendMessage).toHaveBeenCalledOnceWith(req.payload, resp.write);
       });
 
-      it('should not call onMessage', function () {
+      it('should not call onMessage', () => {
         expect(resp.socket.onMessage).not.toHaveBeenCalled();
       });
 
-      it('should call next', function () {
+      it('should call next', () => {
         expect(next).toHaveBeenCalledOnceWith(req, resp);
       });
     });
 
-    describe('with no ack', function () {
-      beforeEach(function () {
+    describe('with no ack', () => {
+      beforeEach(() => {
         req.isAck = false;
         router.all.calls.mostRecent().args[1](req, resp, next);
       });
 
-      it('should call onMessage', function () {
+      it('should call onMessage', () => {
         expect(resp.socket.onMessage).toHaveBeenCalledOnceWith(resp.write);
       });
 
-      it('should call send message', function () {
-        expect(resp.socket.sendMessage).toHaveBeenCalledOnceWith(req.data, undefined);
+      it('should call send message', () => {
+        expect(resp.socket.sendMessage).toHaveBeenCalledOnceWith(req.payload, undefined);
       });
 
-      it('should call next', function () {
+      it('should call next', () => {
         expect(next).toHaveBeenCalledOnceWith(req, resp);
       });
     });

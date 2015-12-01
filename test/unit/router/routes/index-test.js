@@ -1,19 +1,17 @@
-'use strict';
+import proxyquire from 'proxyquire';
 
-var proxyquire = require('proxyquire').noPreserveCache();
-
-describe('router', function () {
+describe('router', () => {
   var index, wildcard;
 
-  beforeEach(function () {
+  beforeEach(() => {
     wildcard = jasmine.createSpy('wildcard');
 
-    index = proxyquire('../../../../router/routes/index', {
-      './wildcard': wildcard
-    });
+    index = proxyquire.noPreserveCache()('../../../../router/routes/index', {
+      './wildcard': {default: wildcard}
+    }).default;
   });
 
-  it('should have a wildcard route', function () {
+  it('should have a wildcard route', () => {
     expect(index.wildcard).toEqual(wildcard);
   });
 });

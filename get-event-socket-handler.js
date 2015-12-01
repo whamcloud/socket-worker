@@ -1,7 +1,9 @@
+// @flow
+
 //
 // INTEL CONFIDENTIAL
 //
-// Copyright 2013-2014 Intel Corporation All Rights Reserved.
+// Copyright 2013-2015 Intel Corporation All Rights Reserved.
 //
 // The source code contained or described herein and all documents related
 // to the source code ("Material") are owned by Intel Corporation or its
@@ -19,59 +21,69 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-'use strict';
+import getEventSocket from './get-event-socket';
+import router from './router';
 
-var getEventSocket = require('./get-event-socket');
-var router = require('./router');
-
-module.exports = function getEventSocketHandler (socket, workerContext) {
-
-  var eventSockets = {};
+export default function getEventSocketHandler (socket: Object, workerContext: typeof self):void {
+  const eventSockets = {};
 
   workerContext.addEventListener('message', handler, false);
 
-  function handler (ev) {
-    var data = ev.data;
-    var type = data.type;
+  function handler ({data}) {
+    const type = data.type;
 
     if (type === 'connect')
-      return onConnect(data);
+      onConnect(data);
     else if (type === 'send')
-      return onSend(data);
+      onSend(data);
     else if (type === 'end')
-      return onEnd(data);
+      onEnd(data);
   }
 
-  function onConnect (data) {
-    if (eventSockets[data.id])
+  function onConnect ({id}) {
+    if (eventSockets[id])
       return;
 
-    eventSockets[data.id] = getEventSocket(socket, data.id, data.options);
+    eventSockets[id] = getEventSocket(socket, id);
   }
 
-  function onSend (data) {
-    var payload = data.payload;
-    var options = payload.options || {};
-    var method = (typeof options.method !== 'string' ? router.verbs.GET : options.method);
 
-    if (!eventSockets[data.id])
+  function onSend ({payload, id, ack}) {
+    const {path} = payload;
+    const options = payload.options || {};
+    const verb = options.method || router.verbs.GET;
+
+    const socket = eventSockets[id];
+
+    if (!socket)
       return;
 
-    router.go(payload.path,
-      { verb: method, data: payload, isAck: data.ack },
-      { socket: eventSockets[data.id], write: fn }
+    router.go(path,
+      {
+        verb,
+        payload,
+        isAck: ack
+      },
+      {
+        socket,
+        write
+      }
     );
 
-    function fn (res) {
-      workerContext.postMessage({ type: 'message', id: data.id, payload: res });
+    function write (payload) {
+      workerContext.postMessage({
+        type: 'message',
+        id,
+        payload
+      });
     }
   }
 
-  function onEnd (data) {
-    if (!eventSockets[data.id])
+  function onEnd ({id}) {
+    if (!eventSockets[id])
       return;
 
-    eventSockets[data.id].end();
-    delete eventSockets[data.id];
+    eventSockets[id].end();
+    delete eventSockets[id];
   }
-};
+}

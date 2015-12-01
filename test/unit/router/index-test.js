@@ -1,11 +1,11 @@
 'use strict';
 
-var proxyquire = require('proxyquire').noPreserveCache();
+import proxyquire from 'proxyquire';
 
-describe('router', function () {
+describe('router', () => {
   var getRouter, router, r;
 
-  beforeEach(function () {
+  beforeEach(() => {
     router = {
       router: true
     };
@@ -13,16 +13,16 @@ describe('router', function () {
     getRouter = jasmine.createSpy('router')
       .and.returnValue(router);
 
-    r = proxyquire('../../../router/index', {
+    r = proxyquire.noPreserveCache()('../../../router/index', {
       'intel-router': getRouter
-    });
+    }).default;
   });
 
-  it('should instantiate the router', function () {
+  it('should instantiate the router', () => {
     expect(getRouter).toHaveBeenCalledOnce();
   });
 
-  it('should export the router', function () {
+  it('should export the router', () => {
     expect(r).toBe(router);
   });
 });
