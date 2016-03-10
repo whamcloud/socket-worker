@@ -1,7 +1,5 @@
-// @flow
-
-declare var socketIoClientInstanceHandler: (arg: any) => void;
-declare var socketIoClientInstance: {
+export type socketIoClientInstanceHandler = (arg: any) => void;
+export type socketIoClientInstance = {
   on(eventName:string, fn:socketIoClientInstanceHandler): void;
   off(eventName:string, fn:socketIoClientInstanceHandler): void;
   once(eventName:string, fn:socketIoClientInstanceHandler): void;
@@ -9,7 +7,3 @@ declare var socketIoClientInstance: {
   removeAllListeners(id: string): void;
   disconnect(): void;
 };
-
-declare module 'socket.io-client' {
-  declare var exports: (uri: string, opts: ?Object) => socketIoClientInstance;
-}

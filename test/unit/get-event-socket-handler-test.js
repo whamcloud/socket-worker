@@ -1,6 +1,7 @@
 import proxyquire from 'proxyquire';
+import {describe, beforeEach, jasmine, it, expect} from '../jasmine';
 
-describe('get event socket handler test', () => {
+describe('get event socket handler', () => {
   var getEventSocketHandler, getEventSocket,
     eventSocket, socket, workerContext, handler, router;
 
@@ -21,9 +22,9 @@ describe('get event socket handler test', () => {
     getEventSocket = jasmine.createSpy('getEventSocket')
       .and.returnValue(eventSocket);
 
-    getEventSocketHandler = proxyquire.noPreserveCache()('../../get-event-socket-handler', {
-      './get-event-socket': {default: getEventSocket},
-      './router': {default: router}
+    getEventSocketHandler = proxyquire('../../source/get-event-socket-handler', {
+      './get-event-socket.js': {default: getEventSocket},
+      './router/index.js': {default: router}
     }).default;
 
     socket = {};

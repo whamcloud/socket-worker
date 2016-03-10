@@ -4,14 +4,12 @@
 
 var Jasmine = require('jasmine');
 var jasmine = new Jasmine();
-var path = require('path');
-
 require('intel-jasmine-n-matchers');
 
 if (process.env.RUNNER === 'CI') {
-  var krustyJasmineReporter = require('krusty-jasmine-reporter');
+  var jasmineJUnitReporter = require('intel-jasmine-junit-reporter');
 
-  var junitReporter = new krustyJasmineReporter.KrustyJasmineJUnitReporter({
+  var junitReporter = jasmineJUnitReporter({
     specTimer: new jasmine.jasmine.Timer(),
     JUnitReportSavePath: process.env.SAVE_PATH || './',
     JUnitReportFilePrefix: process.env.FILE_PREFIX || 'socket-worker-results-' +  process.version,
@@ -22,24 +20,12 @@ if (process.env.RUNNER === 'CI') {
   jasmine.jasmine.getEnv().addReporter(junitReporter);
 }
 
-var base = path.join.bind(path, path.dirname(__dirname));
-
-require('babel-register')({
-  ignore: base('node_modules/'),
-  only: [
-    base('node_modules/intel-fp/fp.js'),
-    base('test/*'),
-    base('types/'),
-    base('router/*'),
-    base('*.js')
-  ]
-});
-
 jasmine.loadConfig({
-  spec_dir: 'test',
+  spec_dir: 'dist/test',
   spec_files: [
-    '**/*.js'
-  ]
+    '**/*-test.js'
+  ],
+  random: true
 });
 
 jasmine.execute();

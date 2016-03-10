@@ -3,7 +3,7 @@
 //
 // INTEL CONFIDENTIAL
 //
-// Copyright 2013-2015 Intel Corporation All Rights Reserved.
+// Copyright 2013-2016 Intel Corporation All Rights Reserved.
 //
 // The source code contained or described herein and all documents related
 // to the source code ("Material") are owned by Intel Corporation or its
@@ -21,39 +21,13 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import io from 'socket.io-client';
+/* global self */
 
-export default function createSocket (url:string, workerContext: typeof self) {
-  var socket = io(url);
+import createSocket from './create-socket.js';
+import getEventSocketHandler from './get-event-socket-handler.js';
+import routes from './router/routes/index.js';
 
-  socket.on('reconnecting', (attempt) => {
-    workerContext.postMessage({
-      type: 'reconnecting',
-      data: attempt
-    });
-  });
+routes.wildcard();
 
-  socket.on('reconnect', (attempt) => {
-    workerContext.postMessage({
-      type: 'reconnect',
-      data: attempt
-    });
-  });
-
-  socket.once('error', (err) => {
-    workerContext.postMessage({
-      type: 'error',
-      data: err
-    });
-
-    socket.disconnect();
-  });
-
-  socket.once('disconnect', () => {
-    workerContext.postMessage({
-      type: 'disconnect'
-    });
-  });
-
-  return socket;
-}
+const socket = createSocket(self.location.origin, self);
+getEventSocketHandler(socket, self);

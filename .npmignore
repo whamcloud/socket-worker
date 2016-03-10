@@ -4,3 +4,8 @@ node_modules
 .editorconfig
 .eslintrc
 .jscsrc
+.flowconfig
+.babelrc
+.gitignore
+/test
+/source

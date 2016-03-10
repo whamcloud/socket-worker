@@ -3,7 +3,7 @@
 //
 // INTEL CONFIDENTIAL
 //
-// Copyright 2013-2015 Intel Corporation All Rights Reserved.
+// Copyright 2013-2016 Intel Corporation All Rights Reserved.
 //
 // The source code contained or described herein and all documents related
 // to the source code ("Material") are owned by Intel Corporation or its
@@ -21,13 +21,19 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-/* global self */
+import router from '../index.js';
 
-import createSocket from './create-socket';
-import getEventSocketHandler from './get-event-socket-handler';
-import routes from './router/routes';
+export default function wildcardRoute (): void {
+  router.all('/(.*)', (req, resp, next) => {
+    var ack;
 
-routes.wildcard();
+    if (req.isAck)
+      ack = resp.write;
+    else
+      resp.socket.onMessage(resp.write);
 
-const socket = createSocket(self.location.origin, self);
-getEventSocketHandler(socket, self);
+    resp.socket.sendMessage(req.payload, ack);
+
+    next(req, resp);
+  });
+}

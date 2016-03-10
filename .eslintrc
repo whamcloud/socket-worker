@@ -6,31 +6,36 @@
   "rules": {
     "flow-vars/define-flow-type": 1,
     "flow-vars/use-flow-type": 1,
-    "quotes": [2, "single"],
-    "linebreak-style": [2, "unix"],
-    "semi": [2, "always"],
-    "indent": [2, 2],
-    "no-console": 0
-  },
-  "globals": {
-    "describe": false,
-    "beforeAll": false,
-    "beforeEach": false,
-    "afterAll": false,
-    "afterEach": false,
-    "jasmine": true,
-    "spyOn": false,
-    "it": false,
-    "console": false,
-    "expect": false,
-    "self": false
-  },
-  "ecmaFeatures": {
-    "modules": true
+    "quotes": [
+      2,
+      "single"
+    ],
+    "linebreak-style": [
+      2,
+      "unix"
+    ],
+    "semi": [
+      2,
+      "always"
+    ],
+    "indent": [
+      2,
+      2
+    ],
+    "no-console": 0,
+    "curly": [
+      2,
+      "multi",
+      "consistent"
+    ]
   },
   "env": {
     "es6": true,
     "node": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
   },
   "extends": "eslint:recommended"
 }

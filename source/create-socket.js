@@ -3,7 +3,7 @@
 //
 // INTEL CONFIDENTIAL
 //
-// Copyright 2013-2015 Intel Corporation All Rights Reserved.
+// Copyright 2013-2016 Intel Corporation All Rights Reserved.
 //
 // The source code contained or described herein and all documents related
 // to the source code ("Material") are owned by Intel Corporation or its
@@ -21,8 +21,40 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import wildcard from './wildcard';
+import io from 'socket.io-client/socket.io.js';
+import type {socketIoClientInstance} from '../flow/include/socket.io-client';
 
-export default {
-  wildcard
-};
+export default function createSocket(url:string, workerContext: typeof self): socketIoClientInstance {
+  var socket = io(url);
+
+  socket.on('reconnecting', (attempt) => {
+    workerContext.postMessage({
+      type: 'reconnecting',
+      data: attempt
+    });
+  });
+
+  socket.on('reconnect', (attempt) => {
+    workerContext.postMessage({
+      type: 'reconnect',
+      data: attempt
+    });
+  });
+
+  socket.once('error', (err) => {
+    workerContext.postMessage({
+      type: 'error',
+      data: err
+    });
+
+    socket.disconnect();
+  });
+
+  socket.once('disconnect', () => {
+    workerContext.postMessage({
+      type: 'disconnect'
+    });
+  });
+
+  return socket;
+}

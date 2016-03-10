@@ -1,12 +1,8 @@
 {
   "esnext": true,
-  "requireCurlyBraces": [
-    "for",
-    "while",
-    "do",
-    "try",
-    "catch"
-  ],
+  "disallowMultipleVarDecl": false,
+  "requireSpacesInsideObjectBrackets": false,
+  "requireTrailingComma": false,
   "requireSpaceAfterKeywords": [
     "if",
     "else",

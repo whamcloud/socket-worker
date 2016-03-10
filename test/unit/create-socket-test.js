@@ -1,8 +1,9 @@
-import proxyquire from 'proxyquire';
+import proxyquire from '../proxyquire.js';
 import {curry} from 'intel-fp';
+import {describe, beforeEach, jasmine, it, expect} from '../jasmine.js';
 
-var getEventHandler = curry(3, function getEventHandler (methodName, socket, event) {
-  var args = socket[methodName].calls.allArgs();
+var getEventHandler = curry(3, (methodName, socket, event) => {
+  const args = socket[methodName].calls.allArgs();
 
   return args.filter((item) => item[0] === event)[0][1];
 });
@@ -20,8 +21,8 @@ describe('create socket', () => {
 
     io = jasmine.createSpy('io').and.returnValue(socket);
 
-    createSocket = proxyquire.noPreserveCache()('../../create-socket', {
-      'socket.io-client': io
+    createSocket = proxyquire('../source/create-socket', {
+      'socket.io-client/socket.io.js': io
     }).default;
 
     url = 'https://localhost:8000';

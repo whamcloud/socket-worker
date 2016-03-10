@@ -1,9 +1,10 @@
-import getEventSocket from '../../get-event-socket';
+import getEventSocket from '../../source/get-event-socket';
+import {describe, beforeEach, jasmine, it, expect} from '../jasmine';
 
-describe('event connection', function () {
+describe('event connection', () => {
   var eventSocket, socket, id;
 
-  beforeEach(function () {
+  beforeEach(() => {
     socket = {
       emit: jasmine.createSpy('emit'),
       on: jasmine.createSpy('on'),
@@ -17,21 +18,21 @@ describe('event connection', function () {
     eventSocket = getEventSocket(socket, id);
   });
 
-  it('should be a function', function () {
+  it('should be a function', () => {
     expect(getEventSocket).toEqual(jasmine.any(Function));
   });
 
-  it('should return an Object extending socket', function () {
+  it('should return an Object extending socket', () => {
     expect(Object.getPrototypeOf(eventSocket)).toBe(socket);
   });
 
-  it('should return a socket with a sendMessage method', function () {
+  it('should return a socket with a sendMessage method', () => {
     eventSocket.sendMessage({});
 
     expect(socket.emit).toHaveBeenCalledOnceWith('messagefoo', {}, undefined);
   });
 
-  it('should take an ack for sendMessage', function () {
+  it('should take an ack for sendMessage', () => {
     var spy = jasmine.createSpy('spy');
 
     eventSocket.sendMessage({}, spy);
@@ -39,18 +40,18 @@ describe('event connection', function () {
     expect(socket.emit).toHaveBeenCalledOnceWith('messagefoo', {}, spy);
   });
 
-  it('should register a reconnect listener on socket', function () {
+  it('should register a reconnect listener on socket', () => {
     expect(socket.on).toHaveBeenCalledOnceWith('reconnect', jasmine.any(Function));
   });
 
-  describe('reconnecting', function () {
+  describe('reconnecting', () => {
     var handler;
 
-    beforeEach(function () {
+    beforeEach(() => {
       handler = socket.on.calls.mostRecent().args[1];
     });
 
-    it('should re-call emit on reconnect', function () {
+    it('should re-call emit on reconnect', () => {
       eventSocket.sendMessage({ path: '/host' });
 
       handler();
@@ -61,44 +62,44 @@ describe('event connection', function () {
     });
   });
 
-  describe('ending', function () {
-    beforeEach(function () {
+  describe('ending', () => {
+    beforeEach(() => {
       eventSocket.end();
     });
 
-    it('should remove message listeners on end', function () {
+    it('should remove message listeners on end', () => {
       expect(socket.removeAllListeners).toHaveBeenCalledOnceWith('messagefoo');
     });
 
-    it('should return a socket with an end method', function () {
+    it('should return a socket with an end method', () => {
       expect(socket.emit).toHaveBeenCalledOnceWith('endfoo');
     });
 
-    it('should remove reconnect listener on disconnect', function () {
+    it('should remove reconnect listener on disconnect', () => {
       expect(socket.off).toHaveBeenCalledOnceWith('reconnect', jasmine.any(Function));
     });
   });
 
-  describe('disconnecting', function () {
-    beforeEach(function () {
+  describe('disconnecting', () => {
+    beforeEach(() => {
       var handler = socket.once.calls.mostRecent().args[1];
       handler();
     });
 
-    it('should register a listener', function () {
+    it('should register a listener', () => {
       expect(socket.once).toHaveBeenCalledOnceWith('destroy', jasmine.any(Function));
     });
 
-    it('should remove message listeners on destroy', function () {
+    it('should remove message listeners on destroy', () => {
       expect(socket.removeAllListeners).toHaveBeenCalledOnceWith('messagefoo');
     });
 
-    it('should remove reconnect listener on destroy', function () {
+    it('should remove reconnect listener on destroy', () => {
       expect(socket.off).toHaveBeenCalledOnceWith('reconnect', jasmine.any(Function));
     });
   });
 
-  it('should register an onMessage handler', function () {
+  it('should register an onMessage handler', () => {
     var spy = jasmine.createSpy('spy');
 
     eventSocket.onMessage(spy);

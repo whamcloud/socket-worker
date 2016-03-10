@@ -1,4 +1,5 @@
-const proxyquire = require('proxyquire').noPreserveCache();
+import proxyquire from '../../../proxyquire.js';
+import {describe, beforeEach, jasmine, it, expect} from '../../../jasmine.js';
 
 describe('routes wildcard', () => {
   var router, wildcard;
@@ -8,8 +9,8 @@ describe('routes wildcard', () => {
       all: jasmine.createSpy('all')
     };
 
-    wildcard = proxyquire('../../../../router/routes/wildcard', {
-      '../': {default: router}
+    wildcard = proxyquire('../source/router/routes/wildcard.js', {
+      '../index.js': router
     }).default;
 
     wildcard();

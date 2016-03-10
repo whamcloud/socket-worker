@@ -1,6 +1,5 @@
-'use strict';
-
-import proxyquire from 'proxyquire';
+import proxyquire from '../../proxyquire.js';
+import {describe, beforeEach, jasmine, it, expect} from '../../jasmine.js';
 
 describe('router', () => {
   var getRouter, router, r;
@@ -13,7 +12,7 @@ describe('router', () => {
     getRouter = jasmine.createSpy('router')
       .and.returnValue(router);
 
-    r = proxyquire.noPreserveCache()('../../../router/index', {
+    r = proxyquire('../source/router/index.js', {
       'intel-router': getRouter
     }).default;
   });
