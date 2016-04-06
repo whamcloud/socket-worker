@@ -11,7 +11,7 @@ describe('build script', () => {
     const moduleDir = dirname(dirname(dirname(__dirname)));
     distDir = join.bind(join, moduleDir, 'dist');
 
-    exec('npm run prepublish', {cwd: moduleDir}, (error, stdout, stderr) => {
+    exec('npm run postversion', {cwd: moduleDir}, (error, stdout, stderr) => {
       if (stderr.length)
         console.error(stderr);
 
