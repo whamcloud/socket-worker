@@ -14,7 +14,7 @@ do
     nvm use $node_version
     rm -rf node_modules
     npm i
-    npm run prepublish
+    npm run postversion
     npm t
     mv *results*.xml ../results
 done
