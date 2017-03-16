@@ -1,6 +1,6 @@
 {
-  "name": "intel-socket-worker",
-  "version": "3.1.1",
+  "name": "@iml/socket-worker",
+  "version": "3.1.2",
   "description": "Socket.io client that runs in a WebWorker. Handles data parsing / munging.",
   "main": "dist/bundle.js",
   "scripts": {
@@ -21,10 +21,7 @@
     "eslint",
     "test:dev"
   ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.intel.com/IML/socket-worker.git"
-  },
+  "repository": "https://github.intel.com/IML/socket-worker.git",
   "publishConfig": {
     "registry": "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-local"
   },
