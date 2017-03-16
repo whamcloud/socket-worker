@@ -93,7 +93,7 @@ describe('get event socket handler', () => {
       };
     });
 
-    it('should not route a message if we haven\'t connected yet', () => {
+    it('should not route a message if we have not connected yet', () => {
       handler(args);
 
       expect(mockRouter.go).not.toHaveBeenCalled();
