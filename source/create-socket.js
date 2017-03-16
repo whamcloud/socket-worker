@@ -21,27 +21,30 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import io from 'socket.io-client/socket.io.js';
-import type {socketIoClientInstance} from '../flow/include/socket.io-client';
+import io from 'socket.io-client/dist/socket.io.js';
+import type { socketIoClientInstance } from '../flow/include/socket.io-client';
 
-export default function createSocket(url:string, workerContext: typeof self): socketIoClientInstance {
+export default function createSocket(
+  url: string,
+  workerContext: typeof self
+): socketIoClientInstance {
   var socket = io(url);
 
-  socket.on('reconnecting', (attempt) => {
+  socket.on('reconnecting', attempt => {
     workerContext.postMessage({
       type: 'reconnecting',
       data: attempt
     });
   });
 
-  socket.on('reconnect', (attempt) => {
+  socket.on('reconnect', attempt => {
     workerContext.postMessage({
       type: 'reconnect',
       data: attempt
     });
   });
 
-  socket.once('error', (err) => {
+  socket.once('error', err => {
     workerContext.postMessage({
       type: 'error',
       data: err

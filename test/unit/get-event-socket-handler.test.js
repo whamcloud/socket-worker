@@ -1,9 +1,11 @@
-import proxyquire from 'proxyquire';
-import {describe, beforeEach, jasmine, it, expect} from '../jasmine';
-
 describe('get event socket handler', () => {
-  var getEventSocketHandler, getEventSocket,
-    eventSocket, socket, workerContext, handler, router;
+  var getEventSocketHandler,
+    mockGetEventSocket,
+    eventSocket,
+    socket,
+    workerContext,
+    handler,
+    mockRouter;
 
   beforeEach(() => {
     eventSocket = {
@@ -12,20 +14,21 @@ describe('get event socket handler', () => {
       end: jasmine.createSpy('end')
     };
 
-    router = {
+    mockRouter = {
       go: jasmine.createSpy('go'),
       verbs: {
         GET: 'get'
       }
     };
 
-    getEventSocket = jasmine.createSpy('getEventSocket')
+    mockGetEventSocket = jasmine
+      .createSpy('getEventSocket')
       .and.returnValue(eventSocket);
 
-    getEventSocketHandler = proxyquire('../../source/get-event-socket-handler', {
-      './get-event-socket.js': {default: getEventSocket},
-      './router/index.js': {default: router}
-    }).default;
+    jest.mock('../../source/get-event-socket.js', () => mockGetEventSocket);
+    jest.mock('../../source/router/index.js', () => mockRouter);
+
+    getEventSocketHandler = require('../../source/get-event-socket-handler').default;
 
     socket = {};
 
@@ -44,8 +47,11 @@ describe('get event socket handler', () => {
   });
 
   it('should add a message listener', () => {
-    expect(workerContext.addEventListener)
-      .toHaveBeenCalledOnceWith('message', jasmine.any(Function), false);
+    expect(workerContext.addEventListener).toHaveBeenCalledOnceWith(
+      'message',
+      jasmine.any(Function),
+      false
+    );
   });
 
   describe('connect', () => {
@@ -63,14 +69,13 @@ describe('get event socket handler', () => {
     });
 
     it('should get an event socket', () => {
-      expect(getEventSocket)
-        .toHaveBeenCalledOnceWith(socket, '1');
+      expect(mockGetEventSocket).toHaveBeenCalledOnceWith(socket, '1');
     });
 
     it('should not recreate an existing socket', () => {
       handler(args);
 
-      expect(getEventSocket).toHaveBeenCalledOnce();
+      expect(mockGetEventSocket).toHaveBeenCalledOnce();
     });
   });
 
@@ -91,7 +96,7 @@ describe('get event socket handler', () => {
     it('should not route a message if we haven\'t connected yet', () => {
       handler(args);
 
-      expect(router.go).not.toHaveBeenCalled();
+      expect(mockRouter.go).not.toHaveBeenCalled();
     });
 
     describe('with a connected socket', () => {
@@ -107,14 +112,15 @@ describe('get event socket handler', () => {
       });
 
       it('should route the data', () => {
-        expect(router.go).toHaveBeenCalledOnceWith('/foo/bar',
+        expect(mockRouter.go).toHaveBeenCalledOnceWith(
+          '/foo/bar',
           { verb: 'get', payload: args.data.payload, isAck: undefined },
           { socket: eventSocket, write: jasmine.any(Function) }
         );
       });
 
       it('should send a postMessage when writing', () => {
-        var write = router.go.calls.mostRecent().args[2].write;
+        var write = mockRouter.go.calls.mostRecent().args[2].write;
 
         write('foo');
 

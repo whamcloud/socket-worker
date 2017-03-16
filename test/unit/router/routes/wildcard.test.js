@@ -1,24 +1,23 @@
-import proxyquire from '../../../proxyquire.js';
-import {describe, beforeEach, jasmine, it, expect} from '../../../jasmine.js';
-
 describe('routes wildcard', () => {
-  var router, wildcard;
+  var mockRouter, wildcard;
 
   beforeEach(() => {
-    router = {
+    mockRouter = {
       all: jasmine.createSpy('all')
     };
 
-    wildcard = proxyquire('../source/router/routes/wildcard.js', {
-      '../index.js': router
-    }).default;
+    jest.mock('../../../../source/router/index.js', () => mockRouter);
+
+    wildcard = require('../../../../source/router/routes/wildcard.js').default;
 
     wildcard();
   });
 
   it('should call router.all', () => {
-    expect(router.all)
-      .toHaveBeenCalledOnceWith('/(.*)', jasmine.any(Function));
+    expect(mockRouter.all).toHaveBeenCalledOnceWith(
+      '/(.*)',
+      jasmine.any(Function)
+    );
   });
 
   describe('generic handler', () => {
@@ -45,11 +44,14 @@ describe('routes wildcard', () => {
 
     describe('with ack', () => {
       beforeEach(() => {
-        router.all.calls.mostRecent().args[1](req, resp, next);
+        mockRouter.all.calls.mostRecent().args[1](req, resp, next);
       });
 
       it('should send a message when the data contains an ack', () => {
-        expect(resp.socket.sendMessage).toHaveBeenCalledOnceWith(req.payload, resp.write);
+        expect(resp.socket.sendMessage).toHaveBeenCalledOnceWith(
+          req.payload,
+          resp.write
+        );
       });
 
       it('should not call onMessage', () => {
@@ -64,7 +66,7 @@ describe('routes wildcard', () => {
     describe('with no ack', () => {
       beforeEach(() => {
         req.isAck = false;
-        router.all.calls.mostRecent().args[1](req, resp, next);
+        mockRouter.all.calls.mostRecent().args[1](req, resp, next);
       });
 
       it('should call onMessage', () => {
@@ -72,7 +74,10 @@ describe('routes wildcard', () => {
       });
 
       it('should call send message', () => {
-        expect(resp.socket.sendMessage).toHaveBeenCalledOnceWith(req.payload, undefined);
+        expect(resp.socket.sendMessage).toHaveBeenCalledOnceWith(
+          req.payload,
+          undefined
+        );
       });
 
       it('should call next', () => {

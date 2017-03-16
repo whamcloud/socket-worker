@@ -1,5 +1,4 @@
 import getEventSocket from '../../source/get-event-socket';
-import {describe, beforeEach, jasmine, it, expect} from '../jasmine';
 
 describe('event connection', () => {
   var eventSocket, socket, id;
@@ -41,7 +40,10 @@ describe('event connection', () => {
   });
 
   it('should register a reconnect listener on socket', () => {
-    expect(socket.on).toHaveBeenCalledOnceWith('reconnect', jasmine.any(Function));
+    expect(socket.on).toHaveBeenCalledOnceWith(
+      'reconnect',
+      jasmine.any(Function)
+    );
   });
 
   describe('reconnecting', () => {
@@ -56,9 +58,13 @@ describe('event connection', () => {
 
       handler();
 
-      expect(socket.emit).toHaveBeenCalledTwiceWith('messagefoo', {
-        path: '/host'
-      }, undefined);
+      expect(socket.emit).toHaveBeenCalledTwiceWith(
+        'messagefoo',
+        {
+          path: '/host'
+        },
+        undefined
+      );
     });
   });
 
@@ -76,7 +82,10 @@ describe('event connection', () => {
     });
 
     it('should remove reconnect listener on disconnect', () => {
-      expect(socket.off).toHaveBeenCalledOnceWith('reconnect', jasmine.any(Function));
+      expect(socket.off).toHaveBeenCalledOnceWith(
+        'reconnect',
+        jasmine.any(Function)
+      );
     });
   });
 
@@ -87,7 +96,10 @@ describe('event connection', () => {
     });
 
     it('should register a listener', () => {
-      expect(socket.once).toHaveBeenCalledOnceWith('destroy', jasmine.any(Function));
+      expect(socket.once).toHaveBeenCalledOnceWith(
+        'destroy',
+        jasmine.any(Function)
+      );
     });
 
     it('should remove message listeners on destroy', () => {
@@ -95,7 +107,10 @@ describe('event connection', () => {
     });
 
     it('should remove reconnect listener on destroy', () => {
-      expect(socket.off).toHaveBeenCalledOnceWith('reconnect', jasmine.any(Function));
+      expect(socket.off).toHaveBeenCalledOnceWith(
+        'reconnect',
+        jasmine.any(Function)
+      );
     });
   });
 
