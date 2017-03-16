@@ -24,41 +24,39 @@
 import getEventSocket from './get-event-socket.js';
 import router from './router/index.js';
 
-export default function getEventSocketHandler (socket: Object, workerContext: typeof self):void {
+export default function getEventSocketHandler(
+  socket: Object,
+  workerContext: typeof self
+): void {
   const eventSockets = {};
 
   workerContext.addEventListener('message', handler, false);
 
-  function handler ({data}) {
+  function handler({ data }) {
     const type = data.type;
 
-    if (type === 'connect')
-      onConnect(data);
-    else if (type === 'send')
-      onSend(data);
-    else if (type === 'end')
-      onEnd(data);
+    if (type === 'connect') onConnect(data);
+    else if (type === 'send') onSend(data);
+    else if (type === 'end') onEnd(data);
   }
 
-  function onConnect ({id}) {
-    if (eventSockets[id])
-      return;
+  function onConnect({ id }) {
+    if (eventSockets[id]) return;
 
     eventSockets[id] = getEventSocket(socket, id);
   }
 
-
-  function onSend ({payload, id, ack}) {
-    const {path} = payload;
+  function onSend({ payload, id, ack }) {
+    const { path } = payload;
     const options = payload.options || {};
     const verb = options.method || router.verbs.GET;
 
     const socket = eventSockets[id];
 
-    if (!socket)
-      return;
+    if (!socket) return;
 
-    router.go(path,
+    router.go(
+      path,
       {
         verb,
         payload,
@@ -70,7 +68,7 @@ export default function getEventSocketHandler (socket: Object, workerContext: ty
       }
     );
 
-    function write (payload) {
+    function write(payload) {
       workerContext.postMessage({
         type: 'message',
         id,
@@ -79,9 +77,8 @@ export default function getEventSocketHandler (socket: Object, workerContext: ty
     }
   }
 
-  function onEnd ({id}) {
-    if (!eventSockets[id])
-      return;
+  function onEnd({ id }) {
+    if (!eventSockets[id]) return;
 
     eventSockets[id].end();
     delete eventSockets[id];

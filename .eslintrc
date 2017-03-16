@@ -1,9 +1,15 @@
 {
   "parser": "babel-eslint",
   "plugins": [
-    "flow-vars"
+    "flow-vars",
+    "prettier"
   ],
   "rules": {
+    "prettier/prettier": [
+      "error", {
+        "singleQuote": true
+      }
+    ],
     "flow-vars/define-flow-type": 1,
     "flow-vars/use-flow-type": 1,
     "quotes": [
@@ -33,5 +39,5 @@
     "jasmine": true,
     "jest": true
   },
-  "extends": "eslint:recommended"
+  "extends": ["eslint:recommended", "prettier"]
 }
