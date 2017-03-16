@@ -4,8 +4,7 @@ set -ex
 . ~/.nvm/nvm.sh
 
 NODE_VERSIONS="
-0.10
-4
+6
 stable
 "
 
@@ -16,5 +15,4 @@ do
     npm i
     npm run postversion
     npm t
-    mv *results*.xml ../results
 done
