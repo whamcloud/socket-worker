@@ -7,7 +7,6 @@
     "test:dev": "./bin/build.sh && npm t",
     "test": "NODE_ENV=test ./bin/test.js",
     "eslint": "eslint ./",
-    "jscs": "jscs .",
     "postversion": "./bin/build.sh && ./bin/bundle.js"
   },
   "author": "IML Team",
@@ -17,7 +16,6 @@
     "socket.io-client": "1.4.8"
   },
   "pre-commit": [
-    "jscs",
     "eslint",
     "test:dev"
   ],
@@ -38,7 +36,6 @@
     "intel-jasmine-junit-reporter": "1.0.0",
     "intel-jasmine-n-matchers": "2.1.1",
     "jasmine": "2.4.1",
-    "jscs": "2.11.0",
     "pre-commit": "1.1.3",
     "proxyquire": "1.7.10",
     "systemjs-builder": "0.15.25",
