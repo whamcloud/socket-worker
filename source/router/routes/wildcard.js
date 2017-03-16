@@ -23,14 +23,12 @@
 
 import router from '../index.js';
 
-export default function wildcardRoute (): void {
+export default function wildcardRoute(): void {
   router.all('/(.*)', (req, resp, next) => {
     var ack;
 
-    if (req.isAck)
-      ack = resp.write;
-    else
-      resp.socket.onMessage(resp.write);
+    if (req.isAck) ack = resp.write;
+    else resp.socket.onMessage(resp.write);
 
     resp.socket.sendMessage(req.payload, ack);
 

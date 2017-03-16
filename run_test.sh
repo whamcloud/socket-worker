@@ -12,7 +12,7 @@ for node_version in $NODE_VERSIONS
 do
     nvm use $node_version
     rm -rf node_modules
-    npm i
-    npm run postversion
-    npm t
+    yarn install
+    yarn run postversion
+    yarn run cover
 done

@@ -1,10 +1,5 @@
 [ignore]
 .*dist/*
-.*node_modules/socket.io-client.*
-.*node_modules/intel-router.*
-.*node_modules/babel-.*
-.*node_modules/babylon.*
-.*\(lib\|test\|builtin-modules\|binary-extensions\|faker\|spdx\).*\.json
 
 [include]
 flow/include/

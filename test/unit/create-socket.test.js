@@ -1,16 +1,20 @@
-import proxyquire from '../proxyquire.js';
-import {curry} from 'intel-fp';
-import {describe, beforeEach, jasmine, it, expect} from '../jasmine.js';
+import { curry } from 'intel-fp';
 
 var getEventHandler = curry(3, (methodName, socket, event) => {
   const args = socket[methodName].calls.allArgs();
 
-  return args.filter((item) => item[0] === event)[0][1];
+  return args.filter(item => item[0] === event)[0][1];
 });
 
 describe('create socket', () => {
-  var result, socket, io, url, workerContext,
-    getOnceHandler, getOnHandler, createSocket;
+  var result,
+    socket,
+    mockIO,
+    url,
+    workerContext,
+    getOnceHandler,
+    getOnHandler,
+    createSocket;
 
   beforeEach(() => {
     socket = {
@@ -19,11 +23,11 @@ describe('create socket', () => {
       disconnect: jasmine.createSpy('disconnect')
     };
 
-    io = jasmine.createSpy('io').and.returnValue(socket);
+    mockIO = jasmine.createSpy('io').and.returnValue(socket);
 
-    createSocket = proxyquire('../source/create-socket', {
-      'socket.io-client/socket.io.js': io
-    }).default;
+    jest.mock('socket.io-client/dist/socket.io.js', () => mockIO);
+
+    createSocket = require('../../source/create-socket.js').default;
 
     url = 'https://localhost:8000';
     workerContext = {
@@ -45,37 +49,44 @@ describe('create socket', () => {
   });
 
   it('should register a reconnecting handler', () => {
-    expect(socket.on).toHaveBeenCalledOnceWith('reconnecting', jasmine.any(Function));
+    expect(socket.on).toHaveBeenCalledOnceWith(
+      'reconnecting',
+      jasmine.any(Function)
+    );
   });
 
   it('should post a message on reconnecting', () => {
     var handler = getOnHandler('reconnecting');
     handler(2);
 
-    expect(workerContext.postMessage)
-      .toHaveBeenCalledOnceWith({
-        type: 'reconnecting',
-        data: 2
-      });
+    expect(workerContext.postMessage).toHaveBeenCalledOnceWith({
+      type: 'reconnecting',
+      data: 2
+    });
   });
 
   it('should register a reconnect handler', () => {
-    expect(socket.on).toHaveBeenCalledOnceWith('reconnect', jasmine.any(Function));
+    expect(socket.on).toHaveBeenCalledOnceWith(
+      'reconnect',
+      jasmine.any(Function)
+    );
   });
 
   it('should post a message on reconnect', () => {
     var handler = getOnHandler('reconnect');
     handler(3);
 
-    expect(workerContext.postMessage)
-      .toHaveBeenCalledOnceWith({
-        type: 'reconnect',
-        data: 3
-      });
+    expect(workerContext.postMessage).toHaveBeenCalledOnceWith({
+      type: 'reconnect',
+      data: 3
+    });
   });
 
   it('should register an error handler', () => {
-    expect(socket.once).toHaveBeenCalledOnceWith('error', jasmine.any(Function));
+    expect(socket.once).toHaveBeenCalledOnceWith(
+      'error',
+      jasmine.any(Function)
+    );
   });
 
   it('should post a message on error', () => {
@@ -103,6 +114,8 @@ describe('create socket', () => {
     var handler = getOnceHandler('disconnect');
     handler();
 
-    expect(workerContext.postMessage).toHaveBeenCalledOnceWith({ type: 'disconnect' });
+    expect(workerContext.postMessage).toHaveBeenCalledOnceWith({
+      type: 'disconnect'
+    });
   });
 });
