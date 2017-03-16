@@ -4,41 +4,53 @@
   "description": "Socket.io client that runs in a WebWorker. Handles data parsing / munging.",
   "main": "dist/bundle.js",
   "scripts": {
-    "test:dev": "./bin/build.sh && npm t",
-    "test": "NODE_ENV=test ./bin/test.js",
+    "test": "jest",
+    "cover": "NODE_ENV=test npm t -- --coverage",
     "eslint": "eslint ./",
-    "postversion": "./bin/build.sh && ./bin/bundle.js"
+    "postversion": "rollup -c rollup-config.js --output='dist/bundle.js'"
   },
   "author": "IML Team",
   "license": "MIT",
   "dependencies": {
     "intel-router": "5.0.0",
-    "socket.io-client": "1.4.8"
+    "socket.io-client": "1.7.3"
   },
   "pre-commit": [
     "eslint",
-    "test:dev"
+    "test"
   ],
   "repository": "https://github.intel.com/IML/socket-worker.git",
   "publishConfig": {
     "registry": "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-local"
   },
   "devDependencies": {
-    "babel-cli": "6.11.4",
-    "babel-core": "6.11.4",
-    "babel-eslint": "6.1.2",
-    "babel-plugin-transform-flow-strip-types": "6.8.0",
-    "babel-plugin-transform-strict-mode": "6.11.3",
-    "babel-preset-es2015": "6.9.0",
-    "eslint": "2.7.0",
-    "eslint-plugin-flow-vars": "0.3.0",
+    "babel-eslint": "7.1.1",
+    "babel-plugin-external-helpers": "6.22.0",
+    "babel-plugin-transform-flow-strip-types": "6.22.0",
+    "babel-preset-env": "1.2.2",
+    "eslint": "3.17.1",
+    "eslint-plugin-flow-vars": "0.5.0",
     "intel-fp": "4.2.1",
-    "intel-jasmine-junit-reporter": "1.0.0",
     "intel-jasmine-n-matchers": "2.1.1",
-    "jasmine": "2.4.1",
-    "pre-commit": "1.1.3",
-    "proxyquire": "1.7.10",
-    "systemjs-builder": "0.15.25",
-    "systemjs-plugin-json": "0.1.0"
+    "jasmine-reporters": "2.2.0",
+    "jest": "19.0.2",
+    "pre-commit": "1.2.2",
+    "rollup": "0.41.6",
+    "rollup-plugin-babel": "2.7.1",
+    "rollup-plugin-cleanup": "1.0.0",
+    "rollup-plugin-commonjs": "8.0.2",
+    "rollup-plugin-node-resolve": "2.0.0"
+  },
+  "jest": {
+    "setupTestFrameworkScriptFile": "./setup-jasmine-env.js",
+    "resetModules": true,
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "./setup-jasmine-env.js",
+      "test"
+    ],
+    "transformIgnorePatterns": [
+      "/node_modules/(?!@iml)/"
+    ]
   }
 }
