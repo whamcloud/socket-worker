@@ -1,11 +1,31 @@
 import babel from 'rollup-plugin-babel';
+import builtins from 'rollup-plugin-node-builtins';
+import globals from 'rollup-plugin-node-globals';
 import nodeResolve from 'rollup-plugin-node-resolve';
-import cleanup from 'rollup-plugin-cleanup';
 import commonjs from 'rollup-plugin-commonjs';
+import replace from 'rollup-plugin-re';
 
 export default {
   entry: 'source/index.js',
   plugins: [
+    replace({
+      patterns: [
+        {
+          test: "require('json3')",
+          replace: 'JSON'
+        },
+        {
+          test: "require('debug')",
+          replace: '(() => () => {})'
+        }
+      ]
+    }),
+    nodeResolve({ jsnext: true, main: true, browser: true }),
+    commonjs({
+      ignore: ['bufferutil', 'utf-8-validate']
+    }),
+    globals(),
+    builtins(),
     babel({
       presets: [
         [
@@ -16,16 +36,16 @@ export default {
             },
             modules: false
           }
-        ]
+        ],
+        'babili'
       ],
-      plugins: ['transform-flow-strip-types', 'external-helpers'],
+      plugins: [
+        ['transform-object-rest-spread', { useBuiltIns: true }],
+        'transform-flow-strip-types',
+        'external-helpers'
+      ],
       babelrc: false
-    }),
-    commonjs({
-      ignore: ['JSON']
-    }),
-    nodeResolve({ main: true }),
-    cleanup({ maxEmptyLines: 0 })
+    })
   ],
   sourceMap: true,
   format: 'iife'

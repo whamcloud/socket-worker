@@ -12,10 +12,6 @@
     ],
     "flow-vars/define-flow-type": 1,
     "flow-vars/use-flow-type": 1,
-    "quotes": [
-      2,
-      "single"
-    ],
     "linebreak-style": [
       2,
       "unix"
@@ -28,7 +24,20 @@
       2,
       2
     ],
-    "no-console": 0
+    "no-console": 0,
+    "no-var": 2,
+    "curly": [
+      2,
+      "multi",
+      "consistent"
+    ],
+    "prefer-const": [
+      "error",
+      {
+        "destructuring": "all",
+        "ignoreReadBeforeAssign": false
+      }
+    ]
   },
   "ecmaFeatures": {
     "modules": true

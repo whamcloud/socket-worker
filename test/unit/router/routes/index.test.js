@@ -1,5 +1,5 @@
 describe('router', () => {
-  var index, mockWildcard;
+  let index, mockWildcard;
 
   beforeEach(() => {
     mockWildcard = jasmine.createSpy('wildcard');
