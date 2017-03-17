@@ -21,14 +21,14 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import io from 'socket.io-client/dist/socket.io.js';
+import io from 'socket.io-client/lib/index.js';
 import type { socketIoClientInstance } from '../flow/include/socket.io-client';
 
 export default function createSocket(
   url: string,
   workerContext: typeof self
 ): socketIoClientInstance {
-  var socket = io(url);
+  const socket = io(url);
 
   socket.on('reconnecting', attempt => {
     workerContext.postMessage({

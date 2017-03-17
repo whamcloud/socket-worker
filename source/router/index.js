@@ -21,6 +21,6 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import getRouter from 'intel-router';
+import getRouter from '@iml/router';
 
 export default getRouter();

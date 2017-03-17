@@ -1,10 +1,9 @@
 import { unlinkSync, readFileSync, statSync } from 'fs';
 import { dirname, join } from 'path';
-import { tail } from 'intel-fp';
 import { exec } from 'child_process';
 
 describe('build script', () => {
-  var distDir;
+  let distDir;
 
   beforeAll(
     done => {
@@ -33,7 +32,7 @@ describe('build script', () => {
 
   it('should result in a readable stream that points to a source map file', () => {
     const bundle = readFileSync(distDir('bundle.js'), 'utf8');
-    expect(tail(bundle.trim().split('\n'))).toBe(
+    expect(bundle.trim().split('\n').reverse()[0]).toBe(
       '//# sourceMappingURL=bundle.js.map'
     );
   });

@@ -1,5 +1,5 @@
 describe('routes wildcard', () => {
-  var mockRouter, wildcard;
+  let mockRouter, wildcard;
 
   beforeEach(() => {
     mockRouter = {
@@ -21,7 +21,7 @@ describe('routes wildcard', () => {
   });
 
   describe('generic handler', () => {
-    var req, resp, next;
+    let req, resp, next;
 
     beforeEach(() => {
       req = {

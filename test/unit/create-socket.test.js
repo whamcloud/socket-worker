@@ -1,13 +1,12 @@
-import { curry } from 'intel-fp';
+const getEventHandler = (methodName, socket) =>
+  event => {
+    const args = socket[methodName].calls.allArgs();
 
-var getEventHandler = curry(3, (methodName, socket, event) => {
-  const args = socket[methodName].calls.allArgs();
-
-  return args.filter(item => item[0] === event)[0][1];
-});
+    return args.filter(item => item[0] === event)[0][1];
+  };
 
 describe('create socket', () => {
-  var result,
+  let result,
     socket,
     mockIO,
     url,
@@ -25,7 +24,7 @@ describe('create socket', () => {
 
     mockIO = jasmine.createSpy('io').and.returnValue(socket);
 
-    jest.mock('socket.io-client/dist/socket.io.js', () => mockIO);
+    jest.mock('socket.io-client/lib/index.js', () => mockIO);
 
     createSocket = require('../../source/create-socket.js').default;
 
@@ -56,7 +55,7 @@ describe('create socket', () => {
   });
 
   it('should post a message on reconnecting', () => {
-    var handler = getOnHandler('reconnecting');
+    const handler = getOnHandler('reconnecting');
     handler(2);
 
     expect(workerContext.postMessage).toHaveBeenCalledOnceWith({
@@ -73,7 +72,7 @@ describe('create socket', () => {
   });
 
   it('should post a message on reconnect', () => {
-    var handler = getOnHandler('reconnect');
+    const handler = getOnHandler('reconnect');
     handler(3);
 
     expect(workerContext.postMessage).toHaveBeenCalledOnceWith({
@@ -90,9 +89,9 @@ describe('create socket', () => {
   });
 
   it('should post a message on error', () => {
-    var err = new Error('boom!');
+    const err = new Error('boom!');
 
-    var handler = getOnceHandler('error');
+    const handler = getOnceHandler('error');
     handler(err);
 
     expect(workerContext.postMessage).toHaveBeenCalledOnceWith({
@@ -102,16 +101,16 @@ describe('create socket', () => {
   });
 
   it('should disconnect on error', () => {
-    var err = new Error('boom!');
+    const err = new Error('boom!');
 
-    var handler = getOnceHandler('error');
+    const handler = getOnceHandler('error');
     handler(err);
 
     expect(socket.disconnect).toHaveBeenCalledOnce();
   });
 
   it('should post a message on disconnect', () => {
-    var handler = getOnceHandler('disconnect');
+    const handler = getOnceHandler('disconnect');
     handler();
 
     expect(workerContext.postMessage).toHaveBeenCalledOnceWith({

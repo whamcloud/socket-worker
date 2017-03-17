@@ -1,5 +1,5 @@
 describe('router', () => {
-  var mockGetRouter, router, r;
+  let mockGetRouter, router, r;
 
   beforeEach(() => {
     router = {
@@ -8,7 +8,7 @@ describe('router', () => {
 
     mockGetRouter = jasmine.createSpy('router').and.returnValue(router);
 
-    jest.mock('intel-router', () => mockGetRouter);
+    jest.mock('@iml/router', () => mockGetRouter);
 
     r = require('../../../source/router/index.js').default;
   });

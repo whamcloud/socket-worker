@@ -8,6 +8,6 @@ type routerInstance = {
   go(path: string | RegExp, req: Object, resp: Object): void
 };
 
-declare module 'intel-router' {
+declare module '@iml/router' {
   declare var exports: () => routerInstance;
 }
