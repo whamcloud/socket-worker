@@ -1,7 +1,7 @@
 import getEventSocket from '../../source/get-event-socket';
 
 describe('event connection', () => {
-  var eventSocket, socket, id;
+  let eventSocket, socket, id;
 
   beforeEach(() => {
     socket = {
@@ -32,7 +32,7 @@ describe('event connection', () => {
   });
 
   it('should take an ack for sendMessage', () => {
-    var spy = jasmine.createSpy('spy');
+    const spy = jasmine.createSpy('spy');
 
     eventSocket.sendMessage({}, spy);
 
@@ -47,7 +47,7 @@ describe('event connection', () => {
   });
 
   describe('reconnecting', () => {
-    var handler;
+    let handler;
 
     beforeEach(() => {
       handler = socket.on.calls.mostRecent().args[1];
@@ -91,7 +91,7 @@ describe('event connection', () => {
 
   describe('disconnecting', () => {
     beforeEach(() => {
-      var handler = socket.once.calls.mostRecent().args[1];
+      const handler = socket.once.calls.mostRecent().args[1];
       handler();
     });
 
@@ -115,7 +115,7 @@ describe('event connection', () => {
   });
 
   it('should register an onMessage handler', () => {
-    var spy = jasmine.createSpy('spy');
+    const spy = jasmine.createSpy('spy');
 
     eventSocket.onMessage(spy);
 

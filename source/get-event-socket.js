@@ -22,9 +22,9 @@
 // express and approved by Intel in writing.
 
 export default function getEventSocket(socket: any, id: string): Object {
-  var lastSend;
+  let lastSend;
 
-  var eventSocket = Object.create(socket);
+  let eventSocket = Object.create(socket);
 
   eventSocket.end = function end() {
     if (!socket) return;

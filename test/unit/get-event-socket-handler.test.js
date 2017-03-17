@@ -1,5 +1,5 @@
 describe('get event socket handler', () => {
-  var getEventSocketHandler,
+  let getEventSocketHandler,
     mockGetEventSocket,
     eventSocket,
     socket,
@@ -55,7 +55,7 @@ describe('get event socket handler', () => {
   });
 
   describe('connect', () => {
-    var args;
+    let args;
 
     beforeEach(() => {
       args = {
@@ -80,7 +80,7 @@ describe('get event socket handler', () => {
   });
 
   describe('send', () => {
-    var args;
+    let args;
 
     beforeEach(() => {
       args = {
@@ -120,7 +120,7 @@ describe('get event socket handler', () => {
       });
 
       it('should send a postMessage when writing', () => {
-        var write = mockRouter.go.calls.mostRecent().args[2].write;
+        const write = mockRouter.go.calls.mostRecent().args[2].write;
 
         write('foo');
 
@@ -134,7 +134,7 @@ describe('get event socket handler', () => {
   });
 
   describe('end', () => {
-    var args;
+    let args;
 
     beforeEach(() => {
       args = {
