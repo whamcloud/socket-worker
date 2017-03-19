@@ -1,12 +1,19 @@
 {
   "presets": [
-    ["env", {
-      "targets": {
-         "browsers": ["last 1 chrome version", "last 1 firefox version"]
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": [
+            "last 1 chrome version",
+            "last 1 firefox version"
+          ]
+        }
       }
-    }]
+    ]
   ],
   "plugins": [
-    "transform-flow-strip-types"
+    "transform-flow-strip-types",
+    "transform-class-properties"
   ]
 }

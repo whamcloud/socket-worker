@@ -2,7 +2,7 @@ import { jasmine, describe, it, beforeEach, expect, jest } from './jasmine.js';
 
 describe('get event socket handler', () => {
   let getEventSocketHandler,
-    mockGetEventSocket,
+    mockMultiplexedSocket,
     eventSocket,
     socket,
     workerContext,
@@ -23,11 +23,11 @@ describe('get event socket handler', () => {
       }
     };
 
-    mockGetEventSocket = jasmine
+    mockMultiplexedSocket = jasmine
       .createSpy('getEventSocket')
       .and.returnValue(eventSocket);
 
-    jest.mock('./get-event-socket.js', () => mockGetEventSocket);
+    jest.mock('./multiplexed-socket.js', () => mockMultiplexedSocket);
     jest.mock('./router/index.js', () => mockRouter);
 
     getEventSocketHandler = require('./get-event-socket-handler').default;
@@ -71,13 +71,13 @@ describe('get event socket handler', () => {
     });
 
     it('should get an event socket', () => {
-      expect(mockGetEventSocket).toHaveBeenCalledOnceWith(socket, '1');
+      expect(mockMultiplexedSocket).toHaveBeenCalledOnceWith(socket, '1');
     });
 
     it('should not recreate an existing socket', () => {
       handler(args);
 
-      expect(mockGetEventSocket).toHaveBeenCalledOnce();
+      expect(mockMultiplexedSocket).toHaveBeenCalledOnce();
     });
   });
 

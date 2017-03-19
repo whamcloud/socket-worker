@@ -42,6 +42,7 @@ export default {
       plugins: [
         ['transform-object-rest-spread', { useBuiltIns: true }],
         'transform-flow-strip-types',
+        'transform-class-properties',
         'external-helpers'
       ],
       babelrc: false

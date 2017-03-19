@@ -21,12 +21,9 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import { default as io, type SocketIoClientInstance } from 'socket.io-client';
+import { default as io, type SocketIoClient } from 'socket.io-client';
 
-export default (
-  url: string,
-  workerContext: typeof self
-): SocketIoClientInstance => {
+export default (url: string, workerContext: typeof self): SocketIoClient => {
   const socket = io(url);
 
   socket.on('reconnecting', attempt => {

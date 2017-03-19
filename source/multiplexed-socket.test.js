@@ -1,9 +1,7 @@
-import { jasmine, describe, it, beforeEach, expect } from './jasmine.js';
+import { jest, jasmine, describe, it, beforeEach, expect } from './jasmine.js';
 
-import getEventSocket from './get-event-socket';
-
-describe('event connection', () => {
-  let eventSocket, socket, id;
+describe('multiplexed socket', () => {
+  let multiplexedSocket, socket;
 
   beforeEach(() => {
     socket = {
@@ -14,29 +12,22 @@ describe('event connection', () => {
       removeAllListeners: jasmine.createSpy('removeAllListeners')
     };
 
-    id = 'foo';
+    jest.mock('./get-random-value.js', () => () => 'foo');
 
-    eventSocket = getEventSocket(socket, id);
+    const getmultiplexedSocket = require('./multiplexed-socket').default;
+    multiplexedSocket = getmultiplexedSocket(socket);
   });
 
-  it('should be a function', () => {
-    expect(getEventSocket).toEqual(jasmine.any(Function));
-  });
-
-  it('should return an Object extending socket', () => {
-    expect(Object.getPrototypeOf(eventSocket)).toBe(socket);
-  });
-
-  it('should return a socket with a sendMessage method', () => {
-    eventSocket.sendMessage({});
+  it('should return a socket with a emit method', () => {
+    multiplexedSocket.emit('message', {});
 
     expect(socket.emit).toHaveBeenCalledOnceWith('messagefoo', {}, undefined);
   });
 
-  it('should take an ack for sendMessage', () => {
+  it('should take an ack for emit', () => {
     const spy = jasmine.createSpy('spy');
 
-    eventSocket.sendMessage({}, spy);
+    multiplexedSocket.emit('message', {}, spy);
 
     expect(socket.emit).toHaveBeenCalledOnceWith('messagefoo', {}, spy);
   });
@@ -56,7 +47,7 @@ describe('event connection', () => {
     });
 
     it('should re-call emit on reconnect', () => {
-      eventSocket.sendMessage({ path: '/host' });
+      multiplexedSocket.emit('message', { path: '/host' });
 
       handler();
 
@@ -72,7 +63,7 @@ describe('event connection', () => {
 
   describe('ending', () => {
     beforeEach(() => {
-      eventSocket.end();
+      multiplexedSocket.end();
     });
 
     it('should remove message listeners on end', () => {
@@ -116,10 +107,10 @@ describe('event connection', () => {
     });
   });
 
-  it('should register an onMessage handler', () => {
+  it('should have an on handler', () => {
     const spy = jasmine.createSpy('spy');
 
-    eventSocket.onMessage(spy);
+    multiplexedSocket.on('message', spy);
 
     expect(socket.on).toHaveBeenCalledOnceWith('messagefoo', spy);
   });
