@@ -21,48 +21,7 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-export default function getEventSocket(socket: any, id: string): Object {
-  let lastSend;
-
-  let eventSocket = Object.create(socket);
-
-  eventSocket.end = function end() {
-    if (!socket) return;
-
-    socket.emit('end' + id);
-    onDestroy();
-    socket = (eventSocket = null);
-  };
-
-  eventSocket.sendMessage = function sendMessage(data, ack) {
-    if (!socket) return;
-
-    if (typeof ack !== 'function') lastSend = arguments;
-
-    socket.emit('message' + id, data, ack);
-    return this;
-  };
-
-  eventSocket.onMessage = function onMessage(fn) {
-    if (!socket) return;
-
-    socket.on('message' + id, fn);
-    return this;
-  };
-
-  socket.on('reconnect', onReconnect);
-  function onReconnect() {
-    if (lastSend && eventSocket)
-      eventSocket.sendMessage.apply(eventSocket, lastSend);
-  }
-
-  socket.once('destroy', onDestroy);
-  function onDestroy() {
-    if (!socket) return;
-
-    socket.removeAllListeners('message' + id);
-    socket.off('reconnect', onReconnect);
-  }
-
-  return eventSocket;
-}
+export default (): string => {
+  const array = new Uint32Array(1);
+  return self.crypto.getRandomValues(array)[0];
+};

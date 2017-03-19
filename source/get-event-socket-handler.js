@@ -21,7 +21,7 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import getEventSocket from './get-event-socket.js';
+import getMultiplexedSocket from './multiplexed-socket.js';
 import router from './router/index.js';
 
 export default function getEventSocketHandler(
@@ -43,7 +43,7 @@ export default function getEventSocketHandler(
   function onConnect({ id }) {
     if (eventSockets[id]) return;
 
-    eventSockets[id] = getEventSocket(socket, id);
+    eventSockets[id] = getMultiplexedSocket(socket, id);
   }
 
   function onSend({ payload, id, ack }) {
