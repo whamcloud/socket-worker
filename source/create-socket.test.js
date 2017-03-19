@@ -1,3 +1,5 @@
+import { jasmine, describe, it, beforeEach, expect, jest } from './jasmine.js';
+
 const getEventHandler = (methodName, socket) =>
   event => {
     const args = socket[methodName].calls.allArgs();
@@ -26,7 +28,7 @@ describe('create socket', () => {
 
     jest.mock('socket.io-client/lib/index.js', () => mockIO);
 
-    createSocket = require('../../source/create-socket.js').default;
+    createSocket = require('./create-socket.js').default;
 
     url = 'https://localhost:8000';
     workerContext = {

@@ -1,4 +1,6 @@
-import getEventSocket from '../../source/get-event-socket';
+import { jasmine, describe, it, beforeEach, expect } from './jasmine.js';
+
+import getEventSocket from './get-event-socket';
 
 describe('event connection', () => {
   let eventSocket, socket, id;
