@@ -1,3 +1,12 @@
+import {
+  jasmine,
+  describe,
+  it,
+  beforeEach,
+  expect,
+  jest
+} from '../../jasmine.js';
+
 describe('router', () => {
   let mockGetRouter, router, r;
 
@@ -10,7 +19,7 @@ describe('router', () => {
 
     jest.mock('@iml/router', () => mockGetRouter);
 
-    r = require('../../../source/router/index.js').default;
+    r = require('./index.js').default;
   });
 
   it('should instantiate the router', () => {

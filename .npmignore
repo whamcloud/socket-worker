@@ -6,6 +6,7 @@ node_modules
 .jscsrc
 .flowconfig
 .babelrc
+setup-jasmine-env.js
+*.log
 .gitignore
-/test
 /source

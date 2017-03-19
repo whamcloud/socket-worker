@@ -1,3 +1,5 @@
+import { jasmine, describe, it, beforeEach, expect, jest } from './jasmine.js';
+
 describe('get event socket handler', () => {
   let getEventSocketHandler,
     mockGetEventSocket,
@@ -25,10 +27,10 @@ describe('get event socket handler', () => {
       .createSpy('getEventSocket')
       .and.returnValue(eventSocket);
 
-    jest.mock('../../source/get-event-socket.js', () => mockGetEventSocket);
-    jest.mock('../../source/router/index.js', () => mockRouter);
+    jest.mock('./get-event-socket.js', () => mockGetEventSocket);
+    jest.mock('./router/index.js', () => mockRouter);
 
-    getEventSocketHandler = require('../../source/get-event-socket-handler').default;
+    getEventSocketHandler = require('./get-event-socket-handler').default;
 
     socket = {};
 
