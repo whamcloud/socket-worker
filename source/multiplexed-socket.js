@@ -32,12 +32,20 @@ const emptySocket = {
   disconnect: noop
 };
 
-class MultiplexedSocket {
+export interface MultiplexedSocketInterface {
+  end(): void,
+  onDestroy(): void,
+  emit(string, Object, fn: ?Function): MultiplexedSocketInterface,
+  on(name: string, fn: Function): MultiplexedSocketInterface,
+  onReconnect(): void
+}
+
+class MultiplexedSocket implements MultiplexedSocketInterface {
   id: string;
   socket: SocketIoClient = emptySocket;
   lastSend: ?Array<any>;
   names: Set<string> = new Set();
-  constructor(socket: SocketIoClient, id) {
+  constructor(socket: SocketIoClient, id: string) {
     this.id = id;
     this.socket = socket;
 
@@ -53,7 +61,7 @@ class MultiplexedSocket {
     this.socket.removeAllListeners(`message${this.id}`);
     this.socket.off('reconnect', this.onReconnect.bind(this));
   }
-  emit(name, data, ack) {
+  emit(name: string, data: Object, ack: ?Function) {
     if (typeof ack !== 'function') this.lastSend = arguments;
 
     const nameWithId = `${name}${this.id}`;
@@ -62,7 +70,7 @@ class MultiplexedSocket {
     this.socket.emit(nameWithId, data, ack);
     return this;
   }
-  on(name, fn) {
+  on(name: string, fn: Function) {
     this.socket.on(`${name}${this.id}`, fn);
     return this;
   }

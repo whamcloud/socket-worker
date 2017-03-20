@@ -23,7 +23,7 @@
 
 import { default as io, type SocketIoClient } from 'socket.io-client';
 
-export default (url: string, workerContext: typeof self): SocketIoClient => {
+export default (url: string, workerContext: self): SocketIoClient => {
   const socket = io(url);
 
   socket.on('reconnecting', attempt => {
