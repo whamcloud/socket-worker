@@ -15,6 +15,7 @@
     "@iml/fp": "8.0.0",
     "@iml/math": "6.0.0",
     "@iml/router": "6.0.1",
+    "highland": "3.0.0-beta.3",
     "socket.io-client": "1.7.3"
   },
   "pre-commit": [
@@ -37,6 +38,9 @@
     "eslint-plugin-flow-vars": "0.5.0",
     "eslint-plugin-flowtype": "^2.30.3",
     "eslint-plugin-prettier": "^2.0.1",
+    "flow-bin": "0.42.0",
+    "intel-flow-highland": "3.9.0",
+    "intel-flow-jasmine": "1.6.0",
     "intel-jasmine-n-matchers": "2.1.1",
     "jasmine-reporters": "2.2.1",
     "jest": "19.0.2",

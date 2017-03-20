@@ -1,3 +1,5 @@
+import { describe, it, beforeAll, afterAll, expect } from './jasmine.js';
+
 import { unlinkSync, readFileSync, statSync } from 'fs';
 import { dirname, join } from 'path';
 import { exec } from 'child_process';
@@ -7,7 +9,7 @@ describe('build script', () => {
 
   beforeAll(
     done => {
-      const moduleDir = dirname(dirname(__dirname));
+      const moduleDir = dirname(__dirname);
       distDir = join.bind(join, moduleDir, 'dist');
 
       exec(

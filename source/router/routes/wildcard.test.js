@@ -1,3 +1,12 @@
+import {
+  jasmine,
+  describe,
+  it,
+  beforeEach,
+  expect,
+  jest
+} from '../../jasmine.js';
+
 describe('routes wildcard', () => {
   let mockRouter, wildcard;
 
@@ -6,9 +15,9 @@ describe('routes wildcard', () => {
       all: jasmine.createSpy('all')
     };
 
-    jest.mock('../../../../source/router/index.js', () => mockRouter);
+    jest.mock('./router/index.js', () => mockRouter);
 
-    wildcard = require('../../../../source/router/routes/wildcard.js').default;
+    wildcard = require('./wildcard.js').default;
 
     wildcard();
   });
