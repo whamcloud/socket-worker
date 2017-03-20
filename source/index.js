@@ -21,13 +21,44 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-/* global self */
-
 import createSocket from './create-socket.js';
-import getEventSocketHandler from './get-event-socket-handler.js';
 import routes from './router/routes/index.js';
+import router from './router/index.js';
 
+routes.ostBalance();
 routes.wildcard();
 
 const socket = createSocket(self.location.origin, self);
-getEventSocketHandler(socket, self);
+
+self.addEventListener(
+  'message',
+  ({ data }) => {
+    const { payload = {}, id, ack = false, type } = data;
+    const { path = '/noop', options = {} } = payload;
+    const verb = options.method || router.verbs.GET;
+
+    router.go(
+      path,
+      {
+        verb,
+        payload,
+        id,
+        type,
+        isAck: ack
+      },
+      {
+        socket,
+        write
+      }
+    );
+
+    function write(payload) {
+      self.postMessage({
+        type: 'message',
+        id,
+        payload
+      });
+    }
+  },
+  false
+);
