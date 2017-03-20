@@ -13,7 +13,7 @@
 // licensors. The Material is protected by worldwide copyright and trade secret
 // laws and treaty provisions. No part of the Material may be used, copied,
 // reproduced, modified, published, uploaded, posted, transmitted, distributed,
-// or disclosed in any way without Intel's prior express written permission.
+// or disclosed in any way without Intel's prior express writtaen permission.
 //
 // No license under any patent, copyright, trade secret or other intellectual
 // property right is granted to or conferred upon you by disclosure or delivery
@@ -21,12 +21,23 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import getRouter from '@iml/router';
-import connections from './middleware/connections.js';
-import socketFactory from './middleware/socket-factory.js';
-import end from './middleware/end.js';
+import { one, many } from '../../socket-stream.js';
+import getMultiplexedSocket from '../../multiplexed-socket.js';
 
-export default getRouter()
-  .addStart(connections)
-  .addStart(socketFactory)
-  .addStart(end);
+export default (req, resp, next) => {
+  req.getOne$ = () => {
+    const socket = getMultiplexedSocket(resp.socket);
+    req.connections[req.id].push(socket);
+
+    return one(socket);
+  };
+
+  req.getMany$ = () => {
+    const socket = getMultiplexedSocket(resp.socket);
+    req.connections[req.id].push(socket);
+
+    return many(socket);
+  };
+
+  next(req, resp);
+};
