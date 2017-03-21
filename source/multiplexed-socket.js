@@ -27,6 +27,7 @@ import { noop } from '@iml/fp';
 
 const emptySocket = {
   on: noop,
+  off: noop,
   removeAllListeners: noop,
   emit: noop,
   disconnect: noop
