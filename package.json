@@ -14,6 +14,7 @@
   "dependencies": {
     "@iml/fp": "8.0.0",
     "@iml/math": "6.0.0",
+    "@iml/number-formatters": "1.0.0",
     "@iml/router": "6.0.1",
     "highland": "3.0.0-beta.3",
     "socket.io-client": "1.7.3"

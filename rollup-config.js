@@ -24,12 +24,6 @@ export default {
         }
       ]
     }),
-    nodeResolve({ jsnext: true, main: true, browser: true }),
-    commonjs({
-      ignore: ['bufferutil', 'utf-8-validate']
-    }),
-    globals(),
-    builtins(),
     babel({
       presets: [
         [
@@ -47,10 +41,17 @@ export default {
         ['transform-object-rest-spread', { useBuiltIns: true }],
         'transform-flow-strip-types',
         'transform-class-properties',
+        'transform-object-rest-spread',
         'external-helpers'
       ],
       babelrc: false
-    })
+    }),
+    nodeResolve({ jsnext: true, main: true, browser: true }),
+    commonjs({
+      ignore: ['bufferutil', 'utf-8-validate']
+    }),
+    globals(),
+    builtins()
   ],
   sourceMap: true,
   format: 'iife'

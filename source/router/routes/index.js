@@ -21,8 +21,10 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
+import ostBalance from './ost-balance/route.js';
 import wildcard from './wildcard.js';
 
 export default {
+  ostBalance,
   wildcard
 };
