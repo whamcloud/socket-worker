@@ -21,29 +21,29 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-type optionsT = {
+type Options = {
   method: string
 };
 
-type payloadT = {
+type Payload = {
   path: string,
-  options: optionsT
+  options: Options
 };
 
-type selfT = {
+type Self = {
   postMessage: (
     {
       type: 'message',
       id: number,
-      payload: payloadT
+      payload: Payload
     }
   ) => void
 };
 
-export default (self: selfT, id: number, payload: payloadT) => {
-  self.postMessage({
-    type: 'message',
-    id,
-    payload
-  });
-};
+export default (self: Self, id: number) =>
+  (payload: Payload) =>
+    self.postMessage({
+      type: 'message',
+      id,
+      payload
+    });

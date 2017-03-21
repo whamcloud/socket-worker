@@ -57,11 +57,6 @@ describe('route by data', () => {
   });
 
   it('should call write', () => {
-    expect(mockWrite).toHaveBeenCalledOnceWith(self, 1, {
-      path: '/path',
-      options: {
-        method: 'get'
-      }
-    });
+    expect(mockWrite).toHaveBeenCalledOnceWith(self, 1);
   });
 });
