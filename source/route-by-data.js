@@ -21,8 +21,43 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-export default (req, resp, next) => {
-  if (req.type !== 'end' || !req.connections[req.id]) return next(req, resp);
-  req.connections[req.id].forEach(c => c.end());
-  delete req.connections[req.id];
+import router from './router/index.js';
+import write from './write-message.js';
+
+type optionsT = {
+  method: ?string
 };
+
+type payloadT = {
+  path: ?string,
+  options: ?optionsT
+};
+
+type dataT = {
+  payload: ?payloadT,
+  id: number,
+  ack: ?boolean,
+  type: string
+};
+
+export default (self, socket) =>
+  ({ data }): { data: dataT } => {
+    const { payload = {}, id, ack = false, type } = data;
+    const { path = '/noop', options = {} } = payload;
+    const verb = options.method || router.verbs.GET;
+
+    router.go(
+      path,
+      {
+        verb,
+        payload,
+        id,
+        type,
+        isAck: ack
+      },
+      {
+        socket,
+        write: write(self, id, payload)
+      }
+    );
+  };
