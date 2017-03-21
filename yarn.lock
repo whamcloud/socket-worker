@@ -20,6 +20,10 @@
   version "3.0.0"
   resolved "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-repos/@iml/maybe/-/@iml/maybe-3.0.0.tgz#f2b72e3cd6f4ef55aee69df86a9fc6164afc2cb8"
 
+"@iml/number-formatters@1.0.0":
+  version "1.0.0"
+  resolved "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-repos/@iml/number-formatters/-/@iml/number-formatters-1.0.0.tgz#d6a6b89b475da14d7ba6dbb5a94cd6400a0c8bd2"
+
 "@iml/router@6.0.1":
   version "6.0.1"
   resolved "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-repos/@iml/router/-/@iml/router-6.0.1.tgz#9f7efb91388f774c05f7be072264127ac5f18f07"

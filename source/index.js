@@ -26,6 +26,7 @@ import routes from './router/routes/index.js';
 import routeByData from './route-by-data.js';
 
 routes.wildcard();
+routes.ostBalance();
 
 const socket = createSocket(self.location.origin, self);
 
