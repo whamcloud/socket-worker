@@ -21,19 +21,10 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-type Options = {
-  method?: string
-};
-
-type Payload = {
-  path?: string,
-  options?: Options
-};
-
 import type { Self } from './route-by-data.js';
 
 export default (self: Self, id: string) =>
-  (payload: Payload) =>
+  (payload: Object): void =>
     self.postMessage({
       type: 'message',
       id,

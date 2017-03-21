@@ -23,7 +23,7 @@ describe('socket stream', () => {
     let s;
 
     beforeEach(() => {
-      s = one(socket)({ path: '/foo', method: 'get' });
+      s = one(socket)({ path: '/foo' });
     });
 
     it('should be a function', () => {
@@ -31,7 +31,7 @@ describe('socket stream', () => {
     });
 
     it('should return a stream', () => {
-      const s = one(socket)({ path: '/foo', method: 'get' });
+      const s = one(socket)({ path: '/foo' });
 
       expect(highland.isStream(s)).toBe(true);
     });
@@ -41,8 +41,7 @@ describe('socket stream', () => {
       expect(socket.emit).toHaveBeenCalledOnceWith(
         'message',
         {
-          path: '/foo',
-          method: 'get'
+          path: '/foo'
         },
         jasmine.any(Function)
       );
@@ -106,8 +105,8 @@ describe('socket stream', () => {
       beforeEach(() => {
         s = many(socket)({
           path: '/host',
-          method: 'get',
           options: {
+            method: 'get',
             qs: { foo: 'bar' }
           }
         });
@@ -118,8 +117,8 @@ describe('socket stream', () => {
       it('should send data to the socket', () => {
         expect(socket.emit).toHaveBeenCalledOnceWith('message', {
           path: '/host',
-          method: 'get',
           options: {
+            method: 'get',
             qs: { foo: 'bar' }
           }
         });
