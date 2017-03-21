@@ -13,7 +13,7 @@
 // licensors. The Material is protected by worldwide copyright and trade secret
 // laws and treaty provisions. No part of the Material may be used, copied,
 // reproduced, modified, published, uploaded, posted, transmitted, distributed,
-// or disclosed in any way without Intel's prior express written permission.
+// or disclosed in any way without Intel's prior express writtaen permission.
 //
 // No license under any patent, copyright, trade secret or other intellectual
 // property right is granted to or conferred upon you by disclosure or delivery
@@ -21,10 +21,22 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import type { Req, Resp, Next } from './middleware-types';
+import { type one, type many } from '../../socket-stream.js';
+import { type MultiplexedSocketInterface } from '../../multiplexed-socket.js';
+import { type Data } from '../../socket-stream.js';
 
-export default (req: Req, resp: Resp, next: Next) => {
-  if (req.type !== 'end' || !req.connections[req.id]) return next(req, resp);
-  req.connections[req.id].forEach(c => c.end());
-  delete req.connections[req.id];
+export type Connections = { [id: string]: MultiplexedSocketInterface[] };
+
+export type Req = {
+  id: string,
+  connections: Connections,
+  type: 'connect' | 'end',
+  getOne$: (payload: Data<string>) => one<string, MultiplexedSocketInterface>,
+  getMany$: (payload: Data<string>) => many<string, MultiplexedSocketInterface>
 };
+
+export type Resp = {
+  socket: MultiplexedSocketInterface
+};
+
+export type Next = (req: Req, resp: Resp) => void;

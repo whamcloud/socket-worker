@@ -24,19 +24,23 @@
 import { one, many } from '../../socket-stream.js';
 import getMultiplexedSocket from '../../multiplexed-socket.js';
 
-export default (req, resp, next) => {
-  req.getOne$ = () => {
+import type { Req, Resp, Next } from './middleware-types';
+
+import type { Data } from '../../socket-stream.js';
+
+export default (req: Req, resp: Resp, next: Next) => {
+  req.getOne$ = (payload: Data<string>) => {
     const socket = getMultiplexedSocket(resp.socket);
     req.connections[req.id].push(socket);
 
-    return one(socket);
+    return one(socket)(payload);
   };
 
-  req.getMany$ = () => {
+  req.getMany$ = (payload: Data<string>) => {
     const socket = getMultiplexedSocket(resp.socket);
     req.connections[req.id].push(socket);
 
-    return many(socket);
+    return many(socket)(payload);
   };
 
   next(req, resp);

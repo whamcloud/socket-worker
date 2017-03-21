@@ -11,7 +11,7 @@ describe('write message', () => {
       postMessage: jasmine.createSpy('postMessage')
     };
 
-    write = writeMessage(selfWorker, 1);
+    write = writeMessage(selfWorker, '1');
     write({
       path: '/path',
       options: {
@@ -23,7 +23,7 @@ describe('write message', () => {
   it('should call postMessage', () => {
     expect(selfWorker.postMessage).toHaveBeenCalledOnceWith({
       type: 'message',
-      id: 1,
+      id: '1',
       payload: {
         path: '/path',
         options: {

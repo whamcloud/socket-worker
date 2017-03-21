@@ -24,27 +24,49 @@
 import router from './router/index.js';
 import writeMessage from './write-message.js';
 
+import { type MultiplexedSocketInterface } from './multiplexed-socket.js';
+
 type Options = {
-  method: ?string
+  method?: string
 };
 
 type Payload = {
-  path: ?string,
-  options: ?Options
+  path?: string,
+  options?: Options
 };
 
 type Data = {
-  payload: ?Payload,
-  id: number,
-  ack: ?boolean,
+  payload?: Payload,
+  id: string,
+  ack?: boolean,
   type: string
 };
 
-export default (self, socket) =>
-  ({ data }): { data: Data } => {
-    const { payload = {}, id, ack = false, type } = data;
-    const { path = '/noop', options = {} } = payload;
-    const verb = options.method || router.verbs.GET;
+export type Self = {
+  postMessage: (
+    {
+      type: 'message',
+      id: string,
+      payload: Payload
+    }
+  ) => void
+};
+
+export default (self: Self, socket: MultiplexedSocketInterface) =>
+  ({ data }: { data: Data }): void => {
+    const {
+      payload = {
+        path: '/noop',
+        options: { method: router.verbs.GET }
+      },
+      id,
+      ack = false,
+      type
+    } = data;
+    const {
+      path = '/noop',
+      options: { method: verb = router.verbs.GET } = {}
+    } = payload;
 
     router.go(
       path,
