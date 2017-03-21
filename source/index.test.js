@@ -22,7 +22,6 @@ describe('socker worker', () => {
       .createSpy('createSocket')
       .and.returnValue(socket);
     mockRoutes = {
-      ostBalance: jasmine.createSpy('ostBalance'),
       wildcard: jasmine.createSpy('wildcard')
     };
     routeFn = jasmine.createSpy('routeFn');
@@ -40,10 +39,6 @@ describe('socker worker', () => {
 
   afterEach(() => {
     self.addEventListener = addEventListener;
-  });
-
-  it('should invoke the ostBalance route', () => {
-    expect(mockRoutes.ostBalance).toHaveBeenCalledOnce();
   });
 
   it('should invoke the wildcard route', () => {

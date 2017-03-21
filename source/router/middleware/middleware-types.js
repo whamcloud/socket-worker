@@ -21,22 +21,24 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import { type one, type many } from '../../socket-stream.js';
 import { type MultiplexedSocketInterface } from '../../multiplexed-socket.js';
-import { type Data } from '../../socket-stream.js';
+import { type StreamFn } from '../../socket-stream.js';
+import { type Payload } from '../../route-by-data.js';
 
 export type Connections = { [id: string]: MultiplexedSocketInterface[] };
 
 export type Req = {
   id: string,
+  payload: Payload,
   connections: Connections,
   type: 'connect' | 'end',
-  getOne$: (payload: Data<string>) => one<string, MultiplexedSocketInterface>,
-  getMany$: (payload: Data<string>) => many<string, MultiplexedSocketInterface>
+  getOne$: StreamFn<*>,
+  getMany$: StreamFn<*>
 };
 
 export type Resp = {
-  socket: MultiplexedSocketInterface
+  socket: MultiplexedSocketInterface,
+  write: (Object) => void
 };
 
 export type Next = (req: Req, resp: Resp) => void;

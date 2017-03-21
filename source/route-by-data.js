@@ -27,10 +27,11 @@ import writeMessage from './write-message.js';
 import { type MultiplexedSocketInterface } from './multiplexed-socket.js';
 
 type Options = {
-  method?: string
+  method: 'get' | 'post' | 'put' | 'patch' | 'delete',
+  qs: Object
 };
 
-type Payload = {
+export type Payload = {
   path?: string,
   options?: Options
 };
@@ -55,10 +56,7 @@ export type Self = {
 export default (self: Self, socket: MultiplexedSocketInterface) =>
   ({ data }: { data: Data }): void => {
     const {
-      payload = {
-        path: '/noop',
-        options: { method: router.verbs.GET }
-      },
+      payload = {},
       id,
       ack = false,
       type

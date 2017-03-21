@@ -22,16 +22,13 @@
 // express and approved by Intel in writing.
 
 import router from '../index.js';
+import { type Req, type Resp } from '../middleware/middleware-types.js';
 
-export default function wildcardRoute(): void {
-  router.all('/(.*)', (req, resp, next) => {
-    let ack;
-
-    if (req.isAck) ack = resp.write;
-    else resp.socket.onMessage(resp.write);
-
-    resp.socket.sendMessage(req.payload, ack);
+export default (): void => {
+  router.all('/(.*)', (req: Req, resp: Resp, next) => {
+    if (req.isAck) req.getOne$(req.payload).each(resp.write);
+    else req.getMany$(req.payload).each(resp.write);
 
     next(req, resp);
   });
-}
+};

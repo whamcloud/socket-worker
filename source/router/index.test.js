@@ -5,7 +5,7 @@ import {
   beforeEach,
   expect,
   jest
-} from '../../jasmine.js';
+} from './../jasmine.js';
 
 describe('router', () => {
   let mockGetRouter, mockConnections, mockSocketFactory, mockEnd, router, r;
@@ -22,15 +22,9 @@ describe('router', () => {
     mockGetRouter = jasmine.createSpy('router').and.returnValue(router);
 
     jest.mock('@iml/router', () => mockGetRouter);
-    jest.mock(
-      './source/router/middleware/connections.js',
-      () => mockConnections
-    );
-    jest.mock(
-      './source/router/middleware/socket-factory.js',
-      () => mockSocketFactory
-    );
-    jest.mock('./source/router/middleware/end.js', () => mockEnd);
+    jest.mock('./router/middleware/connections.js', () => mockConnections);
+    jest.mock('./router/middleware/socket-factory.js', () => mockSocketFactory);
+    jest.mock('./router/middleware/end.js', () => mockEnd);
 
     r = require('./index.js').default;
   });
