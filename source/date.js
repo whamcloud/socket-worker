@@ -23,35 +23,38 @@
 
 import * as fp from '@iml/fp';
 
-export const getServerMoment = (SERVER_TIME_DIFF:number, date:Date) => {
-  let d = new Date(date.getTime());
-  d.setMilliseconds(d.getMilliseconds() + SERVER_TIME_DIFF);
-
-  return d;
-};
-
-export type Unit = 'seconds' | 'minutes' | 'hours' | 'days' | 'weeks' | 'months' | 'years';
+export type Unit =
+  | 'milliseconds'
+  | 'seconds'
+  | 'minutes'
+  | 'hours'
+  | 'days'
+  | 'weeks'
+  | 'months'
+  | 'years';
 
 export const adjustDateFromSizeAndUnit = (
-  SERVER_TIME_DIFF: number,
   operation: 'add' | 'subtract' = 'subtract',
   size: number,
   unit: Unit,
-  d: Date,
+  d: Date
 ) => {
-  let date = new Date(d.getTime());
+  const date = new Date(d.getTime());
   const calculate = (x, size) => {
-    switch(operation) {
-    case 'add':
-      return x + size;
-    case 'subtract':
-      return x - size;
-    default:
-      throw new Error('must pass in a valid operation.');
-    };
+    switch (operation) {
+      case 'add':
+        return x + size;
+      case 'subtract':
+        return x - size;
+      default:
+        throw new Error('must pass in a valid operation.');
+    }
   };
 
   switch (unit) {
+    case 'milliseconds':
+      date.setMilliseconds(calculate(date.getMilliseconds(), size));
+      break;
     case 'seconds':
       date.setSeconds(calculate(date.getSeconds(), size));
       break;
@@ -84,15 +87,15 @@ export const calculateRangeFromSizeAndUnit = (
   SERVER_TIME_DIFF: number,
   size: number,
   unit: Unit,
-  date:Date
+  date: Date
 ) => {
-  const adjustDateByOperation = adjustDateFromSizeAndUnit.bind(null, SERVER_TIME_DIFF);
-  const addToDate = adjustDateByOperation.bind(null, 'add');
-  const subtractFromDate = adjustDateByOperation.bind(null, 'subtract');
+  const addToDate = adjustDateFromSizeAndUnit.bind(null, 'add');
+  const subtractFromDate = adjustDateFromSizeAndUnit.bind(null, 'subtract');
 
-  let dateClone = new Date(date.getTime());
-  const d = getServerMoment(SERVER_TIME_DIFF, dateClone);
-  let end = new Date(getServerMoment(SERVER_TIME_DIFF, dateClone).setMilliseconds(0));
+  const dateClone = new Date(date.getTime());
+  let end = new Date(
+    addToDate(SERVER_TIME_DIFF, 'milliseconds', dateClone).setMilliseconds(0)
+  );
   const secs = end.getSeconds();
 
   end.setSeconds(secs - secs % 10);
