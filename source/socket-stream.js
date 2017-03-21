@@ -22,17 +22,9 @@
 // express and approved by Intel in writing.
 
 import { type MultiplexedSocketInterface } from './multiplexed-socket.js';
+import { type Payload } from './route-by-data.js';
 
 import { default as highland, type HighlandStreamT } from 'highland';
-
-type Data<A> = {
-  path: string,
-  method: 'get' | 'post' | 'put' | 'patch' | 'delete',
-  options?: {
-    qs: A,
-    jsonMask?: string
-  }
-};
 
 type ErrorEnum = Error | string | { [key: string]: string };
 
@@ -58,18 +50,16 @@ type ErrorResp = {
   error?: { [key: string]: string }
 };
 
-type StreamFn<A, B> = (Data<A>) => HighlandStreamT<B>;
+export type StreamFn<B> = (Payload) => HighlandStreamT<B>;
 
-export const many = <A, B>(
-  socket: MultiplexedSocketInterface
-): StreamFn<A, B> =>
-  (data: Data<A>): HighlandStreamT<B> => {
+export const many = <A>(socket: MultiplexedSocketInterface): StreamFn<A> =>
+  (data: Payload): HighlandStreamT<A> => {
     socket.emit('message', data);
-    const s: HighlandStreamT<B & ErrorResp> = highland(
+    const s: HighlandStreamT<A & ErrorResp> = highland(
       'message',
       socket
     ).onDestroy(socket.end.bind(socket));
-    return s.map((response): B => {
+    return s.map((response): A => {
       const error = response.error;
 
       if (error) throw buildResponseError(error);
@@ -78,10 +68,10 @@ export const many = <A, B>(
     });
   };
 
-export const one = <A, B>(socket: MultiplexedSocketInterface): StreamFn<A, B> =>
-  (data: Data<A>): HighlandStreamT<B> => {
-    const stream: HighlandStreamT<B> = highland(push => {
-      socket.emit('message', data, function ack(response: B & ErrorResp) {
+export const one = <A>(socket: MultiplexedSocketInterface): StreamFn<A> =>
+  (data: Payload): HighlandStreamT<A> => {
+    const stream: HighlandStreamT<A> = highland(push => {
+      socket.emit('message', data, function ack(response: A & ErrorResp) {
         const error = response != null && response.error;
 
         if (error) push(buildResponseError(error));

@@ -21,12 +21,12 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import getRouter from '@iml/router';
-import connections from './middleware/connections.js';
-import socketFactory from './middleware/socket-factory.js';
-import end from './middleware/end.js';
+import type { Self } from './route-by-data.js';
 
-export default getRouter()
-  .addStart(connections)
-  .addStart(socketFactory)
-  .addStart(end);
+export default (self: Self, id: string) =>
+  (payload: Object): void =>
+    self.postMessage({
+      type: 'message',
+      id,
+      payload
+    });

@@ -21,66 +21,63 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import getMultiplexedSocket from './multiplexed-socket.js';
 import router from './router/index.js';
+import writeMessage from './write-message.js';
 
-export default function getEventSocketHandler(
-  socket: Object,
-  workerContext: typeof self
-): void {
-  const eventSockets = {};
+import { type MultiplexedSocketInterface } from './multiplexed-socket.js';
 
-  workerContext.addEventListener('message', handler, false);
+type Options = {
+  method: 'get' | 'post' | 'put' | 'patch' | 'delete',
+  qs: Object
+};
 
-  function handler({ data }) {
-    const type = data.type;
+export type Payload = {
+  path?: string,
+  options?: Options
+};
 
-    if (type === 'connect') onConnect(data);
-    else if (type === 'send') onSend(data);
-    else if (type === 'end') onEnd(data);
-  }
+type Data = {
+  payload?: Payload,
+  id: string,
+  ack?: boolean,
+  type: string
+};
 
-  function onConnect({ id }) {
-    if (eventSockets[id]) return;
+export type Self = {
+  postMessage: (
+    {
+      type: 'message',
+      id: string,
+      payload: Payload
+    }
+  ) => void
+};
 
-    eventSockets[id] = getMultiplexedSocket(socket, id);
-  }
-
-  function onSend({ payload, id, ack }) {
-    const { path } = payload;
-    const options = payload.options || {};
-    const verb = options.method || router.verbs.GET;
-
-    const socket = eventSockets[id];
-
-    if (!socket) return;
+export default (self: Self, socket: MultiplexedSocketInterface) =>
+  ({ data }: { data: Data }): void => {
+    const {
+      payload = {},
+      id,
+      ack = false,
+      type
+    } = data;
+    const {
+      path = '/noop',
+      options: { method: verb = router.verbs.GET } = {}
+    } = payload;
 
     router.go(
       path,
       {
         verb,
         payload,
+        id,
+        type,
         isAck: ack
       },
       {
         socket,
-        write
+        write: writeMessage(self, id)
       }
     );
-
-    function write(payload) {
-      workerContext.postMessage({
-        type: 'message',
-        id,
-        payload
-      });
-    }
-  }
-
-  function onEnd({ id }) {
-    if (!eventSockets[id]) return;
-
-    eventSockets[id].end();
-    delete eventSockets[id];
-  }
-}
+  };

@@ -5,19 +5,26 @@ import {
   beforeEach,
   expect,
   jest
-} from '../../jasmine.js';
+} from './../jasmine.js';
 
 describe('router', () => {
-  let mockGetRouter, router, r;
+  let mockGetRouter, mockConnections, mockSocketFactory, mockEnd, router, r;
 
   beforeEach(() => {
     router = {
-      router: true
+      addStart: jasmine.createSpy('addStart')
     };
+    router.addStart.and.returnValue(router);
 
+    mockConnections = {};
+    mockSocketFactory = {};
+    mockEnd = {};
     mockGetRouter = jasmine.createSpy('router').and.returnValue(router);
 
     jest.mock('@iml/router', () => mockGetRouter);
+    jest.mock('./router/middleware/connections.js', () => mockConnections);
+    jest.mock('./router/middleware/socket-factory.js', () => mockSocketFactory);
+    jest.mock('./router/middleware/end.js', () => mockEnd);
 
     r = require('./index.js').default;
   });
@@ -28,5 +35,17 @@ describe('router', () => {
 
   it('should export the router', () => {
     expect(r).toBe(router);
+  });
+
+  it('Should add the connections middleware', () => {
+    expect(router.addStart).toHaveBeenCalledWith(mockConnections);
+  });
+
+  it('Should add the socketFactory middleware', () => {
+    expect(router.addStart).toHaveBeenCalledWith(mockSocketFactory);
+  });
+
+  it('Should add the end middleware', () => {
+    expect(router.addStart).toHaveBeenCalledWith(mockEnd);
   });
 });

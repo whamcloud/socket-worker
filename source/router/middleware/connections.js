@@ -21,12 +21,13 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import getRouter from '@iml/router';
-import connections from './middleware/connections.js';
-import socketFactory from './middleware/socket-factory.js';
-import end from './middleware/end.js';
+import type { Req, Resp, Next, Connections } from './middleware-types';
 
-export default getRouter()
-  .addStart(connections)
-  .addStart(socketFactory)
-  .addStart(end);
+const connections: Connections = {};
+
+export default (req: Req, resp: Resp, next: Next) => {
+  connections[req.id] = connections[req.id] || [];
+  req.connections = connections;
+
+  if (req.type !== 'connect') next(req, resp);
+};

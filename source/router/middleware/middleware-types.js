@@ -13,7 +13,7 @@
 // licensors. The Material is protected by worldwide copyright and trade secret
 // laws and treaty provisions. No part of the Material may be used, copied,
 // reproduced, modified, published, uploaded, posted, transmitted, distributed,
-// or disclosed in any way without Intel's prior express written permission.
+// or disclosed in any way without Intel's prior express writtaen permission.
 //
 // No license under any patent, copyright, trade secret or other intellectual
 // property right is granted to or conferred upon you by disclosure or delivery
@@ -21,12 +21,24 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import getRouter from '@iml/router';
-import connections from './middleware/connections.js';
-import socketFactory from './middleware/socket-factory.js';
-import end from './middleware/end.js';
+import { type MultiplexedSocketInterface } from '../../multiplexed-socket.js';
+import { type StreamFn } from '../../socket-stream.js';
+import { type Payload } from '../../route-by-data.js';
 
-export default getRouter()
-  .addStart(connections)
-  .addStart(socketFactory)
-  .addStart(end);
+export type Connections = { [id: string]: MultiplexedSocketInterface[] };
+
+export type Req = {
+  id: string,
+  payload: Payload,
+  connections: Connections,
+  type: 'connect' | 'end',
+  getOne$: StreamFn<*>,
+  getMany$: StreamFn<*>
+};
+
+export type Resp = {
+  socket: MultiplexedSocketInterface,
+  write: (Object) => void
+};
+
+export type Next = (req: Req, resp: Resp) => void;

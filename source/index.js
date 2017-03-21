@@ -21,13 +21,12 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-/* global self */
-
 import createSocket from './create-socket.js';
-import getEventSocketHandler from './get-event-socket-handler.js';
 import routes from './router/routes/index.js';
+import routeByData from './route-by-data.js';
 
 routes.wildcard();
 
 const socket = createSocket(self.location.origin, self);
-getEventSocketHandler(socket, self);
+
+self.addEventListener('message', routeByData(self, socket), false);

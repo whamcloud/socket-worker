@@ -30,22 +30,28 @@ describe('routes wildcard', () => {
   });
 
   describe('generic handler', () => {
-    let req, resp, next;
+    let req, resp, next, getMany$, getOne$;
 
     beforeEach(() => {
+      getMany$ = {
+        each: jasmine.createSpy('each')
+      };
+
+      getOne$ = {
+        each: jasmine.createSpy('each')
+      };
+
       req = {
         isAck: true,
         payload: {
           foo: 'bar'
-        }
+        },
+        getMany$: jasmine.createSpy('getMany$').and.returnValue(getMany$),
+        getOne$: jasmine.createSpy('getOne$').and.returnValue(getOne$)
       };
 
       resp = {
-        write: 'write',
-        socket: {
-          sendMessage: jasmine.createSpy('resp.socket.sendMessage'),
-          onMessage: jasmine.createSpy('resp.socket.onMessage')
-        }
+        write: 'write'
       };
 
       next = jasmine.createSpy('next');
@@ -56,15 +62,12 @@ describe('routes wildcard', () => {
         mockRouter.all.calls.mostRecent().args[1](req, resp, next);
       });
 
-      it('should send a message when the data contains an ack', () => {
-        expect(resp.socket.sendMessage).toHaveBeenCalledOnceWith(
-          req.payload,
-          resp.write
-        );
+      it('should call getOne$', () => {
+        expect(req.getOne$).toHaveBeenCalledOnceWith(req.payload);
       });
 
-      it('should not call onMessage', () => {
-        expect(resp.socket.onMessage).not.toHaveBeenCalled();
+      it('should call each', () => {
+        expect(getOne$.each).toHaveBeenCalledOnceWith(resp.write);
       });
 
       it('should call next', () => {
@@ -78,15 +81,12 @@ describe('routes wildcard', () => {
         mockRouter.all.calls.mostRecent().args[1](req, resp, next);
       });
 
-      it('should call onMessage', () => {
-        expect(resp.socket.onMessage).toHaveBeenCalledOnceWith(resp.write);
+      it('should call getMany$', () => {
+        expect(req.getMany$).toHaveBeenCalledOnceWith(req.payload);
       });
 
-      it('should call send message', () => {
-        expect(resp.socket.sendMessage).toHaveBeenCalledOnceWith(
-          req.payload,
-          undefined
-        );
+      it('should call each', () => {
+        expect(getMany$.each).toHaveBeenCalledOnceWith('write');
       });
 
       it('should call next', () => {
