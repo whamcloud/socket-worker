@@ -21,8 +21,29 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-export default (req, resp, next) => {
-  if (req.type !== 'end' || !req.connections[req.id]) return next(req, resp);
-  req.connections[req.id].forEach(c => c.end());
-  delete req.connections[req.id];
+type optionsT = {
+  method: string
+};
+
+type payloadT = {
+  path: string,
+  options: optionsT
+};
+
+type selfT = {
+  postMessage: (
+    {
+      type: 'message',
+      id: number,
+      payload: payloadT
+    }
+  ) => void
+};
+
+export default (self: selfT, id: number, payload: payloadT) => {
+  self.postMessage({
+    type: 'message',
+    id,
+    payload
+  });
 };
