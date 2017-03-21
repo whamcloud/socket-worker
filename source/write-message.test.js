@@ -4,14 +4,15 @@ import writeMessage from './write-message.js';
 import { jasmine, describe, it, beforeEach, expect } from './jasmine.js';
 
 describe('write message', () => {
-  let selfWorker;
+  let selfWorker, write;
 
   beforeEach(() => {
     selfWorker = {
       postMessage: jasmine.createSpy('postMessage')
     };
 
-    writeMessage(selfWorker, 1, {
+    write = writeMessage(selfWorker, 1);
+    write({
       path: '/path',
       options: {
         method: 'get'

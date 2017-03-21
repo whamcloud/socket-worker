@@ -22,26 +22,26 @@
 // express and approved by Intel in writing.
 
 import router from './router/index.js';
-import write from './write-message.js';
+import writeMessage from './write-message.js';
 
-type optionsT = {
+type Options = {
   method: ?string
 };
 
-type payloadT = {
+type Payload = {
   path: ?string,
-  options: ?optionsT
+  options: ?Options
 };
 
-type dataT = {
-  payload: ?payloadT,
+type Data = {
+  payload: ?Payload,
   id: number,
   ack: ?boolean,
   type: string
 };
 
 export default (self, socket) =>
-  ({ data }): { data: dataT } => {
+  ({ data }): { data: Data } => {
     const { payload = {}, id, ack = false, type } = data;
     const { path = '/noop', options = {} } = payload;
     const verb = options.method || router.verbs.GET;
@@ -57,7 +57,7 @@ export default (self, socket) =>
       },
       {
         socket,
-        write: write(self, id, payload)
+        write: writeMessage(self, id)
       }
     );
   };
