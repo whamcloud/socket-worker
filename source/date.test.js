@@ -1,34 +1,23 @@
 // @flow
 
+import { describe, it, beforeEach, expect } from './jasmine.js';
+
 import {
-  getServerMoment,
   adjustDateFromSizeAndUnit,
   calculateRangeFromSizeAndUnit,
   type Unit
 } from './date.js';
 
-describe('getServerMoment', () => {
-  let result;
-  it('should return a new date', () => {
-    let d = new Date('2017-12-17T03:24:00');
-    result = getServerMoment(75, d);
-    expect(result.toISOString()).toEqual('2017-12-17T03:24:00.075Z');
-  });
-});
-
 describe('date', () => {
-  let SERVER_TIME_DIFF:number, date:Date, size:number, unit:Unit;
-  let adjustDate:(operation:'add' | 'subtract', size:number, unit:Unit, date:Date) => Date;
+  let date:Date;
   let subtractDate:(size:number, unit:Unit, date:Date) => Date;
   let addDate:(size:number, unit:Unit, date:Date) => Date;
   let result;
 
   beforeEach(() => {
-    SERVER_TIME_DIFF = 75;
     date = new Date('2017-12-17T03:24:00');
-    adjustDate = adjustDateFromSizeAndUnit.bind(null, SERVER_TIME_DIFF);
-    subtractDate = adjustDate.bind(null, 'subtract');
-    addDate = adjustDate.bind(null, 'add');
+    subtractDate = adjustDateFromSizeAndUnit.bind(null, 'subtract');
+    addDate = adjustDateFromSizeAndUnit.bind(null, 'add');
   });
 
   it('should subtract seconds and roll back to the previous hour', () => {
