@@ -17,6 +17,10 @@ export default {
         {
           test: "require('debug')",
           replace: '(() => () => {})'
+        },
+        {
+          test: "from 'highland';",
+          replace: "from 'highland/dist/highland.js';"
         }
       ]
     }),
