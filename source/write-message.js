@@ -22,25 +22,17 @@
 // express and approved by Intel in writing.
 
 type Options = {
-  method: string
+  method?: string
 };
 
 type Payload = {
-  path: string,
-  options: Options
+  path?: string,
+  options?: Options
 };
 
-type Self = {
-  postMessage: (
-    {
-      type: 'message',
-      id: number,
-      payload: Payload
-    }
-  ) => void
-};
+import type { Self } from './route-by-data.js';
 
-export default (self: Self, id: number) =>
+export default (self: Self, id: string) =>
   (payload: Payload) =>
     self.postMessage({
       type: 'message',

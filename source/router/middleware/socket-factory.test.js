@@ -17,6 +17,8 @@ describe('socket factory middleware', () => {
     mockMultiplexedSocket,
     socketFactory,
     socket,
+    onePayloadFn,
+    manyPayloadFn,
     one$,
     many$;
 
@@ -24,9 +26,14 @@ describe('socket factory middleware', () => {
     one$ = highland();
     many$ = highland();
 
+    onePayloadFn = jasmine.createSpy('onePayloadFn').and.returnValue(one$);
+    manyPayloadFn = jasmine
+      .createSpy('manyPayloadFn')
+      .and.returnValue(() => many$);
+
     mockSocketStream = {
-      one: jasmine.createSpy('one').and.returnValue(one$),
-      many: jasmine.createSpy('many').and.returnValue(() => many$)
+      one: jasmine.createSpy('one').and.returnValue(onePayloadFn),
+      many: jasmine.createSpy('many').and.returnValue(manyPayloadFn)
     };
 
     eventSocket = {
@@ -77,10 +84,14 @@ describe('socket factory middleware', () => {
   });
 
   describe('getOne$', () => {
-    let s;
+    let s, payload;
     beforeEach(() => {
+      payload = {
+        path: '/path',
+        method: 'get'
+      };
       socketFactory(req, resp, next);
-      s = req.getOne$();
+      s = req.getOne$(payload);
     });
 
     it('should call getMultiplexedSocket', () => {
@@ -95,16 +106,24 @@ describe('socket factory middleware', () => {
       expect(mockSocketStream.one).toHaveBeenCalledOnceWith(eventSocket);
     });
 
+    it('should call onePayloadFn with the payload', () => {
+      expect(onePayloadFn).toHaveBeenCalledOnceWith(payload);
+    });
+
     it('should return one stream', () => {
       expect(s).toBe(one$);
     });
   });
 
   describe('getMany$', () => {
-    let fn;
+    let fn, payload;
     beforeEach(() => {
+      payload = {
+        path: '/path',
+        method: 'get'
+      };
       socketFactory(req, resp, next);
-      fn = req.getMany$();
+      fn = req.getMany$(payload);
     });
 
     it('should call getMultiplexedSocket', () => {
@@ -117,6 +136,10 @@ describe('socket factory middleware', () => {
 
     it('should call "many" with the socket', () => {
       expect(mockSocketStream.many).toHaveBeenCalledOnceWith(eventSocket);
+    });
+
+    it('should call manyPayloadFn with the payload', () => {
+      expect(manyPayloadFn).toHaveBeenCalledOnceWith(payload);
     });
 
     it('should return a function to stream', () => {

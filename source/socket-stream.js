@@ -25,7 +25,7 @@ import { type MultiplexedSocketInterface } from './multiplexed-socket.js';
 
 import { default as highland, type HighlandStreamT } from 'highland';
 
-type Data<A> = {
+export type Data<A> = {
   path: string,
   method: 'get' | 'post' | 'put' | 'patch' | 'delete',
   options?: {

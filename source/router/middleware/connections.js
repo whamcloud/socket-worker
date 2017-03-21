@@ -21,9 +21,11 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-const connections = {};
+import type { Req, Resp, Next, Connections } from './middleware-types';
 
-export default (req, resp, next) => {
+const connections: Connections = {};
+
+export default (req: Req, resp: Resp, next: Next) => {
   connections[req.id] = connections[req.id] || [];
   req.connections = connections;
 
