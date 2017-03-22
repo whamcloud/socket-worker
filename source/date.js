@@ -83,23 +83,22 @@ export const adjustDateFromSizeAndUnit = (
   return date;
 };
 
+export const getServerMoment = (SERVER_TIME_DIFF: number, date: Date) =>
+  adjustDateFromSizeAndUnit('add', SERVER_TIME_DIFF, 'milliseconds', date);
+
 export const calculateRangeFromSizeAndUnit = (
-  SERVER_TIME_DIFF: number,
   size: number,
   unit: Unit,
-  date: Date
+  end: Date
 ) => {
   const addToDate = adjustDateFromSizeAndUnit.bind(null, 'add');
   const subtractFromDate = adjustDateFromSizeAndUnit.bind(null, 'subtract');
 
-  const dateClone = new Date(date.getTime());
-  let end = new Date(
-    addToDate(SERVER_TIME_DIFF, 'milliseconds', dateClone).setMilliseconds(0)
-  );
+  end.setMilliseconds(0);
   const secs = end.getSeconds();
 
   end.setSeconds(secs - secs % 10);
-  end = new Date(addToDate(10, 'seconds', end).toISOString());
+  end = addToDate(10, 'seconds', end);
 
   const setBeginTime = fp.flow(
     subtractFromDate.bind(null, size, unit),
@@ -107,5 +106,30 @@ export const calculateRangeFromSizeAndUnit = (
   );
   const start = setBeginTime(end);
 
-  return [start, end];
+  return [start.toISOString(), end.toISOString()];
+};
+
+export const getDurationParams = (
+  begin: string,
+  end: string,
+  buffer: Object[]
+) => {
+  let params = {};
+
+  if (buffer.length === 0) {
+    params = {
+      begin,
+      end
+    };
+  } else {
+    const latestDate = buffer[buffer.length - 1].ts;
+
+    params = {
+      end: latestDate,
+      begin: new Date().toISOString(),
+      update: true
+    };
+  }
+
+  return params;
 };
