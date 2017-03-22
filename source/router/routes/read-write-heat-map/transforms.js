@@ -39,21 +39,18 @@ export const objToPoints: (
   xs => [].concat(...xs)
 );
 
-export const buff = (size:number, unit:string) => {
-  let leadingEdge, buffer;
+const concatWithBuff = buffer => xs => buffer.concat(xs);
+const filterWithLeadingEdge = leadingEdge =>
+  fp.filter(({ ts }) => new Date(ts).valueOf() >= leadingEdge);
+const sortWithTs = xs =>
+  xs.sort(({ ts }, { ts: tsy }) => new Date(ts) - new Date(tsy));
+export const compareByTsAndId = (a, b) => a.ts === b.ts && a.id === b.id;
+const cmp = ({ name }, { name: nameY }) => name.localeCompare(nameY);
+export const sort = fp.tap(xs => xs.sort(cmp));
 
-  leadingEdge = getServerMoment()
-    .milliseconds(0).subtract(size, unit);
-
-  const secs = leadingEdge.seconds();
-  leadingEdge.seconds(secs - (secs % 10));
-
-  leadingEdge = leadingEdge.valueOf();
-
-  return fp.flow(
-    fp.filter(point => new Date(point.ts).valueOf() >= leadingEdge),
-    xs => xs.sort((a, b) => new Date(a.ts) - new Date(b.ts)),
-    fp.tap(xs => buffer = xs),
-    xs => [].concat(...xs)
+export const appendWithBuff = (buffer, leadingEdge) =>
+  fp.flow(
+    concatWithBuff(buffer),
+    filterWithLeadingEdge(leadingEdge),
+    sortWithTs
   );
-};

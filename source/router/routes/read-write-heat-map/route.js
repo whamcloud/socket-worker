@@ -22,49 +22,41 @@
 // express and approved by Intel in writing.
 
 import * as fp from '@iml/fp';
-import { type HighlandStreamT } from 'highland';
+import { default as highland, type HighlandStreamT } from 'highland';
 import {
-  objToPoints
+  objToPoints,
+  appendWithBuff,
+  compareByTsAndId,
+  sort
 } from './transforms.js';
+import {
+  calculateRangeFromSizeAndUnit,
+  getServerMoment,
+  getDurationParams
+} from '../../../date.js';
+
+import * as streams from './streams.js';
 
 import router from '../../index.js';
 
 export default () => {
   router.get('/read-write-heat-map', (req, resp, next) => {
-    const targetStream = req
-      .getOne$({
-        path: '/target',
-        options: {
-          qs: { limit: 0 },
-          jsonMask: 'objects(id,name)'
-        }
-      })
-      .map(x => x.objects);
+    console.log('req', req);
+    const {
+      payload: {
+        options: { qs: moreQs, durationParams, rangeParams, timeOffset }
+      }
+    } = req;
 
-    const { payload: { options: { qs: moreQs = {}, percentage, size, unit } } } = req;
-
-    const readWriteHeatMapStream: HighlandStreamT<OutputOstData[]> = req
-      .getOne$({
-        path: '/target/metric',
-        options: {
-          qs: {
-            kind: 'OST',
-            metrics: 'kbytestotal,kbytesfree',
-            latest: true,
-            ...moreQs
-          }
-        }
-      })
-      .map(objToPoints)
-      .through(buff(size, unit))
-      .through(unionWithTarget)
-      .through(requestRange.setLatest)
-      .flatten()
-      .through(removeDupsBy(fp.eqFn(idLens, idLens)))
-      .group('id')
-      .map(values)
-      .map(sortOsts)
-      .each(resp.write);
+    if (durationParams) {
+      streams
+        .getDurationStream(req, durationParams, timeOffset, moreQs)
+        .each(resp.write);
+    } else {
+      streams
+        .getRangeStream(req, moreQs, timeOffset, rangeParams)
+        .each(resp.write);
+    }
 
     next(req, resp);
   });
