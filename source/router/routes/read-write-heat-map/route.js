@@ -40,8 +40,9 @@ import * as streams from './streams.js';
 import router from '../../index.js';
 
 export default () => {
+  console.log('in read write heatmap');
   router.get('/read-write-heat-map', (req, resp, next) => {
-    console.log('req', req);
+    console.log('read-write-heat-map call');
     const {
       payload: {
         options: { qs: moreQs, durationParams, rangeParams, timeOffset }
