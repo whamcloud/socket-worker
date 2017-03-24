@@ -36,11 +36,18 @@ import {
   getDurationParams
 } from '../../../date.js';
 
+import type { Types } from './heat-map-types.js';
+
+import type { Req } from '../../middleware/middleware-types';
+
+import type { Unit } from '../../../date.js';
+
 const getTargetStream = req =>
   req
     .getOne$({
       path: '/target',
       options: {
+        method: 'get',
         qs: { limit: 0 },
         jsonMask: 'objects(id,name)'
       }
@@ -48,11 +55,11 @@ const getTargetStream = req =>
     .map(x => x.objects);
 
 export const getDurationStream = (
-  req,
-  moreQs,
-  timeOffset,
-  { size, unit },
-  type
+  req: Req,
+  moreQs: Object,
+  timeOffset: number,
+  { size, unit }: { size: number, unit: Unit },
+  type: Types
 ) => {
   let buffer = [];
   const metric$ = highland((push, next) => {
@@ -70,6 +77,7 @@ export const getDurationStream = (
       .getOne$({
         path: '/target/metric',
         options: {
+          method: 'get',
           qs: {
             kind: 'OST',
             ...moreQs,
@@ -98,11 +106,11 @@ export const getDurationStream = (
 };
 
 export const getRangeStream = (
-  req,
-  moreQs,
-  timeOffset,
-  { startDate, endDate },
-  type
+  req: Req,
+  moreQs: Object,
+  timeOffset: number,
+  { startDate, endDate }: { startDate: string, endDate: string },
+  type: Types
 ) => {
   const targetStream = getTargetStream(req);
   const begin = getServerMoment(timeOffset, new Date(startDate)).toISOString();
@@ -112,6 +120,7 @@ export const getRangeStream = (
     .getOne$({
       path: '/target/metric',
       options: {
+        method: 'get',
         qs: {
           kind: 'OST',
           ...moreQs,

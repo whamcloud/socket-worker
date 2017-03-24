@@ -133,6 +133,7 @@ describe('heatmap streams', () => {
       expect(getOne$).toHaveBeenCalledWith({
         path: '/target/metric',
         options: {
+          method: 'get',
           qs: {
             begin: '2017-01-21T12:00:00.000Z',
             end: '2017-01-21T12:10:10.000Z',
@@ -337,6 +338,7 @@ describe('heatmap streams', () => {
       expect(req.getOne$).toHaveBeenCalledWith({
         path: '/target/metric',
         options: {
+          method: 'get',
           qs: {
             kind: 'OST',
             begin: new Date(startDate).toISOString(),
