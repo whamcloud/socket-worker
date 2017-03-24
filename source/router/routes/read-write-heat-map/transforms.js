@@ -27,7 +27,8 @@ import type {
   Types,
   Target,
   PointsObj,
-  HeatMapEntries
+  HeatMapEntries,
+  HeatMapEntry
 } from './heat-map-types.js';
 
 export const objToPoints: (
@@ -39,18 +40,17 @@ export const objToPoints: (
   xs => [].concat(...xs)
 );
 
-const concatWithBuff = buffer => xs => buffer.concat(xs);
-const filterWithLeadingEdge = leadingEdge =>
-  entry =>
+const concatWithBuff = (buffer: HeatMapEntries) =>
+  (xs: HeatMapEntries) => buffer.concat(xs);
+const filterWithLeadingEdge = (leadingEdge: string) =>
+  (entry: HeatMapEntry) =>
     fp.filter(
       ({ ts }) => new Date(ts).valueOf() >= new Date(leadingEdge).valueOf()
     )(entry);
-const sortWithTs = xs =>
-  xs.sort(({ ts }, { ts: tsy }) => new Date(ts) - new Date(tsy));
-export const compareByTsAndId = (
-  a: { ts: string, id: string },
-  b: { ts: string, id: string }
-) => a.ts === b.ts && a.id === b.id;
+const sortWithTs = (xs: HeatMapEntries) =>
+  xs.sort(({ ts: tsx }, { ts: tsy }) => new Date(tsx) - new Date(tsy));
+export const compareByTsAndId = (a: HeatMapEntry, b: HeatMapEntry) =>
+  a.ts === b.ts && a.id === b.id;
 const cmp = (
   [{ name: namex }]: HeatMapEntries,
   [{ name: namey }]: HeatMapEntries

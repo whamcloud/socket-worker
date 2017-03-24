@@ -42,7 +42,7 @@ import type { Req } from '../../middleware/middleware-types';
 
 import type { Unit } from '../../../date.js';
 
-const getTargetStream = req =>
+const getTargetStream = (req: Req) =>
   req
     .getOne$({
       path: '/target',
