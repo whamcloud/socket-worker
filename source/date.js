@@ -40,7 +40,7 @@ export const adjustDateFromSizeAndUnit = (
   d: Date
 ) => {
   const date = new Date(d.getTime());
-  const calculate = (x, size) => {
+  const calculate = (x: number, size: number) => {
     switch (operation) {
       case 'add':
         return x + size;
@@ -51,7 +51,7 @@ export const adjustDateFromSizeAndUnit = (
     }
   };
 
-  switch (unit) {
+  switch ((unit: Unit)) {
     case 'milliseconds':
       date.setMilliseconds(calculate(date.getMilliseconds(), size));
       break;
