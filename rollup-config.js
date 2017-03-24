@@ -34,8 +34,8 @@ export default {
             },
             modules: false
           }
-        ],
-        'babili'
+        ]
+        //'babili'
       ],
       plugins: [
         ['transform-object-rest-spread', { useBuiltIns: true }],

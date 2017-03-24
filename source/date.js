@@ -93,7 +93,6 @@ export const calculateRangeFromSizeAndUnit = (
 ) => {
   const addToDate = adjustDateFromSizeAndUnit.bind(null, 'add');
   const subtractFromDate = adjustDateFromSizeAndUnit.bind(null, 'subtract');
-
   end.setMilliseconds(0);
   const secs = end.getSeconds();
 

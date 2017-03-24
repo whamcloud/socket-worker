@@ -8,7 +8,13 @@ import {
 } from './../jasmine.js';
 
 describe('router', () => {
-  let mockGetRouter, mockConnections, mockSocketFactory, mockEnd, router, r;
+  let mockGetRouter,
+    mockConnections,
+    mockSocketFactory,
+    mockStreams,
+    mockEnd,
+    router,
+    r;
 
   beforeEach(() => {
     router = {
@@ -18,11 +24,13 @@ describe('router', () => {
 
     mockConnections = {};
     mockSocketFactory = {};
+    mockStreams = {};
     mockEnd = {};
     mockGetRouter = jasmine.createSpy('router').and.returnValue(router);
 
     jest.mock('@iml/router', () => mockGetRouter);
     jest.mock('./router/middleware/connections.js', () => mockConnections);
+    jest.mock('./router/middleware/streams.js', () => mockStreams);
     jest.mock('./router/middleware/socket-factory.js', () => mockSocketFactory);
     jest.mock('./router/middleware/end.js', () => mockEnd);
 
@@ -39,6 +47,10 @@ describe('router', () => {
 
   it('Should add the connections middleware', () => {
     expect(router.addStart).toHaveBeenCalledWith(mockConnections);
+  });
+
+  it('Should add the streams middleware', () => {
+    expect(router.addStart).toHaveBeenCalledWith(mockStreams);
   });
 
   it('Should add the socketFactory middleware', () => {
