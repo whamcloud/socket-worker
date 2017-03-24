@@ -137,7 +137,8 @@ describe('heatmap streams', () => {
           qs: {
             begin: '2017-01-21T12:00:00.000Z',
             end: '2017-01-21T12:10:10.000Z',
-            kind: 'OST'
+            kind: 'OST',
+            update: false
           }
         }
       });

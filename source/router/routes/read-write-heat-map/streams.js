@@ -21,7 +21,7 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import { default as highland } from 'highland';
+import { default as highland, type HighlandStreamT } from 'highland';
 import {
   objToPoints,
   appendWithBuff,
@@ -36,13 +36,15 @@ import {
   getDurationParams
 } from '../../../date.js';
 
-import type { Types } from './heat-map-types.js';
+import type { Types, HeatMapEntries, Target } from './heat-map-types.js';
 
 import type { Req } from '../../middleware/middleware-types';
 
 import type { Unit } from '../../../date.js';
 
-const getTargetStream = (req: Req) =>
+const getTargetStream = (
+  req: Req
+): HighlandStreamT<[HeatMapEntries, Target[]]> =>
   req
     .getOne$({
       path: '/target',
@@ -60,7 +62,7 @@ export const getDurationStream = (
   timeOffset: number,
   { size, unit }: { size: number, unit: Unit },
   type: Types
-) => {
+): HighlandStreamT<HeatMapEntries> => {
   let buffer = [];
   const metric$ = highland((push, next) => {
     const [begin, end] = calculateRangeFromSizeAndUnit(
@@ -111,7 +113,7 @@ export const getRangeStream = (
   timeOffset: number,
   { startDate, endDate }: { startDate: string, endDate: string },
   type: Types
-) => {
+): HighlandStreamT<HeatMapEntries> => {
   const targetStream = getTargetStream(req);
   const begin = getServerMoment(timeOffset, new Date(startDate)).toISOString();
   const end = getServerMoment(timeOffset, new Date(endDate)).toISOString();
