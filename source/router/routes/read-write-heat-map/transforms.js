@@ -23,31 +23,12 @@
 
 import * as fp from '@iml/fp';
 
-type PointsObj = {
-  [id: number]: { data: Object }[]
-};
-type HeatMapData = {
-  filesfree: number,
-  filestotal: number,
-  kbytesavail: number,
-  kbytesfree: number,
-  kbytestotal: number,
-  num_exports: number,
-  stats_connect: number,
-  stats_create: number,
-  stats_get_info: number,
-  stats_read_bytes: number,
-  stats_read_iops: number,
-  stats_set_info_async: number,
-  stats_statfs: number,
-  stats_write_bytes: number,
-  stats_write_iops: number,
-  tot_dirty: number,
-  tot_granted: number,
-  tot_pending: number
-};
-type HeatMapEntry = { data: HeatMapData, id: string, name: string, ts: string };
-type HeatMapEntries = HeatMapEntry[];
+import type {
+  Types,
+  Target,
+  PointsObj,
+  HeatMapEntries
+} from './heat-map-types.js';
 
 export const objToPoints: (
   points: PointsObj
@@ -75,17 +56,13 @@ const cmp = (
   [{ name: namey }]: HeatMapEntries
 ) => namex.localeCompare(namey);
 export const sortOsts = (xs: HeatMapEntries[]) => xs.sort(cmp);
-export const appendWithBuff = (buffer, leadingEdge) =>
+export const appendWithBuff = (buffer: HeatMapEntries[], leadingEdge: string) =>
   fp.flow(
     concatWithBuff(buffer),
     filterWithLeadingEdge(leadingEdge),
     sortWithTs
   );
 
-type Target = {
-  id: string,
-  name: string
-};
 export const combineWithTargets = (
   [heatMapMetrics, targets]: [HeatMapEntries, Target[]]
 ) =>
@@ -94,11 +71,6 @@ export const combineWithTargets = (
     name: (targets.find(t => t.id === v.id) || { name: v.name }).name
   }));
 
-type Types =
-  | 'stats_read_bytes'
-  | 'stats_write_bytes'
-  | 'stats_read_iops'
-  | 'stats_write_iops';
 export const filterDataByType = (type: Types) =>
   (data: HeatMapEntries) =>
     data.map(v => ({
