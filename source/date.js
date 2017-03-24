@@ -38,7 +38,7 @@ export const adjustDateFromSizeAndUnit = (
   size: number,
   unit: Unit,
   d: Date
-) => {
+): Date => {
   const date = new Date(d.getTime());
   const calculate = (x: number, size: number) => {
     switch (operation) {
@@ -83,14 +83,14 @@ export const adjustDateFromSizeAndUnit = (
   return date;
 };
 
-export const getServerMoment = (SERVER_TIME_DIFF: number, date: Date) =>
+export const getServerMoment = (SERVER_TIME_DIFF: number, date: Date): Date =>
   adjustDateFromSizeAndUnit('add', SERVER_TIME_DIFF, 'milliseconds', date);
 
 export const calculateRangeFromSizeAndUnit = (
   size: number,
   unit: Unit,
   end: Date
-) => {
+): [string, string] => {
   const addToDate = adjustDateFromSizeAndUnit.bind(null, 'add');
   const subtractFromDate = adjustDateFromSizeAndUnit.bind(null, 'subtract');
   end.setMilliseconds(0);
@@ -112,13 +112,14 @@ export const getDurationParams = (
   begin: string,
   end: string,
   buffer: Object[]
-) => {
+): { end: string, begin: string, update: boolean } => {
   let params = {};
 
   if (buffer.length === 0) {
     params = {
       begin,
-      end
+      end,
+      update: false
     };
   } else {
     const latestDate = buffer[buffer.length - 1].ts;
