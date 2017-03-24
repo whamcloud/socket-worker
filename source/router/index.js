@@ -23,10 +23,12 @@
 
 import getRouter from '@iml/router';
 import connections from './middleware/connections.js';
+import streams from './middleware/streams.js';
 import socketFactory from './middleware/socket-factory.js';
 import end from './middleware/end.js';
 
 export default getRouter()
   .addStart(connections)
+  .addStart(streams)
   .addStart(socketFactory)
   .addStart(end);

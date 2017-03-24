@@ -21,43 +21,26 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import * as fp from '@iml/fp';
-import { default as highland, type HighlandStreamT } from 'highland';
-import {
-  objToPoints,
-  appendWithBuff,
-  compareByTsAndId,
-  sort
-} from './transforms.js';
-import {
-  calculateRangeFromSizeAndUnit,
-  getServerMoment,
-  getDurationParams
-} from '../../../date.js';
-
 import * as streams from './streams.js';
 
 import router from '../../index.js';
 
 export default () => {
-  console.log('in read write heatmap');
   router.get('/read-write-heat-map', (req, resp, next) => {
-    console.log('read-write-heat-map call');
     const {
       payload: {
-        options: { qs: moreQs, durationParams, rangeParams, timeOffset }
+        options: { qs: moreQs, durationParams, rangeParams, timeOffset, type }
       }
     } = req;
 
-    if (durationParams) {
+    if (durationParams)
       streams
-        .getDurationStream(req, durationParams, timeOffset, moreQs)
+        .getDurationStream(req, moreQs, timeOffset, durationParams, type)
         .each(resp.write);
-    } else {
+    else
       streams
-        .getRangeStream(req, moreQs, timeOffset, rangeParams)
+        .getRangeStream(req, moreQs, timeOffset, rangeParams, type)
         .each(resp.write);
-    }
 
     next(req, resp);
   });

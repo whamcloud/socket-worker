@@ -21,18 +21,37 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import highland from 'highland';
-import { type HighlandStreamT } from 'highland';
 import * as fp from '@iml/fp';
 
 type PointsObj = {
   [id: number]: { data: Object }[]
 };
-type FlattenedPoints = { data: Object, id: string, name: string }[];
+type HeatMapData = {
+  filesfree: number,
+  filestotal: number,
+  kbytesavail: number,
+  kbytesfree: number,
+  kbytestotal: number,
+  num_exports: number,
+  stats_connect: number,
+  stats_create: number,
+  stats_get_info: number,
+  stats_read_bytes: number,
+  stats_read_iops: number,
+  stats_set_info_async: number,
+  stats_statfs: number,
+  stats_write_bytes: number,
+  stats_write_iops: number,
+  tot_dirty: number,
+  tot_granted: number,
+  tot_pending: number
+};
+type HeatMapEntry = { data: HeatMapData, id: string, name: string, ts: string };
+type HeatMapEntries = HeatMapEntry[];
 
 export const objToPoints: (
   points: PointsObj
-) => FlattenedPoints = fp.flow(
+) => HeatMapEntries = fp.flow(
   Object.entries,
   fp.map(([k: string, xs: { data: Object }[]]) =>
     xs.map((x: Object) => ({ ...x, id: k, name: k }))),
@@ -41,16 +60,48 @@ export const objToPoints: (
 
 const concatWithBuff = buffer => xs => buffer.concat(xs);
 const filterWithLeadingEdge = leadingEdge =>
-  fp.filter(({ ts }) => new Date(ts).valueOf() >= leadingEdge);
+  entry =>
+    fp.filter(
+      ({ ts }) => new Date(ts).valueOf() >= new Date(leadingEdge).valueOf()
+    )(entry);
 const sortWithTs = xs =>
   xs.sort(({ ts }, { ts: tsy }) => new Date(ts) - new Date(tsy));
-export const compareByTsAndId = (a, b) => a.ts === b.ts && a.id === b.id;
-const cmp = ({ name }, { name: nameY }) => name.localeCompare(nameY);
-export const sort = fp.tap(xs => xs.sort(cmp));
-
+export const compareByTsAndId = (
+  a: { ts: string, id: string },
+  b: { ts: string, id: string }
+) => a.ts === b.ts && a.id === b.id;
+const cmp = (
+  [{ name: namex }]: HeatMapEntries,
+  [{ name: namey }]: HeatMapEntries
+) => namex.localeCompare(namey);
+export const sortOsts = (xs: HeatMapEntries[]) => xs.sort(cmp);
 export const appendWithBuff = (buffer, leadingEdge) =>
   fp.flow(
     concatWithBuff(buffer),
     filterWithLeadingEdge(leadingEdge),
     sortWithTs
   );
+
+type Target = {
+  id: string,
+  name: string
+};
+export const combineWithTargets = (
+  [heatMapMetrics, targets]: [HeatMapEntries, Target[]]
+) =>
+  heatMapMetrics.map(v => ({
+    ...v,
+    name: (targets.find(t => t.id === v.id) || { name: v.name }).name
+  }));
+
+type Types =
+  | 'stats_read_bytes'
+  | 'stats_write_bytes'
+  | 'stats_read_iops'
+  | 'stats_write_iops';
+export const filterDataByType = (type: Types) =>
+  (data: HeatMapEntries) =>
+    data.map(v => ({
+      ...v,
+      data: { [type]: v.data[type] }
+    }));

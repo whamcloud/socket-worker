@@ -9,9 +9,9 @@ import {
 } from './date.js';
 
 describe('date', () => {
-  let date:Date;
-  let subtractDate:(size:number, unit:Unit, date:Date) => Date;
-  let addDate:(size:number, unit:Unit, date:Date) => Date;
+  let date: Date;
+  let subtractDate: (size: number, unit: Unit, date: Date) => Date;
+  let addDate: (size: number, unit: Unit, date: Date) => Date;
   let result;
 
   beforeEach(() => {
@@ -121,14 +121,14 @@ describe('calculate range from size and unit', () => {
   let date, start, end;
   beforeEach(() => {
     date = new Date('2017-12-17T03:24:00');
-    [start, end] = calculateRangeFromSizeAndUnit(75, 10, 'minutes', date);
+    [start, end] = calculateRangeFromSizeAndUnit(10, 'minutes', date);
   });
 
   it('should have a start time', () => {
-    expect(start.toISOString()).toEqual('2017-12-17T03:14:00.000Z');
+    expect(start).toEqual('2017-12-17T03:14:00.000Z');
   });
 
   it('should have an end time', () => {
-    expect(end.toISOString()).toEqual('2017-12-17T03:24:10.000Z');
+    expect(end).toEqual('2017-12-17T03:24:10.000Z');
   });
 });

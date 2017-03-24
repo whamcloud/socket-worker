@@ -23,6 +23,7 @@ describe('socker worker', () => {
       .and.returnValue(socket);
     mockRoutes = {
       ostBalance: jasmine.createSpy('ostBalance'),
+      readWriteHeatMap: jasmine.createSpy('readWriteHeatMap'),
       wildcard: jasmine.createSpy('wildcard')
     };
     routeFn = jasmine.createSpy('routeFn');
@@ -44,6 +45,10 @@ describe('socker worker', () => {
 
   it('should invoke the ostBalance route', () => {
     expect(mockRoutes.ostBalance).toHaveBeenCalledOnce();
+  });
+
+  it('should invoke the readWriteHeatMap route', () => {
+    expect(mockRoutes.readWriteHeatMap).toHaveBeenCalledOnce();
   });
 
   it('should invoke the wildcard route', () => {

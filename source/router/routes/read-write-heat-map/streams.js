@@ -21,13 +21,14 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import * as fp from '@iml/fp';
-import { default as highland, type HighlandStreamT } from 'highland';
+import { default as highland } from 'highland';
 import {
   objToPoints,
   appendWithBuff,
   compareByTsAndId,
-  sort
+  sortOsts,
+  combineWithTargets,
+  filterDataByType
 } from './transforms.js';
 import {
   calculateRangeFromSizeAndUnit,
@@ -35,9 +36,7 @@ import {
   getDurationParams
 } from '../../../date.js';
 
-import router from '../../index.js';
-
-export const getTargetStream = req =>
+const getTargetStream = req =>
   req
     .getOne$({
       path: '/target',
@@ -48,17 +47,25 @@ export const getTargetStream = req =>
     })
     .map(x => x.objects);
 
-export const durationStream = (req, moreQs, timeOffset, { size, unit }) => {
+export const getDurationStream = (
+  req,
+  moreQs,
+  timeOffset,
+  { size, unit },
+  type
+) => {
   let buffer = [];
-  highland((push, next) => {
-    let [begin, end] = calculateRangeFromSizeAndUnit(
+  const metric$ = highland((push, next) => {
+    const [begin, end] = calculateRangeFromSizeAndUnit(
       size,
       unit,
       getServerMoment(timeOffset, new Date())
     );
+
     const params = getDurationParams(begin, end, buffer);
 
     const targetStream = getTargetStream(req);
+
     req
       .getOne$({
         path: '/target/metric',
@@ -74,24 +81,34 @@ export const durationStream = (req, moreQs, timeOffset, { size, unit }) => {
       .map(appendWithBuff(buffer, begin))
       .tap(xs => buffer = xs)
       .zip(targetStream)
+      .map(combineWithTargets)
+      .map(filterDataByType(type))
       .flatten()
       .uniqBy(compareByTsAndId)
       .group('id')
       .map(Object.values)
-      .map(sort)
-      .each(function pushData(x) {
+      .map(sortOsts)
+      .each(x => {
         push(null, x);
         next();
       });
   }).ratelimit(1, 10000);
+  req.streams[req.id].push(metric$);
+  return metric$;
 };
 
-const getRangeStream = (req, moreQs, timeOffset, { begin, end }) => {
+export const getRangeStream = (
+  req,
+  moreQs,
+  timeOffset,
+  { startDate, endDate },
+  type
+) => {
   const targetStream = getTargetStream(req);
-  begin = getServerMoment(timeOffset, new Date(begin)).toISOString();
-  end = getServerMoment(timeOffset, new Date(end)).toISOString();
+  const begin = getServerMoment(timeOffset, new Date(startDate)).toISOString();
+  const end = getServerMoment(timeOffset, new Date(endDate)).toISOString();
 
-  req
+  return req
     .getOne$({
       path: '/target/metric',
       options: {
@@ -105,9 +122,11 @@ const getRangeStream = (req, moreQs, timeOffset, { begin, end }) => {
     })
     .map(objToPoints)
     .zip(targetStream)
+    .map(combineWithTargets)
+    .map(filterDataByType(type))
     .flatten()
     .uniqBy(compareByTsAndId)
     .group('id')
     .map(Object.values)
-    .map(sort);
+    .map(sortOsts);
 };
