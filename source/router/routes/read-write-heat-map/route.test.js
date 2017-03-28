@@ -68,13 +68,12 @@ describe('readWriteHeatMap', () => {
       req = {
         payload: {
           options: {
-            qs: { foo: 'bar' },
+            qs: { foo: 'bar', metrics: 'stats_read_bytes' },
             durationParams: {
               size: 10,
               unit: 'minutes'
             },
-            timeOffset: -275,
-            type: 'stats_read_bytes'
+            timeOffset: -275
           }
         }
       };
@@ -88,13 +87,12 @@ describe('readWriteHeatMap', () => {
     it('should call getDurationStream', () => {
       expect(mockStreams.getDurationStream).toHaveBeenCalledOnceWith(
         req,
-        { foo: 'bar' },
+        { foo: 'bar', metrics: 'stats_read_bytes' },
         -275,
         {
           size: 10,
           unit: 'minutes'
-        },
-        'stats_read_bytes'
+        }
       );
     });
 
@@ -112,13 +110,12 @@ describe('readWriteHeatMap', () => {
       req = {
         payload: {
           options: {
-            qs: { bar: 'baz' },
+            qs: { bar: 'baz', metrics: 'stats_read_iops' },
             rangeParams: {
               startDate: '2017-01-01T00:15:00.000Z',
               endDate: '2017-01-02T05:17:00.000Z'
             },
-            timeOffset: -230,
-            type: 'stats_read_iops'
+            timeOffset: -230
           }
         }
       };
@@ -132,13 +129,12 @@ describe('readWriteHeatMap', () => {
     it('should call getDurationStream', () => {
       expect(mockStreams.getRangeStream).toHaveBeenCalledOnceWith(
         req,
-        { bar: 'baz' },
+        { bar: 'baz', metrics: 'stats_read_iops' },
         -230,
         {
           startDate: '2017-01-01T00:15:00.000Z',
           endDate: '2017-01-02T05:17:00.000Z'
-        },
-        'stats_read_iops'
+        }
       );
     });
 

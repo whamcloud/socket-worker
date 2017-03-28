@@ -15,11 +15,7 @@ describe('end middleware', () => {
         '1': [
           {
             end: endSpy
-          }
-        ]
-      },
-      streams: {
-        '1': [
+          },
           {
             destroy: destroySpy
           }
@@ -46,12 +42,8 @@ describe('end middleware', () => {
       expect(destroySpy).toHaveBeenCalledOnce();
     });
 
-    it('should remove the connection from the list', () => {
+    it('should remove the connection and the stream from the list', () => {
       expect(req.connections['1']).toBe(undefined);
-    });
-
-    it('should remove the stream from the list', () => {
-      expect(req.streams['1']).toBe(undefined);
     });
 
     it('should not call next', () => {
@@ -79,10 +71,6 @@ describe('end middleware', () => {
 
     it('should not delete the connection from the list', () => {
       expect(req.connections['1']).not.toBe(undefined);
-    });
-
-    it('should not delete the stream from the list', () => {
-      expect(req.streams['1']).not.toBe(undefined);
     });
   });
 

@@ -27,8 +27,7 @@ import {
   appendWithBuff,
   compareByTsAndId,
   sortOsts,
-  combineWithTargets,
-  filterDataByType
+  combineWithTargets
 } from './transforms.js';
 import {
   calculateRangeFromSizeAndUnit,
@@ -36,14 +35,17 @@ import {
   getDurationParams
 } from '../../../date.js';
 
-import type { Types, HeatMapEntries, Target } from './heat-map-types.js';
-
-import type { Req } from '../../middleware/middleware-types';
+import type {
+  HeatMapEntries,
+  HeatMapRequest,
+  Target,
+  MoreQs
+} from './heat-map-types.js';
 
 import type { Unit } from '../../../date.js';
 
 const getTargetStream = (
-  req: Req
+  req: HeatMapRequest
 ): HighlandStreamT<[HeatMapEntries, Target[]]> =>
   req
     .getOne$({
@@ -56,13 +58,15 @@ const getTargetStream = (
     })
     .map(x => x.objects);
 
+type ReturnValues = (Object) => HeatMapEntries[];
+const values = ((Object.values: any): ReturnValues);
+
 export const getDurationStream = (
-  req: Req,
-  moreQs: Object,
+  req: HeatMapRequest,
+  moreQs: ?MoreQs,
   timeOffset: number,
-  { size, unit }: { size: number, unit: Unit },
-  type: Types
-): HighlandStreamT<HeatMapEntries> => {
+  { size, unit }: { size: number, unit: Unit }
+): HighlandStreamT<HeatMapEntries[]> => {
   let buffer = [];
   const metric$ = highland((push, next) => {
     const [begin, end] = calculateRangeFromSizeAndUnit(
@@ -72,7 +76,6 @@ export const getDurationStream = (
     );
 
     const params = getDurationParams(begin, end, buffer);
-
     const targetStream = getTargetStream(req);
 
     req
@@ -92,28 +95,26 @@ export const getDurationStream = (
       .tap(xs => buffer = xs)
       .zip(targetStream)
       .map(combineWithTargets)
-      .map(filterDataByType(type))
       .flatten()
       .uniqBy(compareByTsAndId)
       .group('id')
-      .map(Object.values)
+      .map(values)
       .map(sortOsts)
       .each(x => {
         push(null, x);
         next();
       });
   }).ratelimit(1, 10000);
-  req.streams[req.id].push(metric$);
+  req.connections[req.id].push(metric$);
   return metric$;
 };
 
 export const getRangeStream = (
-  req: Req,
-  moreQs: Object,
+  req: HeatMapRequest,
+  moreQs: ?MoreQs,
   timeOffset: number,
-  { startDate, endDate }: { startDate: string, endDate: string },
-  type: Types
-): HighlandStreamT<HeatMapEntries> => {
+  { startDate, endDate }: { startDate: string, endDate: string }
+): HighlandStreamT<HeatMapEntries[]> => {
   const targetStream = getTargetStream(req);
   const begin = getServerMoment(timeOffset, new Date(startDate)).toISOString();
   const end = getServerMoment(timeOffset, new Date(endDate)).toISOString();
@@ -134,10 +135,9 @@ export const getRangeStream = (
     .map(objToPoints)
     .zip(targetStream)
     .map(combineWithTargets)
-    .map(filterDataByType(type))
     .flatten()
     .uniqBy(compareByTsAndId)
     .group('id')
-    .map(Object.values)
+    .map(values)
     .map(sortOsts);
 };

@@ -22,26 +22,31 @@
 // express and approved by Intel in writing.
 
 import * as streams from './streams.js';
-
 import router from '../../index.js';
 
+import type { HeatMapRequest } from './heat-map-types.js';
+import type { Resp, Next } from '../../middleware/middleware-types.js';
+
 export default () => {
-  router.get('/read-write-heat-map', (req, resp, next) => {
-    const {
-      payload: {
-        options: { qs: moreQs, durationParams, rangeParams, timeOffset, type }
-      }
-    } = req;
+  router.get(
+    '/read-write-heat-map',
+    (req: HeatMapRequest, resp: Resp, next: Next) => {
+      const {
+        payload: {
+          options: { qs: moreQs, durationParams, rangeParams, timeOffset }
+        }
+      } = req;
 
-    if (durationParams)
-      streams
-        .getDurationStream(req, moreQs, timeOffset, durationParams, type)
-        .each(resp.write);
-    else
-      streams
-        .getRangeStream(req, moreQs, timeOffset, rangeParams, type)
-        .each(resp.write);
+      if (durationParams)
+        streams
+          .getDurationStream(req, moreQs, timeOffset, durationParams)
+          .each(resp.write);
+      else if (rangeParams)
+        streams
+          .getRangeStream(req, moreQs, timeOffset, rangeParams)
+          .each(resp.write);
 
-    next(req, resp);
-  });
+      next(req, resp);
+    }
+  );
 };

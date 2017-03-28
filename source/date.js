@@ -22,6 +22,7 @@
 // express and approved by Intel in writing.
 
 import * as fp from '@iml/fp';
+import * as math from '@iml/math';
 
 export type Unit =
   | 'milliseconds'
@@ -33,23 +34,29 @@ export type Unit =
   | 'months'
   | 'years';
 
+type DateOperations = 'add' | 'subtract';
+
+const generateOperation = (
+  operation: DateOperations
+): (a: number, b: number) => number => {
+  switch (operation) {
+    case 'add':
+      return math.add;
+    case 'subtract':
+      return math.minus;
+    default:
+      return math.minus;
+  }
+};
+
 export const adjustDateFromSizeAndUnit = (
-  operation: 'add' | 'subtract' = 'subtract',
+  operation: DateOperations = 'subtract',
   size: number,
   unit: Unit,
   d: Date
 ): Date => {
   const date = new Date(d.getTime());
-  const calculate = (x: number, size: number) => {
-    switch (operation) {
-      case 'add':
-        return x + size;
-      case 'subtract':
-        return x - size;
-      default:
-        throw new Error('must pass in a valid operation.');
-    }
-  };
+  const calculate = generateOperation(operation);
 
   switch ((unit: Unit)) {
     case 'milliseconds':
