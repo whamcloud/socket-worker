@@ -24,11 +24,10 @@
 import * as fp from '@iml/fp';
 
 import type {
-  Types,
   Target,
   PointsObj,
-  HeatMapEntries,
   HeatMapEntry,
+  HeatMapEntries,
   HeatMapData
 } from './heat-map-types.js';
 
@@ -52,14 +51,18 @@ export const filterWithLeadingEdge = (leadingEdge: string) =>
 
 export const sortWithTs = (xs: HeatMapEntries): HeatMapEntries =>
   xs.sort(({ ts: tsx }, { ts: tsy }) => new Date(tsx) - new Date(tsy));
+
 export const compareByTsAndId = (a: HeatMapEntry, b: HeatMapEntry): boolean =>
   a.ts === b.ts && a.id === b.id;
+
 const cmp = (
   [{ name: namex }]: HeatMapEntries,
   [{ name: namey }]: HeatMapEntries
 ): number => namex.localeCompare(namey);
+
 export const sortOsts = (xs: HeatMapEntries[]): HeatMapEntries[] =>
   xs.sort(cmp);
+
 export const appendWithBuff = (
   buffer: HeatMapEntries,
   leadingEdge: string
@@ -77,10 +80,3 @@ export const combineWithTargets = (
     ...v,
     name: (targets.find(t => t.id === v.id) || { name: v.name }).name
   }));
-
-export const filterDataByType = (type: Types) =>
-  (data: HeatMapEntries): HeatMapEntries =>
-    data.map(v => ({
-      ...v,
-      data: { [type]: v.data[type] }
-    }));

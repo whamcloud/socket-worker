@@ -41,7 +41,7 @@
     "eslint-plugin-flowtype": "^2.30.3",
     "eslint-plugin-prettier": "^2.0.1",
     "flow-bin": "0.42.0",
-    "intel-flow-highland": "3.9.0",
+    "intel-flow-highland": "3.11.1",
     "intel-flow-jasmine": "1.6.0",
     "intel-jasmine-n-matchers": "2.1.1",
     "jasmine-reporters": "2.2.1",

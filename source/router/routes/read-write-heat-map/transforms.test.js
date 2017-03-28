@@ -5,6 +5,8 @@ import * as transforms from './transforms.js';
 
 import { jasmine, describe, it, beforeEach, expect } from '../../../jasmine.js';
 
+import type { HeatMapEntry } from './heat-map-types';
+
 describe('transforms', function() {
   let result, spy;
 
@@ -164,22 +166,59 @@ describe('transforms', function() {
   });
 
   describe('comparing by timestamp and id', () => {
-    it('should produce uniqe items', () => {
-      highland([
-        { id: 1, ts: '2017-01-01T05:00:00+00:00' },
-        { id: 2, ts: '2017-01-01T06:00:00+00:00' },
-        { id: 1, ts: '2017-01-01T05:00:00+00:00' },
-        { id: 2, ts: '2017-01-01T07:00:00+00:00' }
-      ])
+    it('should produce unique items', () => {
+      const item1: HeatMapEntry = {
+        id: '1',
+        name: '1',
+        ts: '2017-01-01T05:00:00+00:00',
+        data: { bar: 'baz' }
+      };
+      const item2: HeatMapEntry = {
+        id: '2',
+        name: '2',
+        ts: '2017-01-01T06:00:00+00:00',
+        data: { bar: 'baz' }
+      };
+      const item3: HeatMapEntry = {
+        id: '1',
+        name: '1',
+        ts: '2017-01-01T05:00:00+00:00',
+        data: { bar: 'baz' }
+      };
+      const item4: HeatMapEntry = {
+        id: '2',
+        name: '2',
+        ts: '2017-01-01T07:00:00+00:00',
+        data: { bar: 'baz' }
+      };
+
+      highland([item1, item2, item3, item4])
         .uniqBy(transforms.compareByTsAndId)
         .group('id')
         .each(spy);
 
       expect(spy).toHaveBeenCalledWith({
-        '1': [{ id: 1, ts: '2017-01-01T05:00:00+00:00' }],
+        '1': [
+          {
+            id: '1',
+            name: '1',
+            ts: '2017-01-01T05:00:00+00:00',
+            data: { bar: 'baz' }
+          }
+        ],
         '2': [
-          { id: 2, ts: '2017-01-01T06:00:00+00:00' },
-          { id: 2, ts: '2017-01-01T07:00:00+00:00' }
+          {
+            id: '2',
+            name: '2',
+            ts: '2017-01-01T06:00:00+00:00',
+            data: { bar: 'baz' }
+          },
+          {
+            id: '2',
+            name: '2',
+            ts: '2017-01-01T07:00:00+00:00',
+            data: { bar: 'baz' }
+          }
         ]
       });
     });
@@ -350,37 +389,5 @@ describe('transforms', function() {
         }
       ]);
     });
-  });
-
-  describe('filtering data by type', () => {
-    result = transforms.filterDataByType('stats_read_bytes')([
-      {
-        data: { stats_read_bytes: 123, stats_write_bytes: 567 },
-        id: '1',
-        name: 'ost1',
-        ts: '2017-01-01T05:00:00+00:00'
-      },
-      {
-        data: { stats_read_bytes: 321, stats_write_bytes: 567 },
-        id: '2',
-        name: 'ost2',
-        ts: '2017-01-01T06:00:00+00:00'
-      }
-    ]);
-
-    expect(result).toEqual([
-      {
-        data: { stats_read_bytes: 123 },
-        id: '1',
-        name: 'ost1',
-        ts: '2017-01-01T05:00:00+00:00'
-      },
-      {
-        data: { stats_read_bytes: 321 },
-        id: '2',
-        name: 'ost2',
-        ts: '2017-01-01T06:00:00+00:00'
-      }
-    ]);
   });
 });

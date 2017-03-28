@@ -29,7 +29,6 @@ describe('heatmap streams', () => {
     jest.spyOn(transforms, 'compareByTsAndId');
     jest.spyOn(transforms, 'sortOsts');
     jest.spyOn(transforms, 'combineWithTargets');
-    jest.spyOn(transforms, 'filterDataByType');
   });
 
   describe('duration stream', () => {
@@ -71,16 +70,15 @@ describe('heatmap streams', () => {
       req = {
         payload: {
           options: {
-            qs: { foo: 'bar' },
+            qs: { foo: 'bar', metrics: 'stats_read_bytes' },
             durationParams: {
               size: 10,
               unit: 'minutes'
             },
-            timeOffset: -275,
-            type: 'stats_read_bytes'
+            timeOffset: -275
           }
         },
-        streams: {
+        connections: {
           1: []
         },
         id: 1,
@@ -89,10 +87,9 @@ describe('heatmap streams', () => {
 
       metric$ = streams.getDurationStream(
         req,
-        undefined,
+        { foo: 'bar', metrics: 'stats_read_bytes' },
         -275,
-        { size: 10, unit: 'minutes' },
-        'stats_read_bytes'
+        { size: 10, unit: 'minutes' }
       );
 
       metric$.each(metricSpy);
@@ -138,7 +135,9 @@ describe('heatmap streams', () => {
             begin: '2017-01-21T12:00:00.000Z',
             end: '2017-01-21T12:10:10.000Z',
             kind: 'OST',
-            update: false
+            update: false,
+            metrics: 'stats_read_bytes',
+            foo: 'bar'
           }
         }
       });
@@ -186,12 +185,6 @@ describe('heatmap streams', () => {
       ]);
     });
 
-    it('should call filterDataByType', () => {
-      expect(transforms.filterDataByType).toHaveBeenCalledWith(
-        'stats_read_bytes'
-      );
-    });
-
     it('should call compareByTsAndId', () => {
       expect(transforms.compareByTsAndId).toHaveBeenCalled();
     });
@@ -235,7 +228,7 @@ describe('heatmap streams', () => {
     });
 
     it('should push the metric stream into req.streams', () => {
-      expect(req.streams[req.id][0]).toBe(metric$);
+      expect(req.connections[req.id][0]).toBe(metric$);
     });
   });
 
@@ -285,13 +278,12 @@ describe('heatmap streams', () => {
       req = {
         payload: {
           options: {
-            qs: { foo: 'bar' },
+            qs: { foo: 'bar', metrics: 'stats_read_bytes' },
             durationParams: {
               startDate,
               endDate
             },
-            timeOffset: -275,
-            type: 'stats_read_bytes'
+            timeOffset: -275
           }
         },
         streams: {
@@ -303,13 +295,12 @@ describe('heatmap streams', () => {
 
       metric$ = streams.getRangeStream(
         req,
-        undefined,
+        { foo: 'bar', metrics: 'stats_read_bytes' },
         -275,
         {
           startDate,
           endDate
-        },
-        'stats_read_bytes'
+        }
       );
 
       metric$.each(metricSpy);
@@ -335,7 +326,7 @@ describe('heatmap streams', () => {
       );
     });
 
-    it('should call req.getOne$', () => {
+    it('should call getOne$', () => {
       expect(req.getOne$).toHaveBeenCalledWith({
         path: '/target/metric',
         options: {
@@ -343,7 +334,9 @@ describe('heatmap streams', () => {
           qs: {
             kind: 'OST',
             begin: new Date(startDate).toISOString(),
-            end: new Date(endDate).toISOString()
+            end: new Date(endDate).toISOString(),
+            foo: 'bar',
+            metrics: 'stats_read_bytes'
           }
         }
       });
@@ -390,12 +383,6 @@ describe('heatmap streams', () => {
         ],
         [{ id: '1', name: 'ost1' }, { id: '2', name: 'ost2' }]
       ]);
-    });
-
-    it('should call filterDataByType', () => {
-      expect(transforms.filterDataByType).toHaveBeenCalledWith(
-        'stats_read_bytes'
-      );
     });
 
     it('should call compareByTsAndId', () => {
