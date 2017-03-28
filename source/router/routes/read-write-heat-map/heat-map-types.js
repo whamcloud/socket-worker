@@ -22,8 +22,7 @@
 // express and approved by Intel in writing.
 
 import type { Unit } from '../../../date.js';
-import type { Connections } from '../../middleware/middleware-types.js';
-import { type StreamFn } from '../../../socket-stream.js';
+import type { BaseReq } from '../../middleware/middleware-types.js';
 
 export type Types =
   | 'stats_read_bytes'
@@ -41,8 +40,7 @@ export type MoreQs = {
   metrics: Types
 };
 
-export type HeatMapRequest = {
-  id: string,
+interface heatMapRequest extends BaseReq {
   payload: {
     options: {
       qs: MoreQs,
@@ -50,12 +48,9 @@ export type HeatMapRequest = {
       rangeParams: ?{ startDate: string, endDate: string },
       timeOffset: number
     }
-  },
-  connections: Connections,
-  type: 'connect' | 'end',
-  getOne$: StreamFn<*>,
-  getMany$: StreamFn<*>
-};
+  }
+}
+export type HeatMapRequest = heatMapRequest;
 
 export type PointsObj = {
   [id: number]: { data: HeatMapData, ts: string }[]

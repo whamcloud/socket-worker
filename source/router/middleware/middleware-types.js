@@ -30,17 +30,22 @@ import {
 } from '../routes/read-write-heat-map/heat-map-types.js';
 
 export type Connections = {
-  [id: string]: Array<MultiplexedSocketInterface | HighlandStreamT<any>>
+  [id: string]: Array<MultiplexedSocketInterface | HighlandStreamT<*>>
 };
 
-export type Req = {
+interface baseReq {
   id: string,
-  payload: Payload,
   connections: Connections,
   type: 'connect' | 'end',
   getOne$: StreamFn<*>,
   getMany$: StreamFn<*>
-};
+}
+export type BaseReq = baseReq;
+
+interface req extends baseReq {
+  payload: Payload
+}
+export type Req = req;
 
 export type Resp = {
   socket: MultiplexedSocketInterface,
