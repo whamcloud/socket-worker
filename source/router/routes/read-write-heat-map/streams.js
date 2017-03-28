@@ -63,7 +63,7 @@ const values = ((Object.values: any): ReturnValues);
 
 export const getDurationStream = (
   req: HeatMapRequest,
-  moreQs: ?MoreQs,
+  moreQs: MoreQs,
   timeOffset: number,
   { size, unit }: { size: number, unit: Unit }
 ): HighlandStreamT<HeatMapEntries[]> => {
@@ -111,7 +111,7 @@ export const getDurationStream = (
 
 export const getRangeStream = (
   req: HeatMapRequest,
-  moreQs: ?MoreQs,
+  moreQs: MoreQs,
   timeOffset: number,
   { startDate, endDate }: { startDate: string, endDate: string }
 ): HighlandStreamT<HeatMapEntries[]> => {
