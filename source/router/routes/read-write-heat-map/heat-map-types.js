@@ -42,17 +42,18 @@ export type MoreQs = {
 };
 
 interface HeatMapOptions extends Options {
-  qs: MoreQs,
-  durationParams: ?{ size: number, unit: Unit },
-  rangeParams: ?{ startDate: string, endDate: string },
-  timeOffset: number
+  +qs: MoreQs,
+  +durationParams: ?{ size: number, unit: Unit },
+  +rangeParams: ?{ startDate: string, endDate: string },
+  +timeOffset: number
+}
+
+interface HeatMapPayload extends Payload {
+  +options: HeatMapOptions
 }
 
 export interface HeatMapRequest extends Req {
-  +payload: {
-    ...Payload,
-    +options: HeatMapOptions
-  }
+  +payload: HeatMapPayload
 }
 
 export type PointsObj = {
