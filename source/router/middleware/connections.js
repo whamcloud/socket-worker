@@ -21,7 +21,7 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import type { Req, Resp, Next, Connections } from './middleware-types';
+import type { Req, Resp, Next, Connections } from './middleware-types.js';
 
 const connections: Connections = {};
 
