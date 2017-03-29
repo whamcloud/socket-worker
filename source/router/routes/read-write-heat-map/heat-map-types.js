@@ -40,7 +40,7 @@ export type MoreQs = {
   metrics: Types
 };
 
-interface heatMapRequest extends BaseReq {
+export interface HeatMapRequest extends BaseReq {
   payload: {
     options: {
       qs: MoreQs,
@@ -50,7 +50,6 @@ interface heatMapRequest extends BaseReq {
     }
   }
 }
-export type HeatMapRequest = heatMapRequest;
 
 export type PointsObj = {
   [id: number]: { data: HeatMapData, ts: string }[]

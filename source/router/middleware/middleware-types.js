@@ -33,19 +33,17 @@ export type Connections = {
   [id: string]: Array<MultiplexedSocketInterface | HighlandStreamT<*>>
 };
 
-interface baseReq {
+export interface BaseReq {
   id: string,
   connections: Connections,
   type: 'connect' | 'end',
   getOne$: StreamFn<*>,
   getMany$: StreamFn<*>
 }
-export type BaseReq = baseReq;
 
-interface req extends baseReq {
+export interface Req extends BaseReq {
   payload: Payload
 }
-export type Req = req;
 
 export type Resp = {
   socket: MultiplexedSocketInterface,
