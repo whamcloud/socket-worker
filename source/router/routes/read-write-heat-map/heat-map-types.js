@@ -22,7 +22,8 @@
 // express and approved by Intel in writing.
 
 import type { Unit } from '../../../date.js';
-import type { BaseReq } from '../../middleware/middleware-types.js';
+import type { Payload, Options } from '../../../route-by-data.js';
+import type { Req } from '../../middleware/middleware-types.js';
 
 export type Types =
   | 'stats_read_bytes'
@@ -40,14 +41,17 @@ export type MoreQs = {
   metrics: Types
 };
 
-export interface HeatMapRequest extends BaseReq {
-  payload: {
-    options: {
-      qs: MoreQs,
-      durationParams: ?{ size: number, unit: Unit },
-      rangeParams: ?{ startDate: string, endDate: string },
-      timeOffset: number
-    }
+interface HeatMapOptions extends Options {
+  qs: MoreQs,
+  durationParams: ?{ size: number, unit: Unit },
+  rangeParams: ?{ startDate: string, endDate: string },
+  timeOffset: number
+}
+
+export interface HeatMapRequest extends Req {
+  +payload: {
+    ...Payload,
+    +options: HeatMapOptions
   }
 }
 

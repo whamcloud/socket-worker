@@ -25,24 +25,18 @@ import { type MultiplexedSocketInterface } from '../../multiplexed-socket.js';
 import { type StreamFn } from '../../socket-stream.js';
 import { type Payload } from '../../route-by-data.js';
 import { type HighlandStreamT } from 'highland';
-import {
-  type HeatMapRequest
-} from '../routes/read-write-heat-map/heat-map-types.js';
 
 export type Connections = {
   [id: string]: Array<MultiplexedSocketInterface | HighlandStreamT<*>>
 };
 
-export interface BaseReq {
+export interface Req {
   id: string,
   connections: Connections,
   type: 'connect' | 'end',
   getOne$: StreamFn<*>,
-  getMany$: StreamFn<*>
-}
-
-export interface Req extends BaseReq {
-  payload: Payload
+  getMany$: StreamFn<*>,
+  +payload: Payload
 }
 
 export type Resp = {
@@ -50,4 +44,4 @@ export type Resp = {
   write: (mixed) => void
 };
 
-export type Next = (req: Req | HeatMapRequest, resp: Resp) => void;
+export type Next = (req: Req, resp: Resp) => void;
