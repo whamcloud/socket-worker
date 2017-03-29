@@ -31,9 +31,9 @@ export type Connections = {
 };
 
 export interface Req {
-  id: string,
+  +id: string,
   connections: Connections,
-  type: 'connect' | 'end',
+  +type: 'connect' | 'end',
   getOne$: StreamFn<*>,
   getMany$: StreamFn<*>,
   +payload: Payload

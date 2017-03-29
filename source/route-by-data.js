@@ -31,10 +31,10 @@ export interface Options {
   +qs: Object
 }
 
-export type Payload = {
+export interface Payload {
   +path?: string,
   +options?: Options
-};
+}
 
 type Data = {
   payload?: Payload,
