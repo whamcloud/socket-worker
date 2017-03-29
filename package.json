@@ -28,7 +28,7 @@
     "registry": "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-local"
   },
   "devDependencies": {
-    "babel-eslint": "7.1.1",
+    "babel-eslint": "7.2.1",
     "babel-plugin-external-helpers": "6.22.0",
     "babel-plugin-transform-class-properties": "6.23.0",
     "babel-plugin-transform-flow-strip-types": "6.22.0",
@@ -38,7 +38,7 @@
     "eslint": "3.18.0",
     "eslint-config-prettier": "^1.5.0",
     "eslint-plugin-flow-vars": "0.5.0",
-    "eslint-plugin-flowtype": "^2.30.3",
+    "eslint-plugin-flowtype": "2.30.4",
     "eslint-plugin-prettier": "^2.0.1",
     "flow-bin": "0.42.0",
     "intel-flow-highland": "3.11.1",
