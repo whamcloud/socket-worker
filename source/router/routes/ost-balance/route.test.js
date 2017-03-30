@@ -40,6 +40,7 @@ describe('get OST balance stream', () => {
             getOne$,
             payload: {
               options: {
+                method: 'get',
                 percentage: 0,
                 qs: {
                   filesystem_id: '1'
@@ -62,6 +63,7 @@ describe('get OST balance stream', () => {
         expect(getOne$).toHaveBeenCalledOnceWith({
           path: '/target/metric',
           options: {
+            method: 'get',
             qs: {
               kind: 'OST',
               metrics: 'kbytestotal,kbytesfree',
@@ -84,6 +86,7 @@ describe('get OST balance stream', () => {
             getOne$,
             payload: {
               options: {
+                method: 'get',
                 percentage: 1
               }
             }
@@ -118,6 +121,7 @@ describe('get OST balance stream', () => {
             getOne$,
             payload: {
               options: {
+                method: 'get',
                 percentage: 0
               }
             }
@@ -148,6 +152,7 @@ describe('get OST balance stream', () => {
         expect(getOne$).toHaveBeenCalledOnceWith({
           path: '/target/metric',
           options: {
+            method: 'get',
             qs: {
               kind: 'OST',
               metrics: 'kbytestotal,kbytesfree',

@@ -21,55 +21,23 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import type { Unit } from '../../../date.js';
 import type { Payload, Options } from '../../../route-by-data.js';
 import type { Req } from '../../middleware/middleware-types.js';
 
-export type Types =
-  | 'stats_read_bytes'
-  | 'stats_write_bytes'
-  | 'stats_read_iops'
-  | 'stats_write_iops';
-
-export type Target = {
-  +id: string,
-  +name: string
-};
-
 export type MoreQs = {
   +filesystem_id?: string,
-  +id?: string,
-  +metrics: Types
+  +id?: string
 };
 
-interface HeatMapOptions extends Options {
+interface OstOptions extends Options {
   +qs: MoreQs,
-  +durationParams: ?{ size: number, unit: Unit },
-  +rangeParams: ?{ startDate: string, endDate: string },
-  +timeOffset: number
+  +percentage: number
 }
 
-interface HeatMapPayload extends Payload {
-  +options: HeatMapOptions
+interface OstPayload extends Payload {
+  +options: OstOptions
 }
 
-export interface HeatMapRequest extends Req {
-  +payload: HeatMapPayload
+export interface OstRequest extends Req {
+  +payload: OstPayload
 }
-
-export type PointsObj = {
-  [id: number]: { data: HeatMapData, ts: string }[]
-};
-export type HeatMapData = {
-  stats_read_bytes?: number,
-  stats_read_iops?: number,
-  stats_write_bytes?: number,
-  stats_write_iops?: number
-};
-export type HeatMapEntry = {
-  data: HeatMapData,
-  id: string,
-  name: string,
-  ts: string
-};
-export type HeatMapEntries = HeatMapEntry[];
