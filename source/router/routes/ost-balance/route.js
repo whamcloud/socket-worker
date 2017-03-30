@@ -34,7 +34,27 @@ import router from '../../index.js';
 
 import { type HighlandStreamT } from 'highland';
 import type { Resp, Next } from '../../middleware/middleware-types.js';
-import type { OstRequest } from './ost-types.js';
+
+import type { Payload, Options } from '../../../route-by-data.js';
+import type { Req } from '../../middleware/middleware-types.js';
+
+export type MoreQs = {
+  +filesystem_id?: string,
+  +id?: string
+};
+
+interface OstOptions extends Options {
+  +qs: MoreQs,
+  +percentage: number
+}
+
+interface OstPayload extends Payload {
+  +options: OstOptions
+}
+
+export interface OstRequest extends Req {
+  +payload: OstPayload
+}
 
 export default () => {
   router.get('/ost-balance', (req: OstRequest, resp: Resp, next: Next) => {
