@@ -5,7 +5,7 @@ import * as transforms from './transforms.js';
 
 import { jasmine, describe, it, beforeEach, expect } from '../../../jasmine.js';
 
-import type { HeatMapEntry } from './heat-map-types';
+import type { HeatMapEntry } from './route.js';
 
 describe('transforms', function() {
   let result, spy;

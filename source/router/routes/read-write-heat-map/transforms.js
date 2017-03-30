@@ -29,7 +29,7 @@ import type {
   HeatMapEntry,
   HeatMapEntries,
   HeatMapData
-} from './heat-map-types.js';
+} from './route.js';
 
 export const objToPoints: (
   points: PointsObj

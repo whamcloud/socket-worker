@@ -40,7 +40,7 @@ import type {
   HeatMapRequest,
   Target,
   MoreQs
-} from './heat-map-types.js';
+} from './route.js';
 
 import type { Unit } from '../../../date.js';
 
