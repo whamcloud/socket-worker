@@ -22,7 +22,6 @@
 // express and approved by Intel in writing.
 
 import * as fp from '@iml/fp';
-import { type HighlandStreamT } from 'highland';
 import {
   transformMetrics,
   type OutputOstData,
@@ -33,12 +32,17 @@ import {
 
 import router from '../../index.js';
 
+import { type HighlandStreamT } from 'highland';
+import type { Resp, Next } from '../../middleware/middleware-types.js';
+import type { OstRequest } from './ost-types.js';
+
 export default () => {
-  router.get('/ost-balance', (req, resp, next) => {
+  router.get('/ost-balance', (req: OstRequest, resp: Resp, next: Next) => {
     const targetStream = req
       .getOne$({
         path: '/target',
         options: {
+          method: 'get',
           qs: { limit: 0 },
           jsonMask: 'objects(id,name)'
         }
@@ -51,6 +55,7 @@ export default () => {
       .getOne$({
         path: '/target/metric',
         options: {
+          method: 'get',
           qs: {
             kind: 'OST',
             metrics: 'kbytestotal,kbytesfree',
