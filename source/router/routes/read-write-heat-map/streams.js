@@ -44,9 +44,7 @@ import type {
 
 import type { Unit } from '../../../date.js';
 
-const getTargetStream = (
-  req: HeatMapRequest
-): HighlandStreamT<[HeatMapEntries, Target[]]> =>
+const getTargetStream = (req: HeatMapRequest): HighlandStreamT<Target[]> =>
   req
     .getOne$({
       path: '/target',
@@ -76,7 +74,7 @@ export const getDurationStream = (
     );
 
     const params = getDurationParams(begin, end, buffer);
-    const targetStream = getTargetStream(req);
+    const targetStream: HighlandStreamT<Target[]> = getTargetStream(req);
 
     req
       .getOne$({

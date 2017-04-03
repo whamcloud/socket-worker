@@ -56,9 +56,14 @@ export interface OstRequest extends Req {
   +payload: OstPayload
 }
 
+export type Target = {
+  +id: string,
+  +name: string
+};
+
 export default () => {
   router.get('/ost-balance', (req: OstRequest, resp: Resp, next: Next) => {
-    const targetStream = req
+    const targetStream: HighlandStreamT<Target[]> = req
       .getOne$({
         path: '/target',
         options: {
