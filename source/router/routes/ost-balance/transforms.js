@@ -24,6 +24,8 @@
 import * as fp from '@iml/fp';
 import { formatBytes } from '@iml/number-formatters';
 
+import type { Target } from './route.js';
+
 type InputDataObj = {
   [string]: InputData[]
 };
@@ -102,11 +104,6 @@ export const transformMetrics: TransformMetrics = fp.flow(
   filterByLen,
   fp.map(fp.flow(takeLast, cleanData, addFree, addUsed, addDetail))
 );
-
-type Target = {
-  id: string,
-  name: string
-};
 
 export const combineWithTargets = (
   [ostBalanceMetrics, targets]: [OutputOstData[], Target[]]
