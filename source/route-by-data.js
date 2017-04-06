@@ -26,15 +26,15 @@ import writeMessage from './write-message.js';
 
 import { type MultiplexedSocketInterface } from './multiplexed-socket.js';
 
-type Options = {
-  method: 'get' | 'post' | 'put' | 'patch' | 'delete',
-  qs: Object
-};
+export interface Options {
+  +method: 'get' | 'post' | 'put' | 'patch' | 'delete',
+  +qs: Object
+}
 
-export type Payload = {
-  path?: string,
-  options?: Options
-};
+export interface Payload {
+  +path?: string,
+  +options?: Options
+}
 
 type Data = {
   payload?: Payload,

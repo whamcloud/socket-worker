@@ -3,16 +3,21 @@ import end from './end.js';
 import { jasmine, describe, it, beforeEach, expect } from '../../jasmine.js';
 
 describe('end middleware', () => {
-  let req, resp, next, endSpy;
+  let req, resp, next, endSpy, destroySpy;
 
   beforeEach(() => {
     endSpy = jasmine.createSpy('end');
+    destroySpy = jasmine.createSpy('destroy');
+
     req = {
       id: '1',
       connections: {
         '1': [
           {
             end: endSpy
+          },
+          {
+            destroy: destroySpy
           }
         ]
       },
@@ -33,7 +38,11 @@ describe('end middleware', () => {
       expect(endSpy).toHaveBeenCalledOnce();
     });
 
-    it('should remove the connection from the list', () => {
+    it('should destroy all associated streams', () => {
+      expect(destroySpy).toHaveBeenCalledOnce();
+    });
+
+    it('should remove the connection and the stream from the list', () => {
       expect(req.connections['1']).toBe(undefined);
     });
 
@@ -53,7 +62,11 @@ describe('end middleware', () => {
     });
 
     it('should not call end on the matching connection list', () => {
-      expect(req.connections['1'][0].end).not.toHaveBeenCalled();
+      expect(endSpy).not.toHaveBeenCalled();
+    });
+
+    it('should not call destroy on the matching streams', () => {
+      expect(destroySpy).not.toHaveBeenCalled();
     });
 
     it('should not delete the connection from the list', () => {

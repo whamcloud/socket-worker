@@ -21,86 +21,84 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import * as fp from '@iml/fp';
-import {
-  transformMetrics,
-  type OutputOstData,
-  combineWithTargets,
-  toNvd3,
-  sort
-} from './transforms.js';
-
+import * as streams from './streams.js';
 import router from '../../index.js';
 
-import { type HighlandStreamT } from 'highland';
 import type { Resp, Next } from '../../middleware/middleware-types.js';
 
+import type { Unit } from '../../../date.js';
 import type { Payload, Options } from '../../../route-by-data.js';
 import type { Req } from '../../middleware/middleware-types.js';
 
-export type MoreQs = {
-  +filesystem_id?: string,
-  +id?: string
-};
-
-interface OstOptions extends Options {
-  +qs: MoreQs,
-  +percentage: number
-}
-
-interface OstPayload extends Payload {
-  +options: OstOptions
-}
-
-export interface OstRequest extends Req {
-  +payload: OstPayload
-}
+export type Types =
+  | 'stats_read_bytes'
+  | 'stats_write_bytes'
+  | 'stats_read_iops'
+  | 'stats_write_iops';
 
 export type Target = {
   +id: string,
   +name: string
 };
 
+export type MoreQs = {
+  +filesystem_id?: string,
+  +id?: string,
+  +metrics: Types
+};
+
+interface HeatMapOptions extends Options {
+  +qs: MoreQs,
+  +durationParams: ?{ size: number, unit: Unit },
+  +rangeParams: ?{ startDate: string, endDate: string },
+  +timeOffset: number
+}
+
+interface HeatMapPayload extends Payload {
+  +options: HeatMapOptions
+}
+
+export interface HeatMapRequest extends Req {
+  +payload: HeatMapPayload
+}
+
+export type PointsObj = {
+  [id: number]: { data: HeatMapData, ts: string }[]
+};
+export type HeatMapData = {
+  +stats_read_bytes?: number,
+  +stats_read_iops?: number,
+  +stats_write_bytes?: number,
+  +stats_write_iops?: number
+};
+export type HeatMapEntry = {
+  +data: HeatMapData,
+  +id: string,
+  +name: string,
+  +ts: string
+};
+export type HeatMapEntries = HeatMapEntry[];
+
 export default () => {
-  router.get('/ost-balance', (req: OstRequest, resp: Resp, next: Next) => {
-    const targetStream: HighlandStreamT<Target[]> = req
-      .getOne$({
-        path: '/target',
-        options: {
-          method: 'get',
-          qs: { limit: 0 },
-          jsonMask: 'objects(id,name)'
+  router.get(
+    '/read-write-heat-map',
+    (req: HeatMapRequest, resp: Resp, next: Next) => {
+      const {
+        payload: {
+          options: { qs: moreQs, durationParams, rangeParams, timeOffset }
         }
-      })
-      .map(x => x.objects);
+      } = req;
 
-    const { payload: { options: { qs: moreQs = {}, percentage } } } = req;
+      if (durationParams)
+        streams
+          .getDurationStream(req, moreQs, timeOffset, durationParams)
+          .each(resp.write);
+      else if (rangeParams)
+        streams
+          .getRangeStream(req, moreQs, timeOffset, rangeParams)
+          .each(resp.write);
 
-    const ostBalanceStream: HighlandStreamT<OutputOstData[]> = req
-      .getOne$({
-        path: '/target/metric',
-        options: {
-          method: 'get',
-          qs: {
-            kind: 'OST',
-            metrics: 'kbytestotal,kbytesfree',
-            latest: true,
-            ...moreQs
-          }
-        }
-      })
-      .map(
-        fp.flow(
-          transformMetrics,
-          fp.filter((x: OutputOstData) => x.detail.percentUsed >= percentage)
-        )
-      );
-
-    ostBalanceStream
-      .zip(targetStream)
-      .map(fp.flow(combineWithTargets, toNvd3, sort))
-      .each(resp.write);
-
-    next(req, resp);
-  });
+      next(req, resp);
+    }
+  );
 };

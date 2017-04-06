@@ -4,7 +4,7 @@
 [include]
 
 [libs]
-node_modules/intel-flow-highland/flow-typed
+node_modules/@iml/flow-highland/flow-typed
 node_modules/intel-flow-jasmine/flow-typed
 
 [options]
