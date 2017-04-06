@@ -872,9 +872,9 @@ babel-preset-babili@^0.0.12:
     babel-plugin-transform-undefined-to-void "^6.8.0"
     lodash.isplainobject "^4.0.6"
 
-babel-preset-env@1.2.2:
-  version "1.2.2"
-  resolved "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-repos/babel-preset-env/-/babel-preset-env-1.2.2.tgz#1dbc4d7f8a575691d301f45fa9b2f9698b1e3b92"
+babel-preset-env@1.3.2:
+  version "1.3.2"
+  resolved "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-repos/babel-preset-env/-/babel-preset-env-1.3.2.tgz#08eabd2bf810c3678069f7e052323419f1448749"
   dependencies:
     babel-plugin-check-es2015-constants "^6.22.0"
     babel-plugin-syntax-trailing-function-commas "^6.22.0"
@@ -904,7 +904,6 @@ babel-preset-env@1.2.2:
     babel-plugin-transform-exponentiation-operator "^6.22.0"
     babel-plugin-transform-regenerator "^6.22.0"
     browserslist "^1.4.0"
-    electron-to-chromium "^1.2.6"
     invariant "^2.2.2"
 
 babel-preset-jest@^19.0.0:
@@ -1513,7 +1512,7 @@ ecc-jsbn@~0.1.1:
   dependencies:
     jsbn "~0.1.0"
 
-electron-to-chromium@^1.2.5, electron-to-chromium@^1.2.6:
+electron-to-chromium@^1.2.5:
   version "1.2.7"
   resolved "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-repos/electron-to-chromium/-/electron-to-chromium-1.2.7.tgz#4f748061407e478c76256d04496972b71f647407"
 
@@ -1645,9 +1644,9 @@ escope@^3.6.0:
     esrecurse "^4.1.0"
     estraverse "^4.1.1"
 
-eslint-config-prettier@^1.5.0:
-  version "1.5.0"
-  resolved "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-repos/eslint-config-prettier/-/eslint-config-prettier-1.5.0.tgz#969b6d21b2eb2574a6810426507f755072db1963"
+eslint-config-prettier@1.6.0:
+  version "1.6.0"
+  resolved "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-repos/eslint-config-prettier/-/eslint-config-prettier-1.6.0.tgz#56e53a8eb461c06eced20cec40d765c185100fd5"
   dependencies:
     get-stdin "^5.0.1"
 
@@ -1667,9 +1666,9 @@ eslint-plugin-prettier@^2.0.1:
   dependencies:
     requireindex "~1.1.0"
 
-eslint@3.18.0:
-  version "3.18.0"
-  resolved "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-repos/eslint/-/eslint-3.18.0.tgz#647e985c4ae71502d20ac62c109f66d5104c8a4b"
+eslint@3.19.0:
+  version "3.19.0"
+  resolved "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-repos/eslint/-/eslint-3.19.0.tgz#c8fc6201c7f40dd08941b87c085767386a679acc"
   dependencies:
     babel-code-frame "^6.16.0"
     chalk "^1.1.3"
@@ -1881,9 +1880,9 @@ flat-cache@^1.2.1:
     graceful-fs "^4.1.2"
     write "^0.2.1"
 
-flow-bin@0.42.0:
-  version "0.42.0"
-  resolved "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-repos/flow-bin/-/flow-bin-0.42.0.tgz#05dd754b6b052de7b150f9210e2160746961e3cf"
+flow-bin@0.43.1:
+  version "0.43.1"
+  resolved "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-repos/flow-bin/-/flow-bin-0.43.1.tgz#0733958b448fb8ad4b1576add7e87c31794c81bc"
 
 flow-parser@0.40.0:
   version "0.40.0"
@@ -2286,6 +2285,10 @@ is-glob@^2.0.0, is-glob@^2.0.1:
   resolved "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-repos/is-glob/-/is-glob-2.0.1.tgz#d096f926a3ded5600f3fdfd91198cb0888c2d863"
   dependencies:
     is-extglob "^1.0.0"
+
+is-module@^1.0.0:
+  version "1.0.0"
+  resolved "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-repos/is-module/-/is-module-1.0.0.tgz#3258fb69f78c14d5b815d664336b4cffb6441591"
 
 is-my-json-valid@^2.10.0:
   version "2.16.0"
@@ -3658,12 +3661,13 @@ rollup-plugin-node-globals@1.1.0:
     process-es6 "^0.11.3"
     rollup-pluginutils "^1.5.2"
 
-rollup-plugin-node-resolve@2.0.0:
-  version "2.0.0"
-  resolved "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-repos/rollup-plugin-node-resolve/-/rollup-plugin-node-resolve-2.0.0.tgz#07e0ae94ac002a3ea36e8f33ca121d9f836b1309"
+rollup-plugin-node-resolve@3.0.0:
+  version "3.0.0"
+  resolved "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-repos/rollup-plugin-node-resolve/-/rollup-plugin-node-resolve-3.0.0.tgz#8b897c4c3030d5001277b0514b25d2ca09683ee0"
   dependencies:
     browser-resolve "^1.11.0"
     builtin-modules "^1.1.0"
+    is-module "^1.0.0"
     resolve "^1.1.6"
 
 rollup-plugin-re@1.0.2:
