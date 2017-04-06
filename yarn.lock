@@ -6,6 +6,10 @@
   version "1.0.0"
   resolved "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-repos/@comandeer/babel-plugin-banner/-/babel-plugin-banner-1.0.0.tgz#40bcce0bbee084b5b02545a33635d053c248356f"
 
+"@iml/flow-highland@^4.0.0":
+  version "4.0.0"
+  resolved "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-repos/@iml/flow-highland/-/@iml/flow-highland-4.0.0.tgz#841b7e71e894c276fc9782f3f337652795712ec0"
+
 "@iml/fp@8.0.0":
   version "8.0.0"
   resolved "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-repos/@iml/fp/-/@iml/fp-8.0.0.tgz#43a07cded6a8e3a260a2cc164d1fa2df9711ec99"
@@ -968,11 +972,11 @@ babili@0.0.12:
     babel-cli "^6.10.1"
     babel-preset-babili "^0.0.12"
 
-babylon@6.15.0, babylon@^6.11.0, babylon@^6.13.0, babylon@^6.15.0:
+babylon@6.15.0:
   version "6.15.0"
   resolved "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-repos/babylon/-/babylon-6.15.0.tgz#ba65cfa1a80e1759b0e89fb562e27dccae70348e"
 
-babylon@^6.16.1:
+babylon@^6.11.0, babylon@^6.13.0, babylon@^6.15.0, babylon@^6.16.1:
   version "6.16.1"
   resolved "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-repos/babylon/-/babylon-6.16.1.tgz#30c5a22f481978a9e7f8cdfdf496b11d94b404d3"
 
@@ -2194,10 +2198,6 @@ inquirer@^0.12.0:
     string-width "^1.0.1"
     strip-ansi "^3.0.0"
     through "^2.3.6"
-
-intel-flow-highland@3.11.1:
-  version "3.11.1"
-  resolved "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-repos/intel-flow-highland/-/intel-flow-highland-3.11.1.tgz#7a9665ba91915989aa5abc09f5ac71caf087eef6"
 
 intel-flow-jasmine@1.6.0:
   version "1.6.0"
