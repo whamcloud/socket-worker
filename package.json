@@ -1,5 +1,5 @@
 {
-  "name": "@iml/socket-worker",
+  "name": "@mfl/socket-worker",
   "version": "3.2.0",
   "description": "Socket.io client that runs in a WebWorker. Handles data parsing / munging.",
   "main": "dist/bundle.js",
@@ -9,13 +9,13 @@
     "eslint": "eslint ./",
     "postversion": "rollup -c rollup-config.js --output='dist/bundle.js'"
   },
-  "author": "IML Team",
+  "author": "MFL Team",
   "license": "MIT",
   "dependencies": {
-    "@iml/fp": "8.0.0",
-    "@iml/math": "6.0.0",
-    "@iml/number-formatters": "1.0.0",
-    "@iml/router": "6.0.1",
+    "@mfl/fp": "8.0.0",
+    "@mfl/math": "6.0.0",
+    "@mfl/number-formatters": "1.0.0",
+    "@mfl/router": "6.0.1",
     "highland": "3.0.0-beta.3",
     "socket.io-client": "1.7.3"
   },
@@ -23,12 +23,12 @@
     "eslint",
     "test"
   ],
-  "repository": "https://github.intel.com/IML/socket-worker.git",
+  "repository": "https://github.intel.com/MFL/socket-worker.git",
   "publishConfig": {
-    "registry": "https://ubit-artifactory-or.intel.com/artifactory/api/npm/iml-npm-local"
+    "access": "public"
   },
   "devDependencies": {
-    "@iml/flow-highland": "^4.0.0",
+    "@mfl/flow-highland": "^4.0.0",
     "babel-eslint": "7.2.1",
     "babel-plugin-external-helpers": "6.22.0",
     "babel-plugin-transform-class-properties": "6.23.0",
@@ -42,8 +42,8 @@
     "eslint-plugin-flowtype": "2.30.4",
     "eslint-plugin-prettier": "^2.0.1",
     "flow-bin": "0.43.1",
-    "intel-flow-jasmine": "1.6.0",
-    "intel-jasmine-n-matchers": "2.1.1",
+    "@mfl/flow-jasmine": "1.6.0",
+    "@mfl/jasmine-n-matchers": "2.1.1",
     "jasmine-reporters": "2.2.1",
     "jest": "19.0.2",
     "pre-commit": "1.2.2",
@@ -66,7 +66,7 @@
       "test"
     ],
     "transformIgnorePatterns": [
-      "/node_modules/(?!@iml)/"
+      "/node_modules/(?!@mfl)/"
     ]
   }
 }
