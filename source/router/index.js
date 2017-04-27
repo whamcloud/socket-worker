@@ -21,7 +21,7 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import getRouter from '@iml/router';
+import getRouter from '@mfl/router';
 import connections from './middleware/connections.js';
 import socketFactory from './middleware/socket-factory.js';
 import end from './middleware/end.js';
