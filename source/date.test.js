@@ -92,20 +92,17 @@ describe('date', () => {
 
   it('should subtract months from the date within the current year', () => {
     result = subtractDate(2, 'months', date);
-    console.log('result subtract 2', result.valueOf());
     // hour changes from 03 to 02 due to DST
     expect(result.toISOString()).toEqual('2017-10-17T03:24:00.000Z');
   });
 
   it('should subtract months from the date and roll back to previous year', () => {
     result = subtractDate(13, 'months', date);
-    console.log('result subtract 13', result.valueOf());
     expect(result.toISOString()).toEqual('2016-11-17T03:24:00.000Z');
   });
 
   it('should add months to the date', () => {
     result = addDate(1, 'months', date);
-    console.log('result add 1', result.valueOf());
     expect(result.toISOString()).toEqual('2018-01-17T03:24:00.000Z');
   });
 
