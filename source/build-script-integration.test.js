@@ -7,18 +7,26 @@ import { exec } from 'child_process';
 describe('build script', () => {
   let distDir;
 
-  beforeAll(done => {
-    const moduleDir = dirname(__dirname);
-    distDir = join.bind(join, moduleDir, 'dist');
+  beforeAll(
+    done => {
+      const moduleDir = dirname(__dirname);
+      distDir = join.bind(join, moduleDir, 'dist');
 
-    exec('npm run postversion', { cwd: moduleDir }, (error, stdout, stderr) => {
-      if (stderr.length) console.error(stderr);
+      exec(
+        'npm run postversion',
+        { cwd: moduleDir },
+        (error, stdout, stderr) => {
+          // eslint-disable-next-line
+          if (stderr.length) console.error(stderr);
 
-      if (error) done.fail(error);
+          if (error) done.fail(error);
 
-      done();
-    });
-  }, 60000);
+          done();
+        }
+      );
+    },
+    60000
+  );
 
   afterAll(() => {
     unlinkSync(distDir('bundle.js.map'));

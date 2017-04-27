@@ -1,10 +1,11 @@
 import { jasmine, describe, it, beforeEach, expect, jest } from './jasmine.js';
 
-const getEventHandler = (methodName, socket) => event => {
-  const args = socket[methodName].calls.allArgs();
+const getEventHandler = (methodName, socket) =>
+  event => {
+    const args = socket[methodName].calls.allArgs();
 
-  return args.filter(item => item[0] === event)[0][1];
-};
+    return args.filter(item => item[0] === event)[0][1];
+  };
 
 describe('create socket', () => {
   let result,

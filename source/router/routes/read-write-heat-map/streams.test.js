@@ -117,7 +117,9 @@ describe('heatmap streams', () => {
     });
 
     it('should call date.getDurationParams', () => {
-      expect(date.getDurationParams).toHaveBeenCalledWith(
+      expect(
+        date.getDurationParams
+      ).toHaveBeenCalledWith(
         '2017-01-21T12:00:00.000Z',
         '2017-01-21T12:10:10.000Z',
         []
