@@ -15,7 +15,7 @@ describe('date', () => {
   let result;
 
   beforeEach(() => {
-    date = new Date('2017-12-17T03:24:00.000Z');
+    date = new Date(1513481040000);
     subtractDate = adjustDateFromSizeAndUnit.bind(null, 'subtract');
     addDate = adjustDateFromSizeAndUnit.bind(null, 'add');
   });
