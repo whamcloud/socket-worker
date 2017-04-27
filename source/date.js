@@ -78,7 +78,10 @@ export const adjustDateFromSizeAndUnit = (
       date.setDate(calculate(date.getDate(), size * 7));
       break;
     case 'months':
-      date.setMonth(calculate(date.getMonth(), size), date.getDate());
+      console.log('calculate: ', calculate(date.getMonth(), size));
+      console.log('getDate: ', date.getDate());
+      let r = date.setMonth(calculate(date.getMonth(), size), date.getDate());
+      console.log('r', r);
       break;
     case 'years':
       date.setFullYear(calculate(date.getFullYear(), size));
