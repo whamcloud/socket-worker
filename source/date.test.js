@@ -15,7 +15,7 @@ describe('date', () => {
   let result;
 
   beforeEach(() => {
-    date = new Date(1513481040000);
+    date = new Date('2017-12-17T03:24:00.000Z');
     subtractDate = adjustDateFromSizeAndUnit.bind(null, 'subtract');
     addDate = adjustDateFromSizeAndUnit.bind(null, 'add');
   });
@@ -93,17 +93,17 @@ describe('date', () => {
   it('should subtract months from the date within the current year', () => {
     result = subtractDate(2, 'months', date);
     // hour changes from 03 to 02 due to DST
-    expect(result.valueOf()).toEqual(1508207040000);
+    expect(result.toISOString()).toEqual('2017-10-18T02:24:00.000Z');
   });
 
   it('should subtract months from the date and roll back to previous year', () => {
     result = subtractDate(13, 'months', date);
-    expect(result.toISOString()).toEqual('2016-11-17T03:24:00.000Z');
+    expect(result.toISOString()).toEqual('2016-11-18T03:24:00.000Z');
   });
 
   it('should add months to the date', () => {
     result = addDate(1, 'months', date);
-    expect(result.toISOString()).toEqual('2018-01-17T03:24:00.000Z');
+    expect(result.toISOString()).toEqual('2018-01-18T03:24:00.000Z');
   });
 
   it('should subtract years from the date', () => {
