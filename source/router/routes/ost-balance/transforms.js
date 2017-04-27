@@ -21,8 +21,8 @@
 // otherwise. Any license under such intellectual property rights must be
 // express and approved by Intel in writing.
 
-import * as fp from '@iml/fp';
-import { formatBytes } from '@iml/number-formatters';
+import * as fp from '@mfl/fp';
+import { formatBytes } from '@mfl/number-formatters';
 
 import type { Target } from './route.js';
 
