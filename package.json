@@ -12,12 +12,12 @@
   "author": "MFL Team",
   "license": "MIT",
   "dependencies": {
-    "@mfl/fp": "8.0.0",
-    "@mfl/math": "6.0.0",
+    "@mfl/fp": "8.0.3",
+    "@mfl/math": "6.0.1",
     "@mfl/number-formatters": "1.0.1",
     "@mfl/router": "6.0.1",
     "highland": "3.0.0-beta.4",
-    "socket.io-client": "1.7.3"
+    "socket.io-client": "2.0.2"
   },
   "pre-commit": [
     "eslint",
@@ -28,7 +28,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@mfl/flow-highland": "^4.0.0",
+    "@mfl/flow-highland": "4.2.6",
     "@mfl/flow-jasmine": "1.6.1",
     "@mfl/jasmine-n-matchers": "2.1.1",
     "babel-eslint": "7.2.3",
@@ -36,14 +36,14 @@
     "babel-plugin-transform-class-properties": "6.24.1",
     "babel-plugin-transform-flow-strip-types": "6.22.0",
     "babel-plugin-transform-object-rest-spread": "6.23.0",
-    "babel-preset-env": "1.4.0",
+    "babel-preset-env": "1.5.1",
     "babili": "0.0.12",
     "eslint": "3.19.0",
-    "eslint-config-prettier": "1.7.0",
-    "eslint-plugin-flowtype": "2.32.1",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-prettier": "^2.0.1",
-    "flow-bin": "0.44.2",
+    "eslint-config-prettier": "2.1.1",
+    "eslint-plugin-flowtype": "2.33.0",
+    "eslint-plugin-import": "2.3.0",
+    "eslint-plugin-prettier": "2.1.0",
+    "flow-bin": "0.46.0",
     "jasmine-reporters": "2.2.1",
     "jest": "19.0.2",
     "pre-commit": "1.2.2",
@@ -51,7 +51,7 @@
     "rollup": "0.41.6",
     "rollup-plugin-babel": "2.7.1",
     "rollup-plugin-commonjs": "8.0.2",
-    "rollup-plugin-node-builtins": "2.1.0",
+    "rollup-plugin-node-builtins": "2.1.2",
     "rollup-plugin-node-globals": "1.1.0",
     "rollup-plugin-node-resolve": "3.0.0",
     "rollup-plugin-re": "1.0.2"
