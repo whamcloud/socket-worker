@@ -1,5 +1,5 @@
 {
-  "name": "@mfl/socket-worker",
+  "name": "@iml/socket-worker",
   "version": "3.2.0",
   "description": "Socket.io client that runs in a WebWorker. Handles data parsing / munging.",
   "main": "dist/bundle.js",
@@ -9,7 +9,7 @@
     "eslint": "eslint ./",
     "postversion": "rollup -c rollup-config.js --output='dist/bundle.js'"
   },
-  "author": "MFL Team",
+  "author": "IML Team",
   "license": "MIT",
   "dependencies": {
     "@mfl/fp": "8.0.0",
