@@ -21,7 +21,7 @@ describe('router', () => {
     mockEnd = {};
     mockGetRouter = jasmine.createSpy('router').and.returnValue(router);
 
-    jest.mock('@mfl/router', () => mockGetRouter);
+    jest.mock('@iml/router', () => mockGetRouter);
     jest.mock('./router/middleware/connections.js', () => mockConnections);
     jest.mock('./router/middleware/socket-factory.js', () => mockSocketFactory);
     jest.mock('./router/middleware/end.js', () => mockEnd);

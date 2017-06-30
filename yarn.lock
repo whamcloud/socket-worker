@@ -2,39 +2,39 @@
 # yarn lockfile v1
 
 
-"@mfl/flow-highland@^4.0.0":
+"@iml/flow-highland@^4.0.0":
   version "4.1.0"
-  resolved "https://registry.yarnpkg.com/@mfl/flow-highland/-/flow-highland-4.1.0.tgz#86856f6f34cc06fa31be21124151c3768522de4d"
+  resolved "https://registry.yarnpkg.com/@iml/flow-highland/-/flow-highland-4.1.0.tgz#86856f6f34cc06fa31be21124151c3768522de4d"
 
-"@mfl/flow-jasmine@1.6.1":
+"@iml/flow-jasmine@1.6.1":
   version "1.6.1"
-  resolved "https://registry.yarnpkg.com/@mfl/flow-jasmine/-/flow-jasmine-1.6.1.tgz#ddf955193823af50f2180fc613e81cf7fbde2043"
+  resolved "https://registry.yarnpkg.com/@iml/flow-jasmine/-/flow-jasmine-1.6.1.tgz#ddf955193823af50f2180fc613e81cf7fbde2043"
 
-"@mfl/fp@8.0.0":
+"@iml/fp@8.0.0":
   version "8.0.0"
-  resolved "https://registry.yarnpkg.com/@mfl/fp/-/fp-8.0.0.tgz#8f25255ccb73cb7d6fe0e047108cb93aa902fff7"
+  resolved "https://registry.yarnpkg.com/@iml/fp/-/fp-8.0.0.tgz#8f25255ccb73cb7d6fe0e047108cb93aa902fff7"
   dependencies:
-    "@mfl/maybe" "3.0.0"
+    "@iml/maybe" "3.0.0"
 
-"@mfl/jasmine-n-matchers@2.1.1":
+"@iml/jasmine-n-matchers@2.1.1":
   version "2.1.1"
-  resolved "https://registry.yarnpkg.com/@mfl/jasmine-n-matchers/-/jasmine-n-matchers-2.1.1.tgz#bf4ab1d4fff38152b1253bb9619e7e5e814926c6"
+  resolved "https://registry.yarnpkg.com/@iml/jasmine-n-matchers/-/jasmine-n-matchers-2.1.1.tgz#bf4ab1d4fff38152b1253bb9619e7e5e814926c6"
 
-"@mfl/math@6.0.0":
+"@iml/math@6.0.0":
   version "6.0.0"
-  resolved "https://registry.yarnpkg.com/@mfl/math/-/math-6.0.0.tgz#4e29740d183e448cc52ff64a833b682c4a359f2a"
+  resolved "https://registry.yarnpkg.com/@iml/math/-/math-6.0.0.tgz#4e29740d183e448cc52ff64a833b682c4a359f2a"
 
-"@mfl/maybe@3.0.0":
+"@iml/maybe@3.0.0":
   version "3.0.0"
-  resolved "https://registry.yarnpkg.com/@mfl/maybe/-/maybe-3.0.0.tgz#184d40305afb14011eb9008677771c14d07d98fd"
+  resolved "https://registry.yarnpkg.com/@iml/maybe/-/maybe-3.0.0.tgz#184d40305afb14011eb9008677771c14d07d98fd"
 
-"@mfl/number-formatters@1.0.1":
+"@iml/number-formatters@1.0.1":
   version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@mfl/number-formatters/-/number-formatters-1.0.1.tgz#3d90aba5889aaab70653361c82f6d6211e8f629a"
+  resolved "https://registry.yarnpkg.com/@iml/number-formatters/-/number-formatters-1.0.1.tgz#3d90aba5889aaab70653361c82f6d6211e8f629a"
 
-"@mfl/router@6.0.1":
+"@iml/router@6.0.1":
   version "6.0.1"
-  resolved "https://registry.yarnpkg.com/@mfl/router/-/router-6.0.1.tgz#5ab893976d542e1d6972b30d7fb80d3920615cf6"
+  resolved "https://registry.yarnpkg.com/@iml/router/-/router-6.0.1.tgz#5ab893976d542e1d6972b30d7fb80d3920615cf6"
   dependencies:
     path-to-regexp "1.7.0"
 

@@ -12,10 +12,10 @@
   "author": "IML Team",
   "license": "MIT",
   "dependencies": {
-    "@mfl/fp": "8.0.0",
-    "@mfl/math": "6.0.0",
-    "@mfl/number-formatters": "1.0.1",
-    "@mfl/router": "6.0.1",
+    "@iml/fp": "8.0.0",
+    "@iml/math": "6.0.0",
+    "@iml/number-formatters": "1.0.1",
+    "@iml/router": "6.0.1",
     "highland": "3.0.0-beta.4",
     "socket.io-client": "1.7.3"
   },
@@ -23,14 +23,14 @@
     "eslint",
     "test"
   ],
-  "repository": "https://github.intel.com/MFL/socket-worker.git",
+  "repository": "https://github.intel.com/IML/socket-worker.git",
   "publishConfig": {
     "access": "public"
   },
   "devDependencies": {
-    "@mfl/flow-highland": "^4.0.0",
-    "@mfl/flow-jasmine": "1.6.1",
-    "@mfl/jasmine-n-matchers": "2.1.1",
+    "@iml/flow-highland": "^4.0.0",
+    "@iml/flow-jasmine": "1.6.1",
+    "@iml/jasmine-n-matchers": "2.1.1",
     "babel-eslint": "7.2.3",
     "babel-plugin-external-helpers": "6.22.0",
     "babel-plugin-transform-class-properties": "6.24.1",
@@ -63,7 +63,7 @@
       "test"
     ],
     "transformIgnorePatterns": [
-      "/node_modules/(?!@mfl)/"
+      "/node_modules/(?!@iml)/"
     ]
   }
 }
