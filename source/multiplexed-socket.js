@@ -7,7 +7,7 @@
 
 import getRandomValue from './get-random-value.js';
 import { type SocketIoClient } from 'socket.io-client';
-import { noop } from '@mfl/fp';
+import { noop } from '@iml/fp';
 
 const emptySocket = {
   on: noop,

@@ -1,6 +1,6 @@
 // @flow
 
-import '@mfl/jasmine-n-matchers';
+import '@iml/jasmine-n-matchers';
 
 /*global describe beforeEach afterEach beforeAll afterAll it expect jasmine jest:true*/
 

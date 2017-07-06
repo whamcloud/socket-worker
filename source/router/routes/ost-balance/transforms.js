@@ -5,8 +5,8 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-import * as fp from '@mfl/fp';
-import { formatBytes } from '@mfl/number-formatters';
+import * as fp from '@iml/fp';
+import { formatBytes } from '@iml/number-formatters';
 
 import type { Target } from './route.js';
 

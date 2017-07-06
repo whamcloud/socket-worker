@@ -1,7 +1,7 @@
 // @flow
 
 
-declare module '@mfl/router' {
+declare module '@iml/router' {
   declare type routerInstance = {
     verbs: {
       GET: string
