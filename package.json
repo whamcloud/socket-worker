@@ -28,7 +28,7 @@
     "access": "public"
   },
   "devDependencies": {
-    "@iml/flow-highland": "^4.0.0",
+    "@iml/flow-highland": "^4.2.8",
     "@iml/flow-jasmine": "1.6.1",
     "@iml/jasmine-n-matchers": "2.1.1",
     "babel-eslint": "7.2.3",
