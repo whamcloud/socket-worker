@@ -7,10 +7,9 @@
 
 import type { Self } from './route-by-data.js';
 
-export default (self: Self, id: string) =>
-  (payload: Object): void =>
-    self.postMessage({
-      type: 'message',
-      id,
-      payload
-    });
+export default (self: Self, id: string) => (payload: Object): void =>
+  self.postMessage({
+    type: 'message',
+    id,
+    payload
+  });

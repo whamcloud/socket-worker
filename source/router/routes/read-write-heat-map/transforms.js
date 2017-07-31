@@ -20,18 +20,21 @@ export const objToPoints: (
 ) => HeatMapEntries = fp.flow(
   Object.entries,
   fp.map(([k: string, xs: { data: HeatMapData }[]]) =>
-    xs.map((x: Object) => ({ ...x, id: k, name: k }))),
+    xs.map((x: Object) => ({ ...x, id: k, name: k }))
+  ),
   xs => [].concat(...xs)
 );
 
-export const concatWithBuff = (buffer: HeatMapEntries) =>
-  (xs: HeatMapEntries): HeatMapEntries => buffer.concat(xs);
+export const concatWithBuff = (buffer: HeatMapEntries) => (
+  xs: HeatMapEntries
+): HeatMapEntries => buffer.concat(xs);
 
-export const filterWithLeadingEdge = (leadingEdge: string) =>
-  (xs: HeatMapEntries): HeatMapEntries =>
-    fp.filter(
-      ({ ts }) => new Date(ts).valueOf() >= new Date(leadingEdge).valueOf()
-    )(xs);
+export const filterWithLeadingEdge = (leadingEdge: string) => (
+  xs: HeatMapEntries
+): HeatMapEntries =>
+  fp.filter(
+    ({ ts }) => new Date(ts).valueOf() >= new Date(leadingEdge).valueOf()
+  )(xs);
 
 export const sortWithTs = (xs: HeatMapEntries): HeatMapEntries =>
   xs.sort(({ ts: tsx }, { ts: tsy }) => new Date(tsx) - new Date(tsy));
@@ -50,7 +53,7 @@ export const sortOsts = (xs: HeatMapEntries[]): HeatMapEntries[] =>
 export const appendWithBuff = (
   buffer: HeatMapEntries,
   leadingEdge: string
-): (xs: HeatMapEntries) => HeatMapEntries =>
+): ((xs: HeatMapEntries) => HeatMapEntries) =>
   fp.flow(
     concatWithBuff(buffer),
     filterWithLeadingEdge(leadingEdge),

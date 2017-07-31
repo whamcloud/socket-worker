@@ -25,7 +25,7 @@ export interface Req {
 
 export type Resp = {
   socket: MultiplexedSocketInterface,
-  write: (mixed) => void
+  write: mixed => void
 };
 
 export type Next = (req: Req, resp: Resp) => void;

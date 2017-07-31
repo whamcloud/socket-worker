@@ -1,13 +1,18 @@
 language: node_js
 node_js:
 - 6
-- 7
+cache: yarn
+before_script:
+- yarn global add codecov
 script:
 - yarn run eslint
 - yarn run flow
 - yarn run cover
-cache: yarn
+after_success:
+- codecov
+before_deploy: yarn postversion
 deploy:
+  skip_cleanup: true
   provider: npm
   email: joe.grund@intel.com
   api_key:

@@ -1,11 +1,13 @@
 node_modules
+flow-typed
+rollup-config.js
 .idea
 .eslintignore
 .editorconfig
 .eslintrc
-.jscsrc
 .flowconfig
 .babelrc
 *.log
 .gitignore
+.npmignore
 /source

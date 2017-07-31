@@ -82,7 +82,7 @@ const addDetail = (data): OutputOstData => ({
 
 type EntriesFn = (o: InputDataObj) => [string, Array<InputData>][];
 
-type TransformMetrics = (InputDataObj) => OutputOstData[];
+type TransformMetrics = InputDataObj => OutputOstData[];
 export const transformMetrics: TransformMetrics = fp.flow(
   ((Object.entries: any): EntriesFn),
   filterByLen,
