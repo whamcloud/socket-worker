@@ -22,7 +22,7 @@ type DateOperations = 'add' | 'subtract';
 
 const generateOperation = (
   operation: DateOperations
-): (a: number, b: number) => number => {
+): ((a: number, b: number) => number) => {
   switch (operation) {
     case 'add':
       return math.add;

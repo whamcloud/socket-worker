@@ -28,40 +28,36 @@ type Data = {
 };
 
 export type Self = {
-  postMessage: (
-    {
-      type: 'message',
-      id: string,
-      payload: Payload
-    }
-  ) => void
+  postMessage: ({
+    type: 'message',
+    id: string,
+    payload: Payload
+  }) => void
 };
 
-export default (self: Self, socket: MultiplexedSocketInterface) =>
-  ({ data }: { data: Data }): void => {
-    const {
-      payload = {},
-      id,
-      ack = false,
-      type
-    } = data;
-    const {
-      path = '/noop',
-      options: { method: verb = router.verbs.GET } = {}
-    } = payload;
+export default (self: Self, socket: MultiplexedSocketInterface) => ({
+  data
+}: {
+  data: Data
+}): void => {
+  const { payload = {}, id, ack = false, type } = data;
+  const {
+    path = '/noop',
+    options: { method: verb = router.verbs.GET } = {}
+  } = payload;
 
-    router.go(
-      path,
-      {
-        verb,
-        payload,
-        id,
-        type,
-        isAck: ack
-      },
-      {
-        socket,
-        write: writeMessage(self, id)
-      }
-    );
-  };
+  router.go(
+    path,
+    {
+      verb,
+      payload,
+      id,
+      type,
+      isAck: ack
+    },
+    {
+      socket,
+      write: writeMessage(self, id)
+    }
+  );
+};

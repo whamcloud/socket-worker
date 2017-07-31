@@ -40,7 +40,7 @@ const getTargetStream = (req: HeatMapRequest): HighlandStreamT<Target[]> =>
     })
     .map(x => x.objects);
 
-type ReturnValues = (Object) => HeatMapEntries[];
+type ReturnValues = Object => HeatMapEntries[];
 const values = ((Object.values: any): ReturnValues);
 
 export const getDurationStream = (
@@ -74,7 +74,7 @@ export const getDurationStream = (
       })
       .map(objToPoints)
       .map(appendWithBuff(buffer, begin))
-      .tap(xs => buffer = xs)
+      .tap(xs => (buffer = xs))
       .zip(targetStream)
       .map(combineWithTargets)
       .flatten()
