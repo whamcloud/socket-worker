@@ -8,10 +8,29 @@
 import router from '../index.js';
 import { type Req, type Resp } from '../middleware/middleware-types.js';
 
+const serializeError = (e: Object) => ({
+  error: {
+    statusCode: e.statusCode,
+    message: e.message,
+    name: e.name,
+    stack: e.stack,
+    signal: e.signal,
+    code: e.code
+  }
+});
+
 export default (): void => {
   router.all('/(.*)', (req: Req, resp: Resp, next) => {
-    if (req.isAck) req.getOne$(req.payload).each(resp.write);
-    else req.getMany$(req.payload).each(resp.write);
+    if (req.isAck)
+      req
+        .getOne$(req.payload)
+        .errors((err, push) => push(null, serializeError(err)))
+        .each(resp.write);
+    else
+      req
+        .getMany$(req.payload)
+        .errors((err, push) => push(null, serializeError(err)))
+        .each(resp.write);
 
     next(req, resp);
   });
