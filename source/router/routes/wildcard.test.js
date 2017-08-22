@@ -30,9 +30,19 @@ describe('routes wildcard', () => {
   });
 
   describe('generic handler', () => {
-    let req, resp, next, getMany$, getOne$, getManyErrors, getOneErrors;
+    let req,
+      resp,
+      next,
+      push,
+      getMany$,
+      getOne$,
+      getManyErrors,
+      getOneErrors,
+      onError;
 
     beforeEach(() => {
+      push = jasmine.createSpy('push');
+
       getMany$ = {
         each: jasmine.createSpy('each')
       };
@@ -74,12 +84,49 @@ describe('routes wildcard', () => {
         expect(req.getOne$).toHaveBeenCalledOnceWith(req.payload);
       });
 
+      it('should call errors', () => {
+        expect(getOneErrors.errors).toHaveBeenCalledOnceWith(
+          jasmine.any(Function)
+        );
+      });
+
       it('should call each', () => {
         expect(getOne$.each).toHaveBeenCalledOnceWith(resp.write);
       });
 
       it('should call next', () => {
         expect(next).toHaveBeenCalledOnceWith(req, resp);
+      });
+
+      describe('when error occurrs', () => {
+        beforeEach(() => {
+          onError = getOneErrors.errors.calls.argsFor(0)[0];
+        });
+
+        it('should serialize errors', () => {
+          onError(
+            {
+              statusCode: 400,
+              message: 'error message',
+              name: 'big bad error',
+              stack: 'stack trace',
+              signal: 'fast ball',
+              code: 400
+            },
+            push
+          );
+
+          expect(push).toHaveBeenCalledOnceWith(null, {
+            error: {
+              statusCode: 400,
+              message: 'error message',
+              name: 'big bad error',
+              stack: 'stack trace',
+              signal: 'fast ball',
+              code: 400
+            }
+          });
+        });
       });
     });
 
@@ -93,12 +140,49 @@ describe('routes wildcard', () => {
         expect(req.getMany$).toHaveBeenCalledOnceWith(req.payload);
       });
 
+      it('should call errors', () => {
+        expect(getManyErrors.errors).toHaveBeenCalledOnceWith(
+          jasmine.any(Function)
+        );
+      });
+
       it('should call each', () => {
         expect(getMany$.each).toHaveBeenCalledOnceWith('write');
       });
 
       it('should call next', () => {
         expect(next).toHaveBeenCalledOnceWith(req, resp);
+      });
+
+      describe('when error occurrs', () => {
+        beforeEach(() => {
+          onError = getManyErrors.errors.calls.argsFor(0)[0];
+        });
+
+        it('should serialize errors', () => {
+          onError(
+            {
+              statusCode: 400,
+              message: 'error message',
+              name: 'big bad error',
+              stack: 'stack trace',
+              signal: 'fast ball',
+              code: 400
+            },
+            push
+          );
+
+          expect(push).toHaveBeenCalledOnceWith(null, {
+            error: {
+              statusCode: 400,
+              message: 'error message',
+              name: 'big bad error',
+              stack: 'stack trace',
+              signal: 'fast ball',
+              code: 400
+            }
+          });
+        });
       });
     });
   });
