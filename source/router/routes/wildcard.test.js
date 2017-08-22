@@ -30,7 +30,7 @@ describe('routes wildcard', () => {
   });
 
   describe('generic handler', () => {
-    let req, resp, next, getMany$, getOne$;
+    let req, resp, next, getMany$, getOne$, getManyErrors, getOneErrors;
 
     beforeEach(() => {
       getMany$ = {
@@ -41,13 +41,21 @@ describe('routes wildcard', () => {
         each: jasmine.createSpy('each')
       };
 
+      getOneErrors = {
+        errors: jasmine.createSpy('errors').and.returnValue(getOne$)
+      };
+
+      getManyErrors = {
+        errors: jasmine.createSpy('errors').and.returnValue(getMany$)
+      };
+
       req = {
         isAck: true,
         payload: {
           foo: 'bar'
         },
-        getMany$: jasmine.createSpy('getMany$').and.returnValue(getMany$),
-        getOne$: jasmine.createSpy('getOne$').and.returnValue(getOne$)
+        getMany$: jasmine.createSpy('getMany$').and.returnValue(getManyErrors),
+        getOne$: jasmine.createSpy('getOne$').and.returnValue(getOneErrors)
       };
 
       resp = {

@@ -19,18 +19,12 @@ const serializeError = (e: Object) => ({
   }
 });
 
+const onError = (err, push) => push(null, serializeError(err));
+
 export default (): void => {
   router.all('/(.*)', (req: Req, resp: Resp, next) => {
-    if (req.isAck)
-      req
-        .getOne$(req.payload)
-        .errors((err, push) => push(null, serializeError(err)))
-        .each(resp.write);
-    else
-      req
-        .getMany$(req.payload)
-        .errors((err, push) => push(null, serializeError(err)))
-        .each(resp.write);
+    if (req.isAck) req.getOne$(req.payload).errors(onError).each(resp.write);
+    else req.getMany$(req.payload).errors(onError).each(resp.write);
 
     next(req, resp);
   });
