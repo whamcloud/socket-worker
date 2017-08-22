@@ -1,6 +1,6 @@
 {
   "name": "@iml/socket-worker",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "Socket.io client that runs in a WebWorker. Handles data parsing / munging.",
   "main": "dist/bundle.js",
   "scripts": {
