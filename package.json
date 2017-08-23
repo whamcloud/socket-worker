@@ -1,6 +1,6 @@
 {
   "name": "@iml/socket-worker",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "description": "Socket.io client that runs in a WebWorker. Handles data parsing / munging.",
   "main": "dist/bundle.js",
   "scripts": {
@@ -19,10 +19,7 @@
     "highland": "3.0.0-beta.4",
     "socket.io-client": "1.7.3"
   },
-  "pre-commit": [
-    "eslint",
-    "test"
-  ],
+  "pre-commit": ["eslint", "test"],
   "repository": "https://github.intel.com/IML/socket-worker.git",
   "publishConfig": {
     "access": "public"
@@ -57,12 +54,7 @@
   },
   "jest": {
     "resetModules": true,
-    "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "test"
-    ],
-    "transformIgnorePatterns": [
-      "/node_modules/(?!@iml)/"
-    ]
+    "coveragePathIgnorePatterns": ["/node_modules/", "test"],
+    "transformIgnorePatterns": ["/node_modules/(?!@iml)/"]
   }
 }
