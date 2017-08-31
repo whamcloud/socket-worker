@@ -6,7 +6,7 @@ import commonjs from 'rollup-plugin-commonjs';
 import replace from 'rollup-plugin-re';
 
 export default {
-  entry: 'source/index.js',
+  input: 'source/index.js',
   plugins: [
     replace({
       patterns: [
@@ -53,6 +53,9 @@ export default {
     globals(),
     builtins()
   ],
-  sourceMap: true,
-  format: 'iife'
+  sourcemap: true,
+  output: {
+    format: 'iife',
+    file: 'dist/bundle.js'
+  }
 };

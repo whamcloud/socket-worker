@@ -1,13 +1,14 @@
 {
   "name": "@iml/socket-worker",
   "version": "3.2.2",
-  "description": "Socket.io client that runs in a WebWorker. Handles data parsing / munging.",
+  "description":
+    "Socket.io client that runs in a WebWorker. Handles data parsing / munging.",
   "main": "dist/bundle.js",
   "scripts": {
     "test": "jest",
     "cover": "NODE_ENV=test npm t -- --coverage",
     "eslint": "eslint ./",
-    "postversion": "rollup -c rollup-config.js --output='dist/bundle.js'"
+    "postversion": "rollup -c rollup-config.js"
   },
   "author": "IML Team",
   "license": "MIT",
@@ -17,7 +18,7 @@
     "@iml/number-formatters": "1.0.1",
     "@iml/router": "^6.0.2",
     "highland": "3.0.0-beta.4",
-    "socket.io-client": "1.7.3"
+    "socket.io-client": "^2.0.3"
   },
   "pre-commit": ["eslint", "test"],
   "repository": "https://github.intel.com/IML/socket-worker.git",
@@ -43,10 +44,10 @@
     "flow-bin": "^0.53.1",
     "jest": "19.0.2",
     "pre-commit": "1.2.2",
-    "prettier": "^1.5.3",
-    "rollup": "^0.45.2",
-    "rollup-plugin-babel": "2.7.1",
-    "rollup-plugin-commonjs": "8.0.2",
+    "prettier": "^1.6.0",
+    "rollup": "^0.49.1",
+    "rollup-plugin-babel": "^3.0.2",
+    "rollup-plugin-commonjs": "^8.2.0",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-globals": "1.1.0",
     "rollup-plugin-node-resolve": "3.0.0",

@@ -15,13 +15,13 @@ type InputDataObj = {
 };
 
 type InputData = {|
-  'data': Data,
-  'ts': string
+  data: Data,
+  ts: string
 |};
 
 type Data = {
-  'kbytesfree': number,
-  'kbytestotal': number
+  kbytesfree: number,
+  kbytestotal: number
 };
 
 type Detail = {
