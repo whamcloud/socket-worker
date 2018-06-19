@@ -11,13 +11,13 @@ import writeMessage from './write-message.js';
 import { type MultiplexedSocketInterface } from './multiplexed-socket.js';
 
 export interface Options {
-  +method: 'get' | 'post' | 'put' | 'patch' | 'delete',
-  +qs: Object
+  +method: 'get' | 'post' | 'put' | 'patch' | 'delete';
+  +qs: Object;
 }
 
 export interface Payload {
-  +path?: string,
-  +options?: Options
+  +path?: string;
+  +options?: Options;
 }
 
 type Data = {

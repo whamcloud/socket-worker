@@ -28,16 +28,16 @@ export type MoreQs = {
 };
 
 interface OstOptions extends Options {
-  +qs: MoreQs,
-  +percentage: number
+  +qs: MoreQs;
+  +percentage: number;
 }
 
 interface OstPayload extends Payload {
-  +options: OstOptions
+  +options: OstOptions;
 }
 
 export interface OstRequest extends Req {
-  +payload: OstPayload
+  +payload: OstPayload;
 }
 
 export type Target = {
@@ -58,7 +58,11 @@ export default () => {
       })
       .map(x => x.objects);
 
-    const { payload: { options: { qs: moreQs = {}, percentage } } } = req;
+    const {
+      payload: {
+        options: { qs: moreQs = {}, percentage }
+      }
+    } = req;
 
     const ostBalanceStream: HighlandStreamT<OutputOstData[]> = req
       .getOne$({
@@ -82,7 +86,13 @@ export default () => {
 
     ostBalanceStream
       .zip(targetStream)
-      .map(fp.flow(combineWithTargets, toNvd3, sort))
+      .map(
+        fp.flow(
+          combineWithTargets,
+          toNvd3,
+          sort
+        )
+      )
       .each(resp.write);
 
     next(req, resp);

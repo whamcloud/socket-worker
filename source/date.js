@@ -87,7 +87,7 @@ export const calculateRangeFromSizeAndUnit = (
   end.setMilliseconds(0);
   const secs = end.getSeconds();
 
-  end.setSeconds(secs - secs % 10);
+  end.setSeconds(secs - (secs % 10));
   end = addToDate(10, 'seconds', end);
 
   const setBeginTime = fp.flow(

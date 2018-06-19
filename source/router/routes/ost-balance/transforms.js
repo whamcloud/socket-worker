@@ -15,13 +15,13 @@ type InputDataObj = {
 };
 
 type InputData = {|
-  'data': Data,
-  'ts': string
+  data: Data,
+  ts: string
 |};
 
 type Data = {
-  'kbytesfree': number,
-  'kbytestotal': number
+  kbytesfree: number,
+  kbytestotal: number
 };
 
 type Detail = {
@@ -41,9 +41,15 @@ export type OutputOstData = {
   x: string
 };
 
-const asPercentage = fp.flow(x => x * 100, Math.round);
+const asPercentage = fp.flow(
+  x => x * 100,
+  Math.round
+);
 
-const asFormattedBytes = fp.flow(x => x * 1024, x => formatBytes(x, 4));
+const asFormattedBytes = fp.flow(
+  x => x * 1024,
+  x => formatBytes(x, 4)
+);
 
 const filterByLen = fp.filter(
   ([, xs]: [string, Array<InputData>][]): boolean => xs.length > 0
@@ -86,12 +92,21 @@ type TransformMetrics = InputDataObj => OutputOstData[];
 export const transformMetrics: TransformMetrics = fp.flow(
   ((Object.entries: any): EntriesFn),
   filterByLen,
-  fp.map(fp.flow(takeLast, cleanData, addFree, addUsed, addDetail))
+  fp.map(
+    fp.flow(
+      takeLast,
+      cleanData,
+      addFree,
+      addUsed,
+      addDetail
+    )
+  )
 );
 
-export const combineWithTargets = (
-  [ostBalanceMetrics, targets]: [OutputOstData[], Target[]]
-) =>
+export const combineWithTargets = ([ostBalanceMetrics, targets]: [
+  OutputOstData[],
+  Target[]
+]) =>
   ostBalanceMetrics.map(v => ({
     ...v,
     x: (targets.find(t => t.id === v.x) || { name: v.x }).name
