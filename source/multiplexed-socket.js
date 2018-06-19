@@ -18,11 +18,11 @@ const emptySocket = {
 };
 
 export interface MultiplexedSocketInterface {
-  end(): void,
-  onDestroy(): void,
-  emit(string, Object, fn: ?Function): MultiplexedSocketInterface,
-  on(name: string, fn: Function): MultiplexedSocketInterface,
-  onReconnect(): void
+  end(): void;
+  onDestroy(): void;
+  emit(string, Object, fn: ?Function): MultiplexedSocketInterface;
+  on(name: string, fn: Function): MultiplexedSocketInterface;
+  onReconnect(): void;
 }
 
 class MultiplexedSocket implements MultiplexedSocketInterface {

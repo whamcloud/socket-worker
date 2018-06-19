@@ -9,7 +9,7 @@ describe('build script', () => {
 
   beforeAll(done => {
     const moduleDir = dirname(__dirname);
-    distDir = join.bind(join, moduleDir, 'dist');
+    distDir = join.bind(join, moduleDir, 'targetdir');
 
     exec('npm run postversion', { cwd: moduleDir }, (error, stdout, stderr) => {
       // eslint-disable-next-line
@@ -28,9 +28,12 @@ describe('build script', () => {
 
   it('should result in a readable stream that points to a source map file', () => {
     const bundle = readFileSync(distDir('bundle.js'), 'utf8');
-    expect(bundle.trim().split('\n').reverse()[0]).toBe(
-      '//# sourceMappingURL=bundle.js.map'
-    );
+    expect(
+      bundle
+        .trim()
+        .split('\n')
+        .reverse()[0]
+    ).toBe('//# sourceMappingURL=bundle.js.map');
   });
 
   it('should store a sourcemap on the fs', () => {

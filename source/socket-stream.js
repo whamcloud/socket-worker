@@ -39,13 +39,15 @@ export const many = <A>(socket: MultiplexedSocketInterface): StreamFn<A> => (
     'message',
     socket
   ).onDestroy(socket.end.bind(socket));
-  return s.map((response): A => {
-    const error = response.error;
+  return s.map(
+    (response): A => {
+      const error = response.error;
 
-    if (error) throw buildResponseError(error);
+      if (error) throw buildResponseError(error);
 
-    return response;
-  });
+      return response;
+    }
+  );
 };
 
 export const one = <A>(socket: MultiplexedSocketInterface): StreamFn<A> => (

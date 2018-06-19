@@ -15,9 +15,7 @@ import type {
   HeatMapData
 } from './route.js';
 
-export const objToPoints: (
-  points: PointsObj
-) => HeatMapEntries = fp.flow(
+export const objToPoints: (points: PointsObj) => HeatMapEntries = fp.flow(
   Object.entries,
   fp.map(([k: string, xs: { data: HeatMapData }[]]) =>
     xs.map((x: Object) => ({ ...x, id: k, name: k }))
@@ -60,9 +58,10 @@ export const appendWithBuff = (
     sortWithTs
   );
 
-export const combineWithTargets = (
-  [heatMapMetrics, targets]: [HeatMapEntries, Target[]]
-): HeatMapEntries =>
+export const combineWithTargets = ([heatMapMetrics, targets]: [
+  HeatMapEntries,
+  Target[]
+]): HeatMapEntries =>
   heatMapMetrics.map(v => ({
     ...v,
     name: (targets.find(t => t.id === v.id) || { name: v.name }).name

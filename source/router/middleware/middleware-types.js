@@ -15,12 +15,12 @@ export type Connections = {
 };
 
 export interface Req {
-  +id: string,
-  connections: Connections,
-  +type: 'connect' | 'end',
-  getOne$: StreamFn<*>,
-  getMany$: StreamFn<*>,
-  +payload: Payload
+  +id: string;
+  connections: Connections;
+  +type: 'connect' | 'end';
+  getOne$: StreamFn<*>;
+  getMany$: StreamFn<*>;
+  +payload: Payload;
 }
 
 export type Resp = {
