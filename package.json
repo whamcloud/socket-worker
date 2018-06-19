@@ -9,6 +9,9 @@
     "eslint": "eslint ./",
     "postversion": "rollup -c rollup-config.js --output='targetdir/bundle.js'"
   },
+  "files": [
+    "targetdir/"
+  ],
   "author": "IML Team",
   "license": "MIT",
   "dependencies": {
