@@ -5,37 +5,22 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-import { default as highland, type HighlandStreamT } from 'highland';
-import {
-  objToPoints,
-  appendWithBuff,
-  compareByTsAndId,
-  sortOsts,
-  combineWithTargets
-} from './transforms.js';
-import {
-  calculateRangeFromSizeAndUnit,
-  getServerMoment,
-  getDurationParams
-} from '../../../date.js';
+import { default as highland, type HighlandStreamT } from "highland";
+import { objToPoints, appendWithBuff, compareByTsAndId, sortOsts, combineWithTargets } from "./transforms.js";
+import { calculateRangeFromSizeAndUnit, getServerMoment, getDurationParams } from "../../../date.js";
 
-import type {
-  HeatMapEntries,
-  HeatMapRequest,
-  Target,
-  MoreQs
-} from './route.js';
+import type { HeatMapEntries, HeatMapRequest, Target, MoreQs } from "./route.js";
 
-import type { Unit } from '../../../date.js';
+import type { Unit } from "../../../date.js";
 
 const getTargetStream = (req: HeatMapRequest): HighlandStreamT<Target[]> =>
   req
     .getOne$({
-      path: '/target',
+      path: "/target",
       options: {
-        method: 'get',
+        method: "get",
         qs: { limit: 0 },
-        jsonMask: 'objects(id,name)'
+        jsonMask: "objects(id,name)"
       }
     })
     .map(x => x.objects);
@@ -51,22 +36,18 @@ export const getDurationStream = (
 ): HighlandStreamT<HeatMapEntries[]> => {
   let buffer = [];
   const metric$ = highland((push, next) => {
-    const [begin, end] = calculateRangeFromSizeAndUnit(
-      size,
-      unit,
-      getServerMoment(timeOffset, new Date())
-    );
+    const [begin, end] = calculateRangeFromSizeAndUnit(size, unit, getServerMoment(timeOffset, new Date()));
 
     const params = getDurationParams(begin, end, buffer);
     const targetStream: HighlandStreamT<Target[]> = getTargetStream(req);
 
     req
       .getOne$({
-        path: '/target/metric',
+        path: "/target/metric",
         options: {
-          method: 'get',
+          method: "get",
           qs: {
-            kind: 'OST',
+            kind: "OST",
             ...moreQs,
             ...params
           }
@@ -79,7 +60,7 @@ export const getDurationStream = (
       .map(combineWithTargets)
       .flatten()
       .uniqBy(compareByTsAndId)
-      .group('id')
+      .group("id")
       .map(values)
       .map(sortOsts)
       .each(x => {
@@ -103,11 +84,11 @@ export const getRangeStream = (
 
   return req
     .getOne$({
-      path: '/target/metric',
+      path: "/target/metric",
       options: {
-        method: 'get',
+        method: "get",
         qs: {
-          kind: 'OST',
+          kind: "OST",
           ...moreQs,
           begin,
           end
@@ -119,7 +100,7 @@ export const getRangeStream = (
     .map(combineWithTargets)
     .flatten()
     .uniqBy(compareByTsAndId)
-    .group('id')
+    .group("id")
     .map(values)
     .map(sortOsts);
 };

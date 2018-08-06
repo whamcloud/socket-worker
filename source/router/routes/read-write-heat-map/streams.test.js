@@ -1,41 +1,31 @@
-import highland from 'highland';
+import highland from "highland";
 
-import {
-  jest,
-  jasmine,
-  describe,
-  it,
-  beforeEach,
-  afterEach,
-  expect
-} from '../../../jasmine.js';
+import { jest, jasmine, describe, it, beforeEach, afterEach, expect } from "../../../jasmine.js";
 
-import * as date from '../../../date.js';
-import * as streams from './streams.js';
-import * as transforms from './transforms.js';
+import * as date from "../../../date.js";
+import * as streams from "./streams.js";
+import * as transforms from "./transforms.js";
 
-describe('heatmap streams', () => {
+describe("heatmap streams", () => {
   let req, metric$, getOne$, target$, one$, metricSpy;
   beforeEach(() => {
-    metricSpy = jasmine.createSpy('spy');
-    jest
-      .spyOn(date, 'getServerMoment')
-      .mockImplementation(() => new Date('2017-01-21T12:10:00+00:00'));
-    jest.spyOn(date, 'calculateRangeFromSizeAndUnit');
-    jest.spyOn(date, 'getDurationParams');
+    metricSpy = jasmine.createSpy("spy");
+    jest.spyOn(date, "getServerMoment").mockImplementation(() => new Date("2017-01-21T12:10:00+00:00"));
+    jest.spyOn(date, "calculateRangeFromSizeAndUnit");
+    jest.spyOn(date, "getDurationParams");
 
-    jest.spyOn(transforms, 'objToPoints');
-    jest.spyOn(transforms, 'appendWithBuff');
-    jest.spyOn(transforms, 'compareByTsAndId');
-    jest.spyOn(transforms, 'sortOsts');
-    jest.spyOn(transforms, 'combineWithTargets');
+    jest.spyOn(transforms, "objToPoints");
+    jest.spyOn(transforms, "appendWithBuff");
+    jest.spyOn(transforms, "compareByTsAndId");
+    jest.spyOn(transforms, "sortOsts");
+    jest.spyOn(transforms, "combineWithTargets");
   });
 
-  describe('duration stream', () => {
+  describe("duration stream", () => {
     beforeEach(() => {
       target$ = highland([
         {
-          objects: [{ id: '1', name: 'ost1' }, { id: '2', name: 'ost2' }]
+          objects: [{ id: "1", name: "ost1" }, { id: "2", name: "ost2" }]
         }
       ]);
 
@@ -46,23 +36,23 @@ describe('heatmap streams', () => {
               data: {
                 stats_read_bytes: 7613151815.7
               },
-              ts: '2017-01-21T12:01:00+00:00'
+              ts: "2017-01-21T12:01:00+00:00"
             },
             {
               data: {
                 stats_read_bytes: 7613151815.7
               },
-              ts: '2017-01-21T12:03:00+00:00'
+              ts: "2017-01-21T12:03:00+00:00"
             }
           ]
         }
       ]);
 
-      getOne$ = jasmine.createSpy('getOne$').and.callFake(x => {
+      getOne$ = jasmine.createSpy("getOne$").and.callFake(x => {
         switch (x.path) {
-          case '/target':
+          case "/target":
             return target$;
-          case '/target/metric':
+          case "/target/metric":
             return one$;
         }
       });
@@ -70,10 +60,10 @@ describe('heatmap streams', () => {
       req = {
         payload: {
           options: {
-            qs: { foo: 'bar', metrics: 'stats_read_bytes' },
+            qs: { foo: "bar", metrics: "stats_read_bytes" },
             durationParams: {
               size: 10,
-              unit: 'minutes'
+              unit: "minutes"
             },
             timeOffset: -275
           }
@@ -85,12 +75,10 @@ describe('heatmap streams', () => {
         getOne$
       };
 
-      metric$ = streams.getDurationStream(
-        req,
-        { foo: 'bar', metrics: 'stats_read_bytes' },
-        -275,
-        { size: 10, unit: 'minutes' }
-      );
+      metric$ = streams.getDurationStream(req, { foo: "bar", metrics: "stats_read_bytes" }, -275, {
+        size: 10,
+        unit: "minutes"
+      });
 
       metric$.each(metricSpy);
     });
@@ -101,147 +89,135 @@ describe('heatmap streams', () => {
       target$.destroy();
     });
 
-    it('should invoke date.calculateRangeFromSizeAndUnit', () => {
+    it("should invoke date.calculateRangeFromSizeAndUnit", () => {
       expect(date.calculateRangeFromSizeAndUnit).toHaveBeenCalledWith(
         10,
-        'minutes',
-        new Date('2017-01-21T12:10:00.000Z')
+        "minutes",
+        new Date("2017-01-21T12:10:00.000Z")
       );
     });
 
-    it('should call date.getServerMoment with the timeOffset and a date', () => {
-      expect(date.getServerMoment).toHaveBeenCalledWith(
-        -275,
-        jasmine.any(Date)
-      );
+    it("should call date.getServerMoment with the timeOffset and a date", () => {
+      expect(date.getServerMoment).toHaveBeenCalledWith(-275, jasmine.any(Date));
     });
 
-    it('should call date.getDurationParams', () => {
-      expect(date.getDurationParams).toHaveBeenCalledWith(
-        '2017-01-21T12:00:00.000Z',
-        '2017-01-21T12:10:10.000Z',
-        []
-      );
+    it("should call date.getDurationParams", () => {
+      expect(date.getDurationParams).toHaveBeenCalledWith("2017-01-21T12:00:00.000Z", "2017-01-21T12:10:10.000Z", []);
     });
 
-    it('should call getOne$', () => {
+    it("should call getOne$", () => {
       expect(getOne$).toHaveBeenCalledWith({
-        path: '/target/metric',
+        path: "/target/metric",
         options: {
-          method: 'get',
+          method: "get",
           qs: {
-            begin: '2017-01-21T12:00:00.000Z',
-            end: '2017-01-21T12:10:10.000Z',
-            kind: 'OST',
+            begin: "2017-01-21T12:00:00.000Z",
+            end: "2017-01-21T12:10:10.000Z",
+            kind: "OST",
             update: false,
-            metrics: 'stats_read_bytes',
-            foo: 'bar'
+            metrics: "stats_read_bytes",
+            foo: "bar"
           }
         }
       });
     });
 
-    it('should call objToPoints', () => {
+    it("should call objToPoints", () => {
       expect(transforms.objToPoints).toHaveBeenCalledWith({
-        '1': [
+        "1": [
           {
             data: { stats_read_bytes: 7613151815.7 },
-            ts: '2017-01-21T12:01:00+00:00'
+            ts: "2017-01-21T12:01:00+00:00"
           },
           {
             data: { stats_read_bytes: 7613151815.7 },
-            ts: '2017-01-21T12:03:00+00:00'
+            ts: "2017-01-21T12:03:00+00:00"
           }
         ]
       });
     });
 
-    it('should call appendBuffer', () => {
-      expect(transforms.appendWithBuff).toHaveBeenCalledWith(
-        [],
-        '2017-01-21T12:00:00.000Z'
-      );
+    it("should call appendBuffer", () => {
+      expect(transforms.appendWithBuff).toHaveBeenCalledWith([], "2017-01-21T12:00:00.000Z");
     });
 
-    it('should combine with the targets', () => {
+    it("should combine with the targets", () => {
       expect(transforms.combineWithTargets).toHaveBeenCalledWith([
         [
           {
             data: { stats_read_bytes: 7613151815.7 },
-            ts: '2017-01-21T12:01:00+00:00',
-            id: '1',
-            name: '1'
+            ts: "2017-01-21T12:01:00+00:00",
+            id: "1",
+            name: "1"
           },
           {
             data: { stats_read_bytes: 7613151815.7 },
-            ts: '2017-01-21T12:03:00+00:00',
-            id: '1',
-            name: '1'
+            ts: "2017-01-21T12:03:00+00:00",
+            id: "1",
+            name: "1"
           }
         ],
-        [{ id: '1', name: 'ost1' }, { id: '2', name: 'ost2' }]
+        [{ id: "1", name: "ost1" }, { id: "2", name: "ost2" }]
       ]);
     });
 
-    it('should call compareByTsAndId', () => {
+    it("should call compareByTsAndId", () => {
       expect(transforms.compareByTsAndId).toHaveBeenCalled();
     });
 
-    it('should call sortOsts', () => {
+    it("should call sortOsts", () => {
       expect(transforms.sortOsts).toHaveBeenCalledWith([
         [
           {
             data: { stats_read_bytes: 7613151815.7 },
-            id: '1',
-            name: 'ost1',
-            ts: '2017-01-21T12:01:00+00:00'
+            id: "1",
+            name: "ost1",
+            ts: "2017-01-21T12:01:00+00:00"
           },
           {
             data: { stats_read_bytes: 7613151815.7 },
-            id: '1',
-            name: 'ost1',
-            ts: '2017-01-21T12:03:00+00:00'
+            id: "1",
+            name: "ost1",
+            ts: "2017-01-21T12:03:00+00:00"
           }
         ]
       ]);
     });
 
-    it('should pass the value through the metric stream', () => {
+    it("should pass the value through the metric stream", () => {
       expect(metricSpy).toHaveBeenCalledWith([
         [
           {
             data: { stats_read_bytes: 7613151815.7 },
-            id: '1',
-            name: 'ost1',
-            ts: '2017-01-21T12:01:00+00:00'
+            id: "1",
+            name: "ost1",
+            ts: "2017-01-21T12:01:00+00:00"
           },
           {
             data: { stats_read_bytes: 7613151815.7 },
-            id: '1',
-            name: 'ost1',
-            ts: '2017-01-21T12:03:00+00:00'
+            id: "1",
+            name: "ost1",
+            ts: "2017-01-21T12:03:00+00:00"
           }
         ]
       ]);
     });
 
-    it('should push the metric stream into req.streams', () => {
+    it("should push the metric stream into req.streams", () => {
       expect(req.connections[req.id][0]).toBe(metric$);
     });
   });
 
-  describe('range stream', () => {
+  describe("range stream", () => {
     let startDate, endDate;
     beforeEach(() => {
-      startDate = '2017-01-21T12:00:00+00:00';
-      endDate = '2017-01-21T12:10:00+00:00';
-      jest
-        .spyOn(date, 'getServerMoment')
-        .mockImplementation((timeOffset, date) => date);
+      startDate = "2017-01-21T12:00:00+00:00";
+      endDate = "2017-01-21T12:10:00+00:00";
+      jest.spyOn(date, "getServerMoment").mockImplementation((timeOffset, date) => date);
 
       target$ = highland([
         {
-          objects: [{ id: '1', name: 'ost1' }, { id: '2', name: 'ost2' }]
+          objects: [{ id: "1", name: "ost1" }, { id: "2", name: "ost2" }]
         }
       ]);
 
@@ -252,23 +228,23 @@ describe('heatmap streams', () => {
               data: {
                 stats_read_bytes: 7613151815.7
               },
-              ts: '2017-01-21T12:01:00+00:00'
+              ts: "2017-01-21T12:01:00+00:00"
             },
             {
               data: {
                 stats_read_bytes: 7613151815.7
               },
-              ts: '2017-01-21T12:03:00+00:00'
+              ts: "2017-01-21T12:03:00+00:00"
             }
           ]
         }
       ]);
 
-      getOne$ = jasmine.createSpy('getOne$').and.callFake(x => {
+      getOne$ = jasmine.createSpy("getOne$").and.callFake(x => {
         switch (x.path) {
-          case '/target':
+          case "/target":
             return target$;
-          case '/target/metric':
+          case "/target/metric":
             return one$;
         }
       });
@@ -276,7 +252,7 @@ describe('heatmap streams', () => {
       req = {
         payload: {
           options: {
-            qs: { foo: 'bar', metrics: 'stats_read_bytes' },
+            qs: { foo: "bar", metrics: "stats_read_bytes" },
             durationParams: {
               startDate,
               endDate
@@ -291,15 +267,10 @@ describe('heatmap streams', () => {
         getOne$
       };
 
-      metric$ = streams.getRangeStream(
-        req,
-        { foo: 'bar', metrics: 'stats_read_bytes' },
-        -275,
-        {
-          startDate,
-          endDate
-        }
-      );
+      metric$ = streams.getRangeStream(req, { foo: "bar", metrics: "stats_read_bytes" }, -275, {
+        startDate,
+        endDate
+      });
 
       metric$.each(metricSpy);
     });
@@ -310,124 +281,118 @@ describe('heatmap streams', () => {
       target$.destroy();
     });
 
-    it('should call getServerMoment for the begin date', () => {
-      expect(date.getServerMoment).toHaveBeenCalledWith(
-        -275,
-        new Date(startDate)
-      );
+    it("should call getServerMoment for the begin date", () => {
+      expect(date.getServerMoment).toHaveBeenCalledWith(-275, new Date(startDate));
     });
 
-    it('should call getServerMoment for the end date', () => {
-      expect(date.getServerMoment).toHaveBeenCalledWith(
-        -275,
-        new Date(endDate)
-      );
+    it("should call getServerMoment for the end date", () => {
+      expect(date.getServerMoment).toHaveBeenCalledWith(-275, new Date(endDate));
     });
 
-    it('should call getOne$', () => {
+    it("should call getOne$", () => {
       expect(req.getOne$).toHaveBeenCalledWith({
-        path: '/target/metric',
+        path: "/target/metric",
         options: {
-          method: 'get',
+          method: "get",
           qs: {
-            kind: 'OST',
+            kind: "OST",
             begin: new Date(startDate).toISOString(),
             end: new Date(endDate).toISOString(),
-            foo: 'bar',
-            metrics: 'stats_read_bytes'
+            foo: "bar",
+            metrics: "stats_read_bytes"
           }
         }
       });
     });
 
-    it('should call objToPoints', () => {
+    it("should call objToPoints", () => {
       expect(transforms.objToPoints).toHaveBeenCalledWith({
-        '1': [
+        "1": [
           {
             data: {
               stats_read_bytes: 7613151815.7
             },
-            ts: '2017-01-21T12:01:00+00:00'
+            ts: "2017-01-21T12:01:00+00:00"
           },
           {
             data: {
               stats_read_bytes: 7613151815.7
             },
-            ts: '2017-01-21T12:03:00+00:00'
+            ts: "2017-01-21T12:03:00+00:00"
           }
         ]
       });
     });
 
-    it('should call combineWithTargets', () => {
+    it("should call combineWithTargets", () => {
       expect(transforms.combineWithTargets).toHaveBeenCalledWith([
         [
           {
             data: {
               stats_read_bytes: 7613151815.7
             },
-            ts: '2017-01-21T12:01:00+00:00',
-            id: '1',
-            name: '1'
+            ts: "2017-01-21T12:01:00+00:00",
+            id: "1",
+            name: "1"
           },
           {
             data: {
               stats_read_bytes: 7613151815.7
             },
-            ts: '2017-01-21T12:03:00+00:00',
-            id: '1',
-            name: '1'
+            ts: "2017-01-21T12:03:00+00:00",
+            id: "1",
+            name: "1"
           }
         ],
-        [{ id: '1', name: 'ost1' }, { id: '2', name: 'ost2' }]
+        [{ id: "1", name: "ost1" }, { id: "2", name: "ost2" }]
       ]);
     });
 
-    it('should call compareByTsAndId', () => {
+    it("should call compareByTsAndId", () => {
       expect(transforms.compareByTsAndId).toHaveBeenCalled();
     });
 
-    it('should call sortOsts', () => {
+    it("should call sortOsts", () => {
       expect(transforms.sortOsts).toHaveBeenCalledWith([
         [
           {
             data: {
               stats_read_bytes: 7613151815.7
             },
-            ts: '2017-01-21T12:01:00+00:00',
-            id: '1',
-            name: 'ost1'
+            ts: "2017-01-21T12:01:00+00:00",
+            id: "1",
+            name: "ost1"
           },
           {
             data: {
               stats_read_bytes: 7613151815.7
             },
-            ts: '2017-01-21T12:03:00+00:00',
-            id: '1',
-            name: 'ost1'
+            ts: "2017-01-21T12:03:00+00:00",
+            id: "1",
+            name: "ost1"
           }
         ]
       ]);
     });
 
-    it('should pass the data to the stream', () => {
+    it("should pass the data to the stream", () => {
       expect(metricSpy).toHaveBeenCalledWith([
         [
           {
             data: {
               stats_read_bytes: 7613151815.7
             },
-            ts: '2017-01-21T12:01:00+00:00',
-            id: '1',
-            name: 'ost1'
+            ts: "2017-01-21T12:01:00+00:00",
+            id: "1",
+            name: "ost1"
           },
           {
             data: {
               stats_read_bytes: 7613151815.7
             },
-            ts: '2017-01-21T12:03:00+00:00',
-            id: '1',
-            name: 'ost1'
+            ts: "2017-01-21T12:03:00+00:00",
+            id: "1",
+            name: "ost1"
           }
         ]
       ]);

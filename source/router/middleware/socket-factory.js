@@ -5,11 +5,11 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-import { one, many } from '../../socket-stream.js';
-import getMultiplexedSocket from '../../multiplexed-socket.js';
+import { one, many } from "../../socket-stream.js";
+import getMultiplexedSocket from "../../multiplexed-socket.js";
 
-import type { Payload } from '../../route-by-data.js';
-import type { Req, Resp, Next } from './middleware-types';
+import type { Payload } from "../../route-by-data.js";
+import type { Req, Resp, Next } from "./middleware-types";
 
 export default (req: Req, resp: Resp, next: Next) => {
   req.getOne$ = (payload: Payload) => {

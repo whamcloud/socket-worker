@@ -1,19 +1,19 @@
-import { jasmine, describe, it, beforeEach, expect, jest } from './jasmine.js';
+import { jasmine, describe, it, beforeEach, expect, jest } from "./jasmine.js";
 
-describe('route by data', () => {
+describe("route by data", () => {
   let routeByData, mockRouter, mockWrite, write, self, route, socket;
 
   beforeEach(() => {
     mockRouter = {
-      go: jasmine.createSpy('go')
+      go: jasmine.createSpy("go")
     };
     write = {};
-    mockWrite = jasmine.createSpy('write').and.returnValue(write);
+    mockWrite = jasmine.createSpy("write").and.returnValue(write);
 
-    jest.mock('./router/index.js', () => mockRouter);
-    jest.mock('./write-message.js', () => mockWrite);
+    jest.mock("./router/index.js", () => mockRouter);
+    jest.mock("./write-message.js", () => mockWrite);
 
-    routeByData = require('./route-by-data').default;
+    routeByData = require("./route-by-data").default;
 
     self = {};
     socket = {};
@@ -22,31 +22,31 @@ describe('route by data', () => {
     route({
       data: {
         payload: {
-          path: '/path',
+          path: "/path",
           options: {
-            method: 'get'
+            method: "get"
           }
         },
         id: 1,
         ack: true,
-        type: 'connect'
+        type: "connect"
       }
     });
   });
 
-  it('should call router.go', () => {
+  it("should call router.go", () => {
     expect(mockRouter.go).toHaveBeenCalledOnceWith(
-      '/path',
+      "/path",
       {
-        verb: 'get',
+        verb: "get",
         payload: {
-          path: '/path',
+          path: "/path",
           options: {
-            method: 'get'
+            method: "get"
           }
         },
         id: 1,
-        type: 'connect',
+        type: "connect",
         isAck: true
       },
       {
@@ -56,7 +56,7 @@ describe('route by data', () => {
     );
   });
 
-  it('should call write', () => {
+  it("should call write", () => {
     expect(mockWrite).toHaveBeenCalledOnceWith(self, 1);
   });
 });

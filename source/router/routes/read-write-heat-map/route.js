@@ -5,20 +5,16 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-import * as streams from './streams.js';
-import router from '../../index.js';
+import * as streams from "./streams.js";
+import router from "../../index.js";
 
-import type { Resp, Next } from '../../middleware/middleware-types.js';
+import type { Resp, Next } from "../../middleware/middleware-types.js";
 
-import type { Unit } from '../../../date.js';
-import type { Payload, Options } from '../../../route-by-data.js';
-import type { Req } from '../../middleware/middleware-types.js';
+import type { Unit } from "../../../date.js";
+import type { Payload, Options } from "../../../route-by-data.js";
+import type { Req } from "../../middleware/middleware-types.js";
 
-export type Types =
-  | 'stats_read_bytes'
-  | 'stats_write_bytes'
-  | 'stats_read_iops'
-  | 'stats_write_iops';
+export type Types = "stats_read_bytes" | "stats_write_bytes" | "stats_read_iops" | "stats_write_iops";
 
 export type Target = {
   +id: string,
@@ -64,25 +60,16 @@ export type HeatMapEntry = {
 export type HeatMapEntries = HeatMapEntry[];
 
 export default () => {
-  router.get(
-    '/read-write-heat-map',
-    (req: HeatMapRequest, resp: Resp, next: Next) => {
-      const {
-        payload: {
-          options: { qs: moreQs, durationParams, rangeParams, timeOffset }
-        }
-      } = req;
+  router.get("/read-write-heat-map", (req: HeatMapRequest, resp: Resp, next: Next) => {
+    const {
+      payload: {
+        options: { qs: moreQs, durationParams, rangeParams, timeOffset }
+      }
+    } = req;
 
-      if (durationParams)
-        streams
-          .getDurationStream(req, moreQs, timeOffset, durationParams)
-          .each(resp.write);
-      else if (rangeParams)
-        streams
-          .getRangeStream(req, moreQs, timeOffset, rangeParams)
-          .each(resp.write);
+    if (durationParams) streams.getDurationStream(req, moreQs, timeOffset, durationParams).each(resp.write);
+    else if (rangeParams) streams.getRangeStream(req, moreQs, timeOffset, rangeParams).each(resp.write);
 
-      next(req, resp);
-    }
-  );
+    next(req, resp);
+  });
 };

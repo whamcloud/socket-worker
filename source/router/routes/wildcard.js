@@ -5,8 +5,8 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-import router from '../index.js';
-import { type Req, type Resp } from '../middleware/middleware-types.js';
+import router from "../index.js";
+import { type Req, type Resp } from "../middleware/middleware-types.js";
 
 const serializeError = (e: Object) => ({
   error: {
@@ -22,7 +22,7 @@ const serializeError = (e: Object) => ({
 const onError = (err, push) => push(null, serializeError(err));
 
 export default (): void => {
-  router.all('/(.*)', (req: Req, resp: Resp, next) => {
+  router.all("/(.*)", (req: Req, resp: Resp, next) => {
     if (req.isAck)
       req
         .getOne$(req.payload)

@@ -5,9 +5,9 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-import getRandomValue from './get-random-value.js';
-import { type SocketIoClient } from 'socket.io-client';
-import { noop } from '@iml/fp';
+import getRandomValue from "./get-random-value.js";
+import { type SocketIoClient } from "socket.io-client";
+import { noop } from "@iml/fp";
 
 const emptySocket = {
   on: noop,
@@ -34,8 +34,8 @@ class MultiplexedSocket implements MultiplexedSocketInterface {
     this.id = id;
     this.socket = socket;
 
-    socket.once('destroy', this.onDestroy.bind(this));
-    socket.on('reconnect', this.onReconnect.bind(this));
+    socket.once("destroy", this.onDestroy.bind(this));
+    socket.on("reconnect", this.onReconnect.bind(this));
   }
   end() {
     this.socket.emit(`end${this.id}`);
@@ -44,10 +44,10 @@ class MultiplexedSocket implements MultiplexedSocketInterface {
   }
   onDestroy() {
     this.socket.removeAllListeners(`message${this.id}`);
-    this.socket.off('reconnect', this.onReconnect.bind(this));
+    this.socket.off("reconnect", this.onReconnect.bind(this));
   }
   emit(name: string, data: Object, ack: ?Function) {
-    if (typeof ack !== 'function') this.lastSend = arguments;
+    if (typeof ack !== "function") this.lastSend = arguments;
 
     const nameWithId = `${name}${this.id}`;
     this.names.add(nameWithId);
@@ -64,5 +64,4 @@ class MultiplexedSocket implements MultiplexedSocketInterface {
   }
 }
 
-export default (socket: any): MultiplexedSocket =>
-  new MultiplexedSocket(socket, getRandomValue());
+export default (socket: any): MultiplexedSocket => new MultiplexedSocket(socket, getRandomValue());
