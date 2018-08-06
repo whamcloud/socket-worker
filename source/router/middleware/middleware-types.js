@@ -5,10 +5,10 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-import { type MultiplexedSocketInterface } from '../../multiplexed-socket.js';
-import { type StreamFn } from '../../socket-stream.js';
-import { type Payload } from '../../route-by-data.js';
-import { type HighlandStreamT } from 'highland';
+import { type MultiplexedSocketInterface } from "../../multiplexed-socket.js";
+import { type StreamFn } from "../../socket-stream.js";
+import { type Payload } from "../../route-by-data.js";
+import { type HighlandStreamT } from "highland";
 
 export type Connections = {
   [id: string]: Array<MultiplexedSocketInterface | HighlandStreamT<*>>
@@ -17,7 +17,7 @@ export type Connections = {
 export interface Req {
   +id: string;
   connections: Connections;
-  +type: 'connect' | 'end';
+  +type: "connect" | "end";
   getOne$: StreamFn<*>;
   getMany$: StreamFn<*>;
   +payload: Payload;

@@ -1,22 +1,27 @@
-import babel from 'rollup-plugin-babel';
-import builtins from 'rollup-plugin-node-builtins';
-import globals from 'rollup-plugin-node-globals';
-import nodeResolve from 'rollup-plugin-node-resolve';
-import commonjs from 'rollup-plugin-commonjs';
-import replace from 'rollup-plugin-re';
+import babel from "rollup-plugin-babel";
+import builtins from "rollup-plugin-node-builtins";
+import globals from "rollup-plugin-node-globals";
+import nodeResolve from "rollup-plugin-node-resolve";
+import commonjs from "rollup-plugin-commonjs";
+import replace from "rollup-plugin-re";
 
 export default {
-  entry: 'source/index.js',
+  input: "source/index.js",
+  output: {
+    sourcemap: true,
+    format: "iife",
+    file: "targetdir/bundle.js"
+  },
   plugins: [
     replace({
       patterns: [
         {
           test: "require('json3')",
-          replace: 'JSON'
+          replace: "JSON"
         },
         {
           test: "require('debug')",
-          replace: '(() => () => {})'
+          replace: "(() => () => {})"
         },
         {
           test: "from 'highland';",
@@ -27,32 +32,30 @@ export default {
     babel({
       presets: [
         [
-          'env',
+          "env",
           {
             targets: {
-              browsers: ['last 1 chrome version', 'last 1 firefox version']
+              browsers: ["last 1 chrome version", "last 1 firefox version"]
             },
             modules: false
           }
         ],
-        'babili'
+        "babili"
       ],
       plugins: [
-        ['transform-object-rest-spread', { useBuiltIns: true }],
-        'transform-flow-strip-types',
-        'transform-class-properties',
-        'transform-object-rest-spread',
-        'external-helpers'
+        ["transform-object-rest-spread", { useBuiltIns: true }],
+        "transform-flow-strip-types",
+        "transform-class-properties",
+        "transform-object-rest-spread",
+        "external-helpers"
       ],
       babelrc: false
     }),
-    nodeResolve({ jsnext: true, main: true, browser: true }),
+    nodeResolve({ jsnext: true, main: true, browser: true, preferBuiltins: true }),
     commonjs({
-      ignore: ['bufferutil', 'utf-8-validate']
+      ignore: ["bufferutil", "utf-8-validate"]
     }),
     globals(),
     builtins()
-  ],
-  sourceMap: true,
-  format: 'iife'
+  ]
 };

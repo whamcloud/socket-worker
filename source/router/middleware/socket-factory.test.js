@@ -1,14 +1,7 @@
-import {
-  jasmine,
-  describe,
-  it,
-  beforeEach,
-  expect,
-  jest
-} from '../../jasmine.js';
-import highland from 'highland';
+import { jasmine, describe, it, beforeEach, expect, jest } from "../../jasmine.js";
+import highland from "highland";
 
-describe('socket factory middleware', () => {
+describe("socket factory middleware", () => {
   let req,
     resp,
     next,
@@ -26,46 +19,42 @@ describe('socket factory middleware', () => {
     one$ = highland();
     many$ = highland();
 
-    onePayloadFn = jasmine.createSpy('onePayloadFn').and.returnValue(one$);
-    manyPayloadFn = jasmine
-      .createSpy('manyPayloadFn')
-      .and.returnValue(() => many$);
+    onePayloadFn = jasmine.createSpy("onePayloadFn").and.returnValue(one$);
+    manyPayloadFn = jasmine.createSpy("manyPayloadFn").and.returnValue(() => many$);
 
     mockSocketStream = {
-      one: jasmine.createSpy('one').and.returnValue(onePayloadFn),
-      many: jasmine.createSpy('many').and.returnValue(manyPayloadFn)
+      one: jasmine.createSpy("one").and.returnValue(onePayloadFn),
+      many: jasmine.createSpy("many").and.returnValue(manyPayloadFn)
     };
 
     eventSocket = {
-      onMessage: jasmine.createSpy('onMessage'),
-      sendMessage: jasmine.createSpy('sendMessage'),
-      end: jasmine.createSpy('end')
+      onMessage: jasmine.createSpy("onMessage"),
+      sendMessage: jasmine.createSpy("sendMessage"),
+      end: jasmine.createSpy("end")
     };
 
-    mockMultiplexedSocket = jasmine
-      .createSpy('getEventSocket')
-      .and.returnValue(eventSocket);
+    mockMultiplexedSocket = jasmine.createSpy("getEventSocket").and.returnValue(eventSocket);
 
     socket = {};
 
-    jest.mock('./socket-stream.js', () => mockSocketStream);
-    jest.mock('./multiplexed-socket.js', () => mockMultiplexedSocket);
+    jest.mock("./socket-stream.js", () => mockSocketStream);
+    jest.mock("./multiplexed-socket.js", () => mockMultiplexedSocket);
 
-    socketFactory = require('./socket-factory').default;
+    socketFactory = require("./socket-factory").default;
 
     req = {
-      id: '1',
+      id: "1",
       connections: {
-        '1': []
+        "1": []
       }
     };
     resp = {
       socket
     };
-    next = jasmine.createSpy('next');
+    next = jasmine.createSpy("next");
   });
 
-  describe('initialization', () => {
+  describe("initialization", () => {
     beforeEach(() => {
       socketFactory(req, resp, next);
     });
@@ -78,71 +67,71 @@ describe('socket factory middleware', () => {
       expect(req.getMany$).toEqual(jasmine.any(Function));
     });
 
-    it('should call next with the request and response', () => {
+    it("should call next with the request and response", () => {
       expect(next).toHaveBeenCalledOnceWith(req, resp);
     });
   });
 
-  describe('getOne$', () => {
+  describe("getOne$", () => {
     let s, payload;
     beforeEach(() => {
       payload = {
-        path: '/path',
-        method: 'get'
+        path: "/path",
+        method: "get"
       };
       socketFactory(req, resp, next);
       s = req.getOne$(payload);
     });
 
-    it('should call getMultiplexedSocket', () => {
+    it("should call getMultiplexedSocket", () => {
       expect(mockMultiplexedSocket).toHaveBeenCalledOnceWith(socket);
     });
 
-    it('should push the socket into the connections list', () => {
-      expect(req.connections['1'][0]).toEqual(eventSocket);
+    it("should push the socket into the connections list", () => {
+      expect(req.connections["1"][0]).toEqual(eventSocket);
     });
 
     it('should call "one" with the socket', () => {
       expect(mockSocketStream.one).toHaveBeenCalledOnceWith(eventSocket);
     });
 
-    it('should call onePayloadFn with the payload', () => {
+    it("should call onePayloadFn with the payload", () => {
       expect(onePayloadFn).toHaveBeenCalledOnceWith(payload);
     });
 
-    it('should return one stream', () => {
+    it("should return one stream", () => {
       expect(s).toBe(one$);
     });
   });
 
-  describe('getMany$', () => {
+  describe("getMany$", () => {
     let fn, payload;
     beforeEach(() => {
       payload = {
-        path: '/path',
-        method: 'get'
+        path: "/path",
+        method: "get"
       };
       socketFactory(req, resp, next);
       fn = req.getMany$(payload);
     });
 
-    it('should call getMultiplexedSocket', () => {
+    it("should call getMultiplexedSocket", () => {
       expect(mockMultiplexedSocket).toHaveBeenCalledOnceWith(socket);
     });
 
-    it('should push the socket into the connections list', () => {
-      expect(req.connections['1'][0]).toEqual(eventSocket);
+    it("should push the socket into the connections list", () => {
+      expect(req.connections["1"][0]).toEqual(eventSocket);
     });
 
     it('should call "many" with the socket', () => {
       expect(mockSocketStream.many).toHaveBeenCalledOnceWith(eventSocket);
     });
 
-    it('should call manyPayloadFn with the payload', () => {
+    it("should call manyPayloadFn with the payload", () => {
       expect(manyPayloadFn).toHaveBeenCalledOnceWith(payload);
     });
 
-    it('should return a function to stream', () => {
+    it("should return a function to stream", () => {
       expect(fn({})).toEqual(many$);
     });
   });

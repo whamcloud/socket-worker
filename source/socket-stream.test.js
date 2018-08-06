@@ -1,53 +1,53 @@
 // @flow
 
-import highland from 'highland';
-import { one, many } from './socket-stream.js';
-import { jasmine, describe, it, beforeEach, expect } from './jasmine.js';
+import highland from "highland";
+import { one, many } from "./socket-stream.js";
+import { jasmine, describe, it, beforeEach, expect } from "./jasmine.js";
 
-describe('socket stream', () => {
+describe("socket stream", () => {
   let spy, socket;
 
   beforeEach(() => {
     socket = {
-      end: jasmine.createSpy('end'),
-      emit: jasmine.createSpy('emit'),
-      on: jasmine.createSpy('on'),
-      onDestroy: jasmine.createSpy('onDestroy'),
-      onReconnect: jasmine.createSpy('onReconnect')
+      end: jasmine.createSpy("end"),
+      emit: jasmine.createSpy("emit"),
+      on: jasmine.createSpy("on"),
+      onDestroy: jasmine.createSpy("onDestroy"),
+      onReconnect: jasmine.createSpy("onReconnect")
     };
 
-    spy = jasmine.createSpy('spy');
+    spy = jasmine.createSpy("spy");
   });
 
-  describe('one', () => {
+  describe("one", () => {
     let s;
 
     beforeEach(() => {
-      s = one(socket)({ path: '/foo' });
+      s = one(socket)({ path: "/foo" });
     });
 
-    it('should be a function', () => {
+    it("should be a function", () => {
       expect(one).toEqual(jasmine.any(Function));
     });
 
-    it('should return a stream', () => {
-      const s = one(socket)({ path: '/foo' });
+    it("should return a stream", () => {
+      const s = one(socket)({ path: "/foo" });
 
       expect(highland.isStream(s)).toBe(true);
     });
 
-    it('should send data to the socket', () => {
+    it("should send data to the socket", () => {
       s.each(() => {});
       expect(socket.emit).toHaveBeenCalledOnceWith(
-        'message',
+        "message",
         {
-          path: '/foo'
+          path: "/foo"
         },
         jasmine.any(Function)
       );
     });
 
-    it('should end after a response', () => {
+    it("should end after a response", () => {
       s.each(() => {});
 
       const one = socket.emit.calls.mostRecent().args[2];
@@ -57,95 +57,95 @@ describe('socket stream', () => {
       expect(socket.end).toHaveBeenCalledOnce();
     });
 
-    it('should end after an error', () => {
+    it("should end after an error", () => {
       s.each(() => {});
 
       const one = socket.emit.calls.mostRecent().args[2];
 
-      one({ error: 'boom!' });
+      one({ error: "boom!" });
 
       expect(socket.end).toHaveBeenCalledOnce();
     });
 
-    it('should end if stream is paused', () => {
+    it("should end if stream is paused", () => {
       s.pull(() => {});
 
       const one = socket.emit.calls.mostRecent().args[2];
 
       one({
-        error: 'boom!'
+        error: "boom!"
       });
 
       expect(socket.end).toHaveBeenCalledOnce();
     });
 
-    it('should handle errors', () => {
+    it("should handle errors", () => {
       s.errors(x => spy(x)).each(() => {});
 
       const one = socket.emit.calls.mostRecent().args[2];
 
-      one({ error: 'boom!' });
+      one({ error: "boom!" });
 
-      expect(spy).toHaveBeenCalledOnceWith(new Error('boom!'));
+      expect(spy).toHaveBeenCalledOnceWith(new Error("boom!"));
     });
 
-    it('should handle the response', () => {
+    it("should handle the response", () => {
       s.each(spy);
 
       const one = socket.emit.calls.mostRecent().args[2];
 
-      one({ foo: 'bar' });
+      one({ foo: "bar" });
 
-      expect(spy).toHaveBeenCalledOnceWith({ foo: 'bar' });
+      expect(spy).toHaveBeenCalledOnceWith({ foo: "bar" });
     });
 
-    describe('stream', () => {
+    describe("stream", () => {
       let s, handler;
 
       beforeEach(() => {
         s = many(socket)({
-          path: '/host',
+          path: "/host",
           options: {
-            method: 'get',
-            qs: { foo: 'bar' }
+            method: "get",
+            qs: { foo: "bar" }
           }
         });
 
         handler = socket.on.calls.mostRecent().args[1];
       });
 
-      it('should send data to the socket', () => {
-        expect(socket.emit).toHaveBeenCalledOnceWith('message', {
-          path: '/host',
+      it("should send data to the socket", () => {
+        expect(socket.emit).toHaveBeenCalledOnceWith("message", {
+          path: "/host",
           options: {
-            method: 'get',
-            qs: { foo: 'bar' }
+            method: "get",
+            qs: { foo: "bar" }
           }
         });
       });
 
-      it('should end on destroy', () => {
+      it("should end on destroy", () => {
         s.destroy();
 
         expect(socket.end).toHaveBeenCalledOnce();
       });
 
-      it('should handle errors', () => {
+      it("should handle errors", () => {
         handler({
-          error: new Error('boom!')
+          error: new Error("boom!")
         });
 
         s.errors(x => spy(x)).each(() => {});
 
-        expect(spy).toHaveBeenCalledOnceWith(new Error('boom!'));
+        expect(spy).toHaveBeenCalledOnceWith(new Error("boom!"));
       });
 
-      it('should handle responses', () => {
-        handler({ foo: 'bar' });
+      it("should handle responses", () => {
+        handler({ foo: "bar" });
 
         s.each(spy);
 
-        expect(spy).toHaveBeenCalledOnceWith({ foo: 'bar' });
+        expect(spy).toHaveBeenCalledOnceWith({ foo: "bar" });
       });
     });
   });

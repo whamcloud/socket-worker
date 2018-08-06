@@ -1,49 +1,42 @@
-import highland from 'highland';
+import highland from "highland";
 
-import {
-  jest,
-  jasmine,
-  describe,
-  it,
-  beforeEach,
-  expect
-} from '../../../jasmine.js';
+import { jest, jasmine, describe, it, beforeEach, expect } from "../../../jasmine.js";
 
-import fixtures from './ost-balance.test.fixture.json';
+import fixtures from "./ost-balance.test.fixture.json";
 
-describe('get OST balance stream', () => {
+describe("get OST balance stream", () => {
   let getOne$, targetStream, mockRouter, ostMetricsStream, handler, write;
 
   beforeEach(() => {
-    getOne$ = jasmine.createSpy('getOne$').and.callFake(({ path }) => {
-      if (path === '/target/metric') return (ostMetricsStream = highland());
-      else if (path === '/target') return (targetStream = highland());
+    getOne$ = jasmine.createSpy("getOne$").and.callFake(({ path }) => {
+      if (path === "/target/metric") return (ostMetricsStream = highland());
+      else if (path === "/target") return (targetStream = highland());
     });
 
-    write = jasmine.createSpy('write');
+    write = jasmine.createSpy("write");
 
     mockRouter = {
-      get: jasmine.createSpy('get')
+      get: jasmine.createSpy("get")
     };
-    jest.mock('./router/index.js', () => mockRouter);
+    jest.mock("./router/index.js", () => mockRouter);
 
-    require('./route.js').default();
+    require("./route.js").default();
 
     handler = mockRouter.get.calls.mostRecent().args[1];
   });
 
-  describe('fetching metrics', () => {
-    describe('fetching gte 0 percent', () => {
+  describe("fetching metrics", () => {
+    describe("fetching gte 0 percent", () => {
       beforeEach(() => {
         handler(
           {
             getOne$,
             payload: {
               options: {
-                method: 'get',
+                method: "get",
                 percentage: 0,
                 qs: {
-                  filesystem_id: '1'
+                  filesystem_id: "1"
                 }
               }
             }
@@ -59,34 +52,34 @@ describe('get OST balance stream', () => {
         targetStream.end();
       });
 
-      it('should request data with overrides', () => {
+      it("should request data with overrides", () => {
         expect(getOne$).toHaveBeenCalledOnceWith({
-          path: '/target/metric',
+          path: "/target/metric",
           options: {
-            method: 'get',
+            method: "get",
             qs: {
-              kind: 'OST',
-              metrics: 'kbytestotal,kbytesfree',
+              kind: "OST",
+              metrics: "kbytestotal,kbytesfree",
               latest: true,
-              filesystem_id: '1'
+              filesystem_id: "1"
             }
           }
         });
       });
 
-      it('should return computed data', () => {
+      it("should return computed data", () => {
         expect(write).toHaveBeenCalledOnceWith(fixtures[0].out);
       });
     });
 
-    describe('fetching with filtered data', () => {
+    describe("fetching with filtered data", () => {
       beforeEach(() => {
         handler(
           {
             getOne$,
             payload: {
               options: {
-                method: 'get',
+                method: "get",
                 percentage: 1
               }
             }
@@ -104,7 +97,7 @@ describe('get OST balance stream', () => {
         targetStream.end();
       });
 
-      it('should return computed data', () => {
+      it("should return computed data", () => {
         const out = fixtures[0].out.map(x => ({
           ...x,
           values: [x.values[0]]
@@ -114,14 +107,14 @@ describe('get OST balance stream', () => {
       });
     });
 
-    describe('fetching with matching targets', () => {
+    describe("fetching with matching targets", () => {
       beforeEach(() => {
         handler(
           {
             getOne$,
             payload: {
               options: {
-                method: 'get',
+                method: "get",
                 percentage: 0
               }
             }
@@ -136,38 +129,38 @@ describe('get OST balance stream', () => {
         targetStream.write({
           objects: [
             {
-              id: '18',
-              name: 'OST001'
+              id: "18",
+              name: "OST001"
             },
             {
-              id: '19',
-              name: 'OST002'
+              id: "19",
+              name: "OST002"
             }
           ]
         });
         targetStream.end();
       });
 
-      it('should request data without overrides', () => {
+      it("should request data without overrides", () => {
         expect(getOne$).toHaveBeenCalledOnceWith({
-          path: '/target/metric',
+          path: "/target/metric",
           options: {
-            method: 'get',
+            method: "get",
             qs: {
-              kind: 'OST',
-              metrics: 'kbytestotal,kbytesfree',
+              kind: "OST",
+              metrics: "kbytestotal,kbytesfree",
               latest: true
             }
           }
         });
       });
 
-      it('should return computed data', () => {
+      it("should return computed data", () => {
         const f = fixtures[0].out.map(x => ({
           ...x,
           values: x.values.map(v => ({
             ...v,
-            x: v.x === '18' ? 'OST001' : 'OST002'
+            x: v.x === "18" ? "OST001" : "OST002"
           }))
         }));
 

@@ -5,22 +5,16 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-import * as fp from '@iml/fp';
-import {
-  transformMetrics,
-  type OutputOstData,
-  combineWithTargets,
-  toNvd3,
-  sort
-} from './transforms.js';
+import * as fp from "@iml/fp";
+import { transformMetrics, type OutputOstData, combineWithTargets, toNvd3, sort } from "./transforms.js";
 
-import router from '../../index.js';
+import router from "../../index.js";
 
-import { type HighlandStreamT } from 'highland';
-import type { Resp, Next } from '../../middleware/middleware-types.js';
+import { type HighlandStreamT } from "highland";
+import type { Resp, Next } from "../../middleware/middleware-types.js";
 
-import type { Payload, Options } from '../../../route-by-data.js';
-import type { Req } from '../../middleware/middleware-types.js';
+import type { Payload, Options } from "../../../route-by-data.js";
+import type { Req } from "../../middleware/middleware-types.js";
 
 export type MoreQs = {
   +filesystem_id?: string,
@@ -46,14 +40,14 @@ export type Target = {
 };
 
 export default () => {
-  router.get('/ost-balance', (req: OstRequest, resp: Resp, next: Next) => {
+  router.get("/ost-balance", (req: OstRequest, resp: Resp, next: Next) => {
     const targetStream: HighlandStreamT<Target[]> = req
       .getOne$({
-        path: '/target',
+        path: "/target",
         options: {
-          method: 'get',
+          method: "get",
           qs: { limit: 0 },
-          jsonMask: 'objects(id,name)'
+          jsonMask: "objects(id,name)"
         }
       })
       .map(x => x.objects);
@@ -66,12 +60,12 @@ export default () => {
 
     const ostBalanceStream: HighlandStreamT<OutputOstData[]> = req
       .getOne$({
-        path: '/target/metric',
+        path: "/target/metric",
         options: {
-          method: 'get',
+          method: "get",
           qs: {
-            kind: 'OST',
-            metrics: 'kbytestotal,kbytesfree',
+            kind: "OST",
+            metrics: "kbytestotal,kbytesfree",
             latest: true,
             ...moreQs
           }

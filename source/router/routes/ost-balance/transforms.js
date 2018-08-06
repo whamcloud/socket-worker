@@ -5,10 +5,10 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-import * as fp from '@iml/fp';
-import { formatBytes } from '@iml/number-formatters';
+import * as fp from "@iml/fp";
+import { formatBytes } from "@iml/number-formatters";
 
-import type { Target } from './route.js';
+import type { Target } from "./route.js";
 
 type InputDataObj = {
   [string]: InputData[]
@@ -51,14 +51,9 @@ const asFormattedBytes = fp.flow(
   x => formatBytes(x, 4)
 );
 
-const filterByLen = fp.filter(
-  ([, xs]: [string, Array<InputData>][]): boolean => xs.length > 0
-);
+const filterByLen = fp.filter(([, xs]: [string, Array<InputData>][]): boolean => xs.length > 0);
 
-const takeLast = ([k, xs]: [string, Array<InputData>]): [string, InputData] => [
-  k,
-  xs[xs.length - 1]
-];
+const takeLast = ([k, xs]: [string, Array<InputData>]): [string, InputData] => [k, xs[xs.length - 1]];
 
 const cleanData = ([x, { data }]: [string, InputData]) => ({
   ...data,
@@ -103,10 +98,7 @@ export const transformMetrics: TransformMetrics = fp.flow(
   )
 );
 
-export const combineWithTargets = ([ostBalanceMetrics, targets]: [
-  OutputOstData[],
-  Target[]
-]) =>
+export const combineWithTargets = ([ostBalanceMetrics, targets]: [OutputOstData[], Target[]]) =>
   ostBalanceMetrics.map(v => ({
     ...v,
     x: (targets.find(t => t.id === v.x) || { name: v.x }).name
@@ -129,7 +121,7 @@ export const toNvd3 = (xs: OutputOstData[]) =>
 
       return acc;
     },
-    [{ key: 'Used bytes', values: [] }, { key: 'Free bytes', values: [] }]
+    [{ key: "Used bytes", values: [] }, { key: "Free bytes", values: [] }]
   );
 
 const cmp = ({ x }, { x: y }) => x.localeCompare(y);

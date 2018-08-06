@@ -1,20 +1,20 @@
-import connections from './connections.js';
+import connections from "./connections.js";
 
-import { jasmine, describe, it, beforeEach, expect } from '../../jasmine.js';
+import { jasmine, describe, it, beforeEach, expect } from "../../jasmine.js";
 
-describe('connections middleware', () => {
+describe("connections middleware", () => {
   let req, resp, next;
 
   beforeEach(() => {
     req = {
       id: 1,
       connections: [],
-      type: 'connect'
+      type: "connect"
     };
 
     resp = {};
 
-    next = jasmine.createSpy('next');
+    next = jasmine.createSpy("next");
   });
 
   describe('with a type of "connect"', () => {
@@ -22,30 +22,30 @@ describe('connections middleware', () => {
       connections(req, resp, next);
     });
 
-    it('should add the list of connections to the request', () => {
+    it("should add the list of connections to the request", () => {
       expect(req.connections).toEqual({
         1: []
       });
     });
 
-    it('should not call next', () => {
+    it("should not call next", () => {
       expect(next).not.toHaveBeenCalled();
     });
   });
 
   describe('with a type not equal to "connect"', () => {
     beforeEach(() => {
-      req.type = 'end';
+      req.type = "end";
       connections(req, resp, next);
     });
 
-    it('should add the list of connections to the request', () => {
+    it("should add the list of connections to the request", () => {
       expect(req.connections).toEqual({
         1: []
       });
     });
 
-    it('should call next with the request and response', () => {
+    it("should call next with the request and response", () => {
       expect(next).toHaveBeenCalledOnceWith(req, resp);
     });
   });
