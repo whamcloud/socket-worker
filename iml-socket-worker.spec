@@ -1,7 +1,7 @@
 ﻿%define base_name socket-worker
 
 Name:       iml-%{base_name}
-Version:    4.0.1
+Version:    4.0.2
 Release:    1%{?dist}
 Summary:    Socket.io client that runs in a WebWorker.
 License:    MIT
@@ -33,6 +33,9 @@ rm -rf %{buildroot}
 %{nodejs_sitelib}
 
 %changelog
+* Mon Jan 14 2019 Will Johnson <wjohnson@whamcloud.com> - 4.0.2-1
+- Install deps before running postversion
+
 * Mon Jan 14 2019 Will Johnson <wjohnson@whamcloud.com> - 4.0.1-1
 - Build using Docker copr image
 
