@@ -1,4 +1,4 @@
-﻿%define base_name socket-worker
+%define base_name socket-worker
 
 Name:       iml-%{base_name}
 Version:    4.0.2
