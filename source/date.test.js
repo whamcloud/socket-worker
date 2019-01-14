@@ -116,7 +116,7 @@ describe("date", () => {
 describe("calculate range from size and unit", () => {
   let date, start, end;
   beforeEach(() => {
-    date = new Date("2017-12-17T03:24:00");
+    date = new Date("2017-12-17T03:24:00Z");
     [start, end] = calculateRangeFromSizeAndUnit(10, "minutes", date);
   });
 
