@@ -30,7 +30,7 @@ jobs:
         - docker run -it -e OWNER="$OWNER" -e PROJECT="$PROJECT" -e PACKAGE="$PACKAGE" -e CLONE_URL="$CLONE_URL" -e SPEC="$SPEC" -e KEY="$encrypted_253525cedcf6_key" -e IV="$encrypted_253525cedcf6_iv" -v $(pwd):/build:rw imlteam/copr
     - stage: deploy-copr
       name: "Copr deploy"
-      scripts:
+      script:
         - export OWNER=managerforlustre
         - export PROJECT=manager-for-lustre
         - export PACKAGE=iml-socket-worker
