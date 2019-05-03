@@ -2,6 +2,7 @@ NPM := $(shell if which npm 2>/dev/null; then true; else echo npm; fi)
 
 $(NPM):
 	dnf install -y npm
+	dnf install -y nodejs-packaging
 
 srpm: $(NPM)
 	npm i --silent
