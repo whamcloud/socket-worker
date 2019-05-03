@@ -10,5 +10,5 @@ srpm: $(NPM)
 	npm pack --silent
 	mkdir -p /tmp/_topdir/SOURCES
 	cp -r ./* /tmp/_topdir/SOURCES
-	rpmbuild -bs --define "_topdir /tmp/_topdir" iml-socket-worker.spec
+	rpmbuild -bs --define "_topdir /tmp/_topdir" /tmp/_topdir/SOURCES/iml-socket-worker.spec
 	cp -r /tmp/_topdir/SRPMS/* $(outdir)
