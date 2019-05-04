@@ -2,7 +2,9 @@
 
 Name:       iml-%{base_name}
 Version:    4.0.2
+# Release Start
 Release:    1%{?dist}
+# Release End
 Summary:    Socket.io client that runs in a WebWorker.
 License:    MIT
 Group:      System Environment/Libraries
