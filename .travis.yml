@@ -35,9 +35,8 @@ jobs:
         - export OWNER=managerforlustre
         - export PROJECT=manager-for-lustre-devel
         - export PACKAGE=iml-socket-worker
-        - export CLONE_URL=https://github.com/whamcloud/socket-worker.git
         - export SPEC=iml-socket-worker.spec
-        - docker run -it -e OWNER="$OWNER" -e PROJECT="$PROJECT" -e PACKAGE="$PACKAGE" -e CLONE_URL="$CLONE_URL" -e SPEC="$SPEC" -e KEY="$encrypted_253525cedcf6_key" -e IV="$encrypted_253525cedcf6_iv" -v $(pwd):/build:rw imlteam/copr
+        - docker run -it -e OWNER="$OWNER" -e PROJECT="$PROJECT" -e PACKAGE="$PACKAGE" -e SPEC="$SPEC" -e KEY="$encrypted_253525cedcf6_key" -e IV="$encrypted_253525cedcf6_iv" -v $(pwd):/build:rw imlteam/copr
     - stage: deploy-copr-r5.0
       name: "Copr deploy"
       language: generic
@@ -45,9 +44,8 @@ jobs:
         - export OWNER=managerforlustre
         - export PROJECT=manager-for-lustre-5.0
         - export PACKAGE=iml-socket-worker
-        - export CLONE_URL=https://github.com/whamcloud/socket-worker.git
         - export SPEC=iml-socket-worker.spec
-        - docker run -it -e OWNER="$OWNER" -e PROJECT="$PROJECT" -e PACKAGE="$PACKAGE" -e CLONE_URL="$CLONE_URL" -e SPEC="$SPEC" -e KEY="$encrypted_253525cedcf6_key" -e IV="$encrypted_253525cedcf6_iv" -v $(pwd):/build:rw imlteam/copr
+        - docker run -it -e OWNER="$OWNER" -e PROJECT="$PROJECT" -e PACKAGE="$PACKAGE" -e SPEC="$SPEC" -e PROD="True" -e KEY="$encrypted_253525cedcf6_key" -e IV="$encrypted_253525cedcf6_iv" -v $(pwd):/build:rw imlteam/copr
 stages:
   - test
   - name: deploy-npm
