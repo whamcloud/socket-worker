@@ -6,3 +6,4 @@ copr-key
 .DS_Store
 .fake
 *.log
+*.tgz
