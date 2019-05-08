@@ -101,7 +101,7 @@ export const transformMetrics: TransformMetrics = fp.flow(
 export const combineWithTargets = ([ostBalanceMetrics, targets]: [OutputOstData[], Target[]]) =>
   ostBalanceMetrics.map(v => ({
     ...v,
-    x: (targets.find(t => t.id === v.x) || { name: v.x }).name
+    x: (targets.find(t => t.id === Number.parseInt(v.x)) || { name: v.x }).name
   }));
 
 export const toNvd3 = (xs: OutputOstData[]) =>
