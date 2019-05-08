@@ -40,5 +40,5 @@ export const appendWithBuff = (buffer: HeatMapEntries, leadingEdge: string): ((x
 export const combineWithTargets = ([heatMapMetrics, targets]: [HeatMapEntries, Target[]]): HeatMapEntries =>
   heatMapMetrics.map(v => ({
     ...v,
-    name: (targets.find(t => t.id === v.id) || { name: v.name }).name
+    name: (targets.find(t => t.id === Number.parseInt(v.id)) || { name: v.name }).name
   }));

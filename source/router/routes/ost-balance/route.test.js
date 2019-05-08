@@ -129,11 +129,11 @@ describe("get OST balance stream", () => {
         targetStream.write({
           objects: [
             {
-              id: "18",
+              id: 18,
               name: "OST001"
             },
             {
-              id: "19",
+              id: 19,
               name: "OST002"
             }
           ]

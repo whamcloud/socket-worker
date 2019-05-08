@@ -25,7 +25,7 @@ describe("heatmap streams", () => {
     beforeEach(() => {
       target$ = highland([
         {
-          objects: [{ id: "1", name: "ost1" }, { id: "2", name: "ost2" }]
+          objects: [{ id: 1, name: "ost1" }, { id: 2, name: "ost2" }]
         }
       ]);
 
@@ -157,7 +157,7 @@ describe("heatmap streams", () => {
             name: "1"
           }
         ],
-        [{ id: "1", name: "ost1" }, { id: "2", name: "ost2" }]
+        [{ id: 1, name: "ost1" }, { id: 2, name: "ost2" }]
       ]);
     });
 
@@ -217,7 +217,7 @@ describe("heatmap streams", () => {
 
       target$ = highland([
         {
-          objects: [{ id: "1", name: "ost1" }, { id: "2", name: "ost2" }]
+          objects: [{ id: 1, name: "ost1" }, { id: 2, name: "ost2" }]
         }
       ]);
 
@@ -344,7 +344,7 @@ describe("heatmap streams", () => {
             name: "1"
           }
         ],
-        [{ id: "1", name: "ost1" }, { id: "2", name: "ost2" }]
+        [{ id: 1, name: "ost1" }, { id: 2, name: "ost2" }]
       ]);
     });
 

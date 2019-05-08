@@ -93,7 +93,7 @@ describe("ost balance transforms", () => {
             x: "19"
           }
         ],
-        [{ id: "19", name: "foo" }, { id: "17", name: "bar" }]
+        [{ id: 19, name: "foo" }, { id: 17, name: "bar" }]
       ])
     ).toEqual([
       {

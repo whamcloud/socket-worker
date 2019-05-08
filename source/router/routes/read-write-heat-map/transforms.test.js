@@ -364,11 +364,11 @@ describe("transforms", function() {
         ],
         [
           {
-            id: "1",
+            id: 1,
             name: "ost1"
           },
           {
-            id: "2",
+            id: 2,
             name: "ost2"
           }
         ]
