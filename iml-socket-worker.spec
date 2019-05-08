@@ -1,7 +1,7 @@
 %define base_name socket-worker
 
 Name:       iml-%{base_name}
-Version:    4.0.2
+Version:    4.0.3
 # Release Start
 Release:    2%{?dist}
 # Release End
@@ -35,6 +35,9 @@ rm -rf %{buildroot}
 %{nodejs_sitelib}
 
 %changelog
+* Wed May 08 2019 Joe Grund <jgrund@whamcloud.com> - 4.0.3-1
+- Fix chart target display bug
+
 * Mon Jan 14 2019 Will Johnson <wjohnson@whamcloud.com> - 4.0.2-1
 - Install deps before running postversion
 
